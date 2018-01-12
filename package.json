@@ -1,0 +1,35 @@
+{
+  "name": "z_app",
+  "version": "1.0.0",
+  "description": "针对HBuilder(h5+)开发webapp定制的一套UI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hellowmonkey/z_app.git"
+  },
+  "keywords": [
+    "ui",
+    "app",
+    "webapp",
+    "z_app\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D"
+  ],
+  "author": "Parker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hellowmonkey/z_app/issues"
+  },
+  "homepage": "https://github.com/hellowmonkey/z_app#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-imagemin": "^4.1.0",
+    "gulp-less": "^3.4.0",
+    "gulp-clean-css": "^3.9.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-spritesmith": "0.0.2",
+    "gulp-uglify": "^3.0.0"
+  }
+}
