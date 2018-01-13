@@ -505,7 +505,7 @@ var Zepto = (function () {
             cb(data.version)
         })
     }
-    
+
     // 匹配json字符串
     $.likeObject = function (str) {
         if ($.type(str) !== 'string') return false
@@ -1008,8 +1008,14 @@ var Zepto = (function () {
                 return parent
             })
         },
-        getBackgroundUrl: function () {
-            return this.css('backgroundImage').replace(/url\([\'\"]?(.*?)[\'\"]?\)/g, "$1")
+        getBackgroundUrl: function (src) {
+            if (src) {
+                return this.each(function () {
+                    this.css('backgroundImage', 'url(' + src + ')')
+                })
+            } else {
+                return this.css('backgroundImage').replace(/url\([\'\"]?(.*?)[\'\"]?\)/g, "$1")
+            }
         }
     }
 
@@ -3279,9 +3285,10 @@ var o=n(0),s=Object.create(o?t:window),a=/["&'<>]/;s.$escape=function(e){return 
         var notDocment = opts.container && opts.container !== document
         var sElem = $(opts.container)
         var moreBtn = $('<div class="z-loading-up">' + opts.tipText + '</div>')
+        moreBtn.hide()
         var done = function () {
             lock = true
-            moreBtn.html(opts.loadingText)
+            moreBtn.show().html(opts.loadingText)
             cb(++page)
         }
         sElem.append(moreBtn)
@@ -3643,9 +3650,6 @@ var o=n(0),s=Object.create(o?t:window),a=/["&'<>]/;s.$escape=function(e){return 
         })
     }
 
-    function getFileName(filename) {
-        return $.config.template.path + filename + '.html'
-    }
 })(Zepto, window)
 ;
 (function ($) {
@@ -3748,14 +3752,22 @@ $(function () {
         }
 
         if ($.config.keyEventBind.backbutton) {
-			plus.key.addEventListener('backbutton', function(){
+            plus.key.addEventListener('backbutton', function () {
                 $.back()
             }, false);
-		}
-		if ($.config.keyEventBind.menubutton) {
-			plus.key.addEventListener('menubutton', function(){
-                if($.menu)  $.menu()
+        }
+        if ($.config.keyEventBind.menubutton) {
+            plus.key.addEventListener('menubutton', function () {
+                if ($.menu) $.menu()
             }, false);
-		}
+        }
+
+        //沉浸状态栏
+        if (!plus.navigator.isImmersedStatusbar()) {
+            $('body').addClass('z-immersed')
+        }
     }
+    $('body').on('tap', '.z-action-back', function () {
+        $.back()
+    })
 });

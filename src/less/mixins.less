@@ -1,0 +1,12 @@
+.clearfix() {
+    &:after {
+        display: table;
+        height: 0;
+        content: '';
+        clear: both;
+    }
+}
+
+.btn-shadow(@color) {
+    box-shadow: 0 0 0 3px rgba(red(@color), green(@color), blue(@color), .5);
+}

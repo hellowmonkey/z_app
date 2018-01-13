@@ -19,14 +19,22 @@ $(function () {
         }
 
         if ($.config.keyEventBind.backbutton) {
-			plus.key.addEventListener('backbutton', function(){
+            plus.key.addEventListener('backbutton', function () {
                 $.back()
             }, false);
-		}
-		if ($.config.keyEventBind.menubutton) {
-			plus.key.addEventListener('menubutton', function(){
-                if($.menu)  $.menu()
+        }
+        if ($.config.keyEventBind.menubutton) {
+            plus.key.addEventListener('menubutton', function () {
+                if ($.menu) $.menu()
             }, false);
-		}
+        }
+
+        //沉浸状态栏
+        if (!plus.navigator.isImmersedStatusbar()) {
+            $('body').addClass('z-immersed')
+        }
     }
+    $('body').on('tap', '.z-action-back', function () {
+        $.back()
+    })
 });

@@ -45,9 +45,10 @@
         var notDocment = opts.container && opts.container !== document
         var sElem = $(opts.container)
         var moreBtn = $('<div class="z-loading-up">' + opts.tipText + '</div>')
+        moreBtn.hide()
         var done = function () {
             lock = true
-            moreBtn.html(opts.loadingText)
+            moreBtn.show().html(opts.loadingText)
             cb(++page)
         }
         sElem.append(moreBtn)

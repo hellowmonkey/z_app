@@ -1,38 +1,42 @@
 <!DOCTYPE html>
 <html lang="zh">
 
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-		<title>测试</title>
-		<script src="js/z.js" type="text/javascript" charset="utf-8"></script>
-	</head>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>测试</title>
+    <link rel="stylesheet" type="text/css" href="css/z.css" />
+</head>
 
-	<body>
-		<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-		<video id="video" width="100%" controls="controls"></video>
-		<script>
-			var vsrc = 'https://hhh.sdhdbd1.com/rh/715BDA50/SD/playlist.m3u8'
-			if(Hls.isSupported()) {
-				var video = document.getElementById('video');
-				var hls = new Hls();
-				hls.loadSource(vsrc);
-				hls.attachMedia(video);
-				hls.on(Hls.Events.MANIFEST_PARSED, function() {
-					video.play();
-				});
-			}
-			// hls.js is not supported on platforms that do not have Media Source Extensions (MSE) enabled.
-			// When the browser has built-in HLS support (check using `canPlayType`), we can provide an HLS manifest (i.e. .m3u8 URL) directly to the video element throught the `src` property.
-			// This is using the built-in support of the plain video element, without using hls.js.
-			else if(video.canPlayType('application/vnd.apple.mpegurl')) {
-				video.src = vsrc;
-				video.addEventListener('canplay', function() {
-					video.play();
-				});
-			}
-		</script>
-	</body>
+<body>
+    <div class="z-bar z-bar-red">
+        <h4 class="z-title">沙哈</h4>
+        <a href="#" class="z-bar-item z-pull-left"><span class="z-icon">&#xe693;</span><span class="z-bar-tip">sasasa</span></a>
+        <a href="#" class="z-bar-item z-pull-right"><span class="z-icon">&#xe73a;</span></a>
+    </div>
+    <div class="z-content-padding">
+        <div class="z-mt10">
+            <div class="z-btn-group">
+                <button class="z-btn">按钮</button>
+                <button class="z-btn z-btn-blue">按钮</button>
+                <button class="z-btn z-btn-cyan">按钮</button>
+                <button class="z-btn z-btn-red">按钮</button>
+                <button class="z-btn z-btn-purple z-disabled">按钮</button>
+                <button class="z-btn z-btn-purple z-btn-outlined">按钮</button>
+            </div>
+            <button class="z-btn z-btn-purple z-block z-btn-lg">按钮</button>
+        </div>
+        <div class="z-mt10 z-border"></div>
+    </div>
+    
+    <script src="js/z.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        $(function () {
+
+        })
+    </script>
+</body>
 
 </html>

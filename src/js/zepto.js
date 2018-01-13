@@ -505,7 +505,7 @@ var Zepto = (function () {
             cb(data.version)
         })
     }
-    
+
     // 匹配json字符串
     $.likeObject = function (str) {
         if ($.type(str) !== 'string') return false
@@ -1008,8 +1008,14 @@ var Zepto = (function () {
                 return parent
             })
         },
-        getBackgroundUrl: function () {
-            return this.css('backgroundImage').replace(/url\([\'\"]?(.*?)[\'\"]?\)/g, "$1")
+        getBackgroundUrl: function (src) {
+            if (src) {
+                return this.each(function () {
+                    this.css('backgroundImage', 'url(' + src + ')')
+                })
+            } else {
+                return this.css('backgroundImage').replace(/url\([\'\"]?(.*?)[\'\"]?\)/g, "$1")
+            }
         }
     }
 

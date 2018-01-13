@@ -31,9 +31,8 @@ gulp.task('buildJs', function () {
 })
 
 gulp.task('buildCss', function () {
-    gulp.src('src/less/*.less')
+    gulp.src('src/less/z.less')
         .pipe(less())
-        .pipe(concat('z.css'))
         .pipe(gulp.dest('dist/css/'))
         .pipe(cleancss())
         .pipe(rename({

@@ -49,7 +49,4 @@
         })
     }
 
-    function getFileName(filename) {
-        return $.config.template.path + filename + '.html'
-    }
 })(Zepto, window)

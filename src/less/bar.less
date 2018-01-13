@@ -1,0 +1,68 @@
+.z-bar {
+    position: fixed;
+    z-index: 9;
+    background-color: @light-color;
+    height: @bar-height;
+    box-shadow: 0 0 1px @border-color;
+    padding-top: @immersed-height;
+    vertical-align: middle;
+    width: 100%;
+    .z-icon {
+        font-size: 1.3em;
+        &~.z-bar-tip {
+            float: right;
+            margin-left: 2px;
+        }
+    }
+    .z-title {
+        width: auto;
+        left: 40px;
+        right: 40px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        line-height: @bar-immersed-height;
+        text-align: center;
+        position: absolute;
+        font-size: 1.1rem;
+    }
+    .z-bar-item {
+        height: @bar-immersed-height;
+        line-height: @bar-immersed-height;
+        padding-left: @blank-size + 2;
+        padding-right: @blank-size + 2;
+    }
+    &[class*='z-bar-'] {
+        color: @light-color;
+        box-shadow: none;
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+        a {
+            color: @light-color;
+        }
+    }
+    &.z-bar-blue {
+        background-color: @blue-color;
+    }
+    &.z-bar-green {
+        background-color: @green-color;
+    }
+    &.z-bar-red {
+        background-color: @red-color;
+    }
+    &.z-bar-yellow {
+        background-color: @yellow-color;
+    }
+    &.z-bar-purple {
+        background-color: @purple-color;
+    }
+    &.z-bar-cyan {
+        background-color: @cyan-color;
+    }
+    &.z-bar-gray {
+        background-color: @gray-color;
+        color: #000000;
+    }
+    &.z-bar-dark {
+        background-color: @dark-color;
+    }
+}
