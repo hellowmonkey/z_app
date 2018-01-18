@@ -10,11 +10,14 @@
     //首次按下back按键的时间
     var back__first = null;
 
+    $.beforeback = function (cb) {
+        $.config.beforeback.push(cb)
+    }
+
     $.back = function () {
-        if (typeof $.config.beforeback === 'function') {
-            if ($.config.beforeback() === false) {
-                return;
-            }
+        var backs = $.config.beforeback
+        for (var i = 0; i < backs.length; i++) {
+            if (backs[i]() === false) return
         }
         if (!window.plus) {
             return false;

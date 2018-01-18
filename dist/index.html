@@ -10,31 +10,93 @@
 </head>
 
 <body>
-    <div class="z-bar z-bar-red">
+    <div class="z-bar z-color-red">
         <h4 class="z-title">沙哈</h4>
-        <a href="#" class="z-bar-item z-pull-left"><span class="z-icon">&#xe693;</span><span class="z-bar-tip">sasasa</span></a>
-        <a href="#" class="z-bar-item z-pull-right"><span class="z-icon">&#xe73a;</span></a>
+        <a href="#" class="z-bar-item z-pull-left z-action-back">
+            <span class="z-icon">&#xe693;</span>
+            <span class="z-bar-tip">sasasa</span>
+        </a>
+        <a href="#" class="z-bar-item z-pull-right">
+            <span class="z-icon">&#xe73a;</span>
+        </a>
     </div>
     <div class="z-content-padding">
         <div class="z-mt10">
             <div class="z-btn-group">
                 <button class="z-btn">按钮</button>
-                <button class="z-btn z-btn-blue">按钮</button>
-                <button class="z-btn z-btn-cyan">按钮</button>
-                <button class="z-btn z-btn-red">按钮</button>
-                <button class="z-btn z-btn-purple z-disabled">按钮</button>
-                <button class="z-btn z-btn-purple z-btn-outlined">按钮</button>
+                <button class="z-btn z-color-blue">按钮</button>
+                <button class="z-btn z-color-cyan">按钮</button>
+                <button class="z-btn z-color-red">按钮</button>
+                <button class="z-btn z-color-purple z-disabled">按钮</button>
+                <button class="z-btn z-color-purple z-btn-outlined">按钮</button>
             </div>
-            <button class="z-btn z-btn-purple z-block z-btn-lg">按钮</button>
+            <button class="z-btn z-color-purple z-block z-btn-lg">按钮</button>
         </div>
-        <div class="z-mt10 z-border"></div>
+        <button class="z-btn z-color-purple z-btn-outlined z-action-link" data-link-href="/video.html">打开</button>
+        <a class="z-btn z-color-purple" href="/video.html?id=1&cate=2" data-link-opts='{"show":{"auto":true}}'>打开</a>
+        <div class="z-input-item z-color-red">
+            <span class="z-input-tag">名称名称称</span>
+            <input type="text" class="z-input">
+        </div>
+        <div class="z-input-item">
+            <span class="z-input-tag">名称名称称</span>
+            <textarea class="z-input" name="" id="" cols="30" rows="10"></textarea>
+        </div>
+        <div class="z-input-item z-color-red">
+            <input type="text" class="z-input z-input-clear">
+        </div>
+        <div class="z-input-checkbox">
+            <label>
+                <span class="z-pull-left">全选</span>
+                <input type="checkbox">
+                <span class="z-checkbox z-color-red"></span>
+            </label>
+        </div>
+        <div class="z-input-item z-input-checkbox">
+            <label>
+                <span class="z-input-tag">名称名称称</span>
+                <input type="checkbox">
+                <span class="z-checkbox z-color-red"></span>
+            </label>
+        </div>
+        <div class="z-input-item z-input-radio">
+            <label>
+                <span class="z-input-tag">名称名称称</span>
+                <input type="radio" name="radio">
+                <span class="z-radio z-color-purple"></span>
+            </label>
+        </div>
+        <div class="z-input-item z-input-radio z-left">
+            <label>
+                <span class="z-input-tag">名称名称称</span>
+                <input type="radio" name="radio">
+                <span class="z-radio z-color-dark"></span>
+            </label>
+        </div>
+        <div class="z-input-item z-input-switch z-left">
+            <div class="z-switch z-switch-simple"><span class="z-switch-handle"></span></div>
+        </div>
+        <ul class="z-list z-mt10">
+            <li class="z-list-item z-list-arrow">啊啊啊啊啊</li>
+            <li class="z-list-item z-list-arrow">啊啊啊啊啊</li>
+            <li class="z-list-item z-list-arrow">啊啊啊啊啊</li>
+            <li class="z-list-item z-list-arrow">啊啊啊啊啊
+                <div class="z-switch z-color-green"><span class="z-switch-handle"></span>开关开关开关</div>
+            </li>
+            <li class="z-list-item z-list-arrow">啊啊啊啊啊
+                <div class="z-switch z-switch-simple z-color-red"><span class="z-switch-handle"></span></div>
+            </li>
+        </ul>
     </div>
-    
+
     <script src="js/z.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
         $(function () {
-
+           $('.z-btn').tap(function(){
+               var box = $.modal('内容内容内容内容内容内容内容内容内容','我就是标题', ['哈哈','呵呵'], function(index){
+                   console.log(box)
+               })
+           })
         })
     </script>
 </body>

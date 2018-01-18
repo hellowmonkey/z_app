@@ -25,14 +25,19 @@
         text-align: center;
         position: absolute;
         font-size: 1.1rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
     }
     .z-bar-item {
         height: @bar-immersed-height;
         line-height: @bar-immersed-height;
         padding-left: @blank-size + 2;
         padding-right: @blank-size + 2;
+        position: relative;
+        z-index: 1;
     }
-    &[class*='z-bar-'] {
+    &[class*='z-color-'] {
         color: @light-color;
         box-shadow: none;
         border-bottom: 1px solid rgba(0, 0, 0, .1);
@@ -40,29 +45,29 @@
             color: @light-color;
         }
     }
-    &.z-bar-blue {
+    &.z-color-blue {
         background-color: @blue-color;
     }
-    &.z-bar-green {
+    &.z-color-green {
         background-color: @green-color;
     }
-    &.z-bar-red {
+    &.z-color-red {
         background-color: @red-color;
     }
-    &.z-bar-yellow {
+    &.z-color-yellow {
         background-color: @yellow-color;
     }
-    &.z-bar-purple {
+    &.z-color-purple {
         background-color: @purple-color;
     }
-    &.z-bar-cyan {
+    &.z-color-cyan {
         background-color: @cyan-color;
     }
-    &.z-bar-gray {
+    &.z-color-gray {
         background-color: @gray-color;
         color: #000000;
     }
-    &.z-bar-dark {
+    &.z-color-dark {
         background-color: @dark-color;
     }
 }

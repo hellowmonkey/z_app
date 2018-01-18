@@ -14,7 +14,7 @@
             delay: 900
         },
         waiting: {
-            autoShow: true,
+            autoShow: false,
             title: '',
             modal: false
         },
@@ -72,14 +72,14 @@
                 support: true,
                 style: 'circle',
                 color: '#000000',
-                offset: '45px',
+                offset: $('.z-bar').height() + 'px',
                 auto: false
             },
             up: {
                 nonerText: '没有更多数据了',
                 loadingText: '加载中...',
                 tipText: '上拉加载更多数据',
-                container: document
+                container: $('.z-content,.z-content-padding')[0]
             }
         },
         date: {
@@ -107,6 +107,9 @@
         },
         template: {
             path: '_www/tpl/'
-        }
+        },
+        ripples: ['.z-action-ripple', '.z-list .z-list-item', '.z-btn'],
+        transTime: 50,
+        beforeback: []
     };
 })(Zepto)

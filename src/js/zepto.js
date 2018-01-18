@@ -525,6 +525,46 @@ var Zepto = (function () {
         return false
     }
 
+    // 按类别排序参数
+    $.getArgs = function (args) {
+        var rets = {
+            string: [],
+            function: [],
+            array: [],
+            object: [],
+            number: []
+        }
+        $.each(args, function (k, item) {
+            var type = $.type(item)
+            if (rets[type]) rets[type].push(item)
+            else rets[type] = []
+        })
+        return rets
+    }
+
+    // 解析url参数
+    $.parseUrlQuery = function (url) {
+        var query = {};
+        var urlToParse = url || window.location.href;
+        var i;
+        var params;
+        var param;
+        var length;
+        if (typeof urlToParse === 'string' && urlToParse.length) {
+            urlToParse = urlToParse.indexOf('?') > -1 ? urlToParse.replace(/\S*\?/, '') : '';
+            params = urlToParse.split('&').filter(function (paramsPart) {
+                return paramsPart !== '';
+            });
+            length = params.length;
+
+            for (i = 0; i < length; i += 1) {
+                param = params[i].replace(/#\S+/g, '').split('=');
+                query[decodeURIComponent(param[0])] = typeof param[1] === 'undefined' ? undefined : decodeURIComponent(param[1]) || '';
+            }
+        }
+        return query;
+    }
+
     // Define methods that will be available on all
     // Zepto collections
     $.fn = {

@@ -1,0 +1,31 @@
+.z-modal {
+    display: none;
+    position: fixed;
+    z-index: 99;
+    left: 10%;
+    right: 10%;
+    background-color: @light-color;
+    border-radius: 3px;
+    overflow: hidden;
+    top: 50%;
+    .z-modal-header {
+        padding: 15px 15px 0 15px;
+        font-size: 1.2em;
+    }
+    .z-modal-content {
+        padding: 15px;
+    }
+    .z-modal-footer {
+        display: table;
+        width: 100%;
+        .z-modal-btn {
+            display: table-cell;
+            width: 1%;
+            text-align: center;
+            padding: 13px 10px;
+            &:not(:first-child){
+                border-left: 1px solid lighten(@border-color, 7%);
+            }
+        }
+    }
+}

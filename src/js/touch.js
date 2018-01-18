@@ -162,11 +162,11 @@
             var event = $.Event('tap')
             event.cancelTouch = cancelAll
             // [by paper] fix -> "TypeError: 'undefined' is not an object (evaluating 'touch.el.trigger'), when double tap
-            if (touch.el) touch.el.trigger(event)
+            if (touch.el) touch.el.trigger(event,{touch: touch})
 
             // trigger double tap immediately
             if (touch.isDoubleTap) {
-              if (touch.el) touch.el.trigger('doubleTap')
+              if (touch.el) touch.el.trigger('doubleTap',{touch: touch})
               touch = {}
             }
 
@@ -174,7 +174,7 @@
             else {
               touchTimeout = setTimeout(function(){
                 touchTimeout = null
-                if (touch.el) touch.el.trigger('singleTap')
+                if (touch.el) touch.el.trigger('singleTap',{touch: touch})
                 touch = {}
               }, 250)
             }

@@ -15,7 +15,7 @@
     }
     $.setStorage = function (keyName, val) {
         keyName = keyName.toString()
-        if ($.isObject(val) || $.isArray(val)) val = JSON.stringify(val)
+        if (typeof val === 'object') val = JSON.stringify(val)
         else val = val.toString()
         plus.storage.setItem(keyName, val)
         return $.getStorage(keyName)

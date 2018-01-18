@@ -1,0 +1,25 @@
+.z-list {
+    position: relative;
+    &:before {
+        .border(auto, -1px);
+    }
+    &:after {
+        .border();
+    }
+    .z-list-item {
+        &:not(:last-child):before {
+            .border(0, auto, 15px, 0);
+        }
+        background-color: @light-color;
+        display: block;
+        position: relative;
+        padding: 15px;
+        &.z-list-arrow {
+            padding-right: 65px;
+            background-image: url("data:image/svg+xml;charset=utf-8,<svg%20viewBox%3D'0%200%2060%20120'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'><path%20d%3D'm60%2061.5-38.25%2038.25-9.75-9.75%2029.25-28.5-29.25-28.5%209.75-9.75z'%20fill%3D'%23c7c7cc'%2F><%2Fsvg>");
+            background-size: 10px 20px;
+            background-repeat: no-repeat;
+            background-position: 96% center;
+        }
+    }
+}

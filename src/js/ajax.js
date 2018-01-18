@@ -157,10 +157,10 @@
         global: true,
         // Transport
         xhr: function (settings) {
-            if (settings.crossDomain) { //强制使用plus跨域
-                return new plus.net.XMLHttpRequest();
-            }
             if ($.os.plus) {
+                if (settings.crossDomain) { //强制使用plus跨域
+                    return new plus.net.XMLHttpRequest();
+                }
                 var originAnchor = document.createElement('a');
                 originAnchor.href = window.location.href;
                 //仅在webview的url为远程文件，且ajax请求的资源不同源下使用plus.net.XMLHttpRequest

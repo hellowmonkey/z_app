@@ -4,7 +4,7 @@
     if (!$.os.plus || !template) return
     var tempFiles = {}
     var tempLoadings = {}
-    $.template = function (filename, data, cb) {
+    $.template = function (filename, tempData, cb) {
         if (!filename) {
             console.error('请先指定模板文件')
             return
@@ -32,7 +32,7 @@
         return data
 
         function render() {
-            return template.render(tempfile, data)
+            return template.render(tempfile, tempData)
         }
     }
 

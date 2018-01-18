@@ -18,8 +18,7 @@
     border: 1px solid transparent;
     border-radius: 4px;
     position: relative;
-    transition: all linear .2s;
-    -webkit-transition: all linear .2s;
+    .transition();
     color: @font-color;
     border: 1px solid @border-color;
     background-color: @light-color;
@@ -49,120 +48,120 @@
         background-color: #e0e0e0;
         .btn-shadow(@border-color);
     }
-    &.z-btn-blue {
+    &.z-color-blue {
         color: #fff;
-        border-color: darken(@blue-color, 10%);
+        border-color: darken(@blue-color, 7%);
         background-color: @blue-color;
         &:active,
         &.z-active {
-            border-color: darken(@blue-color, 20%);
+            border-color: darken(@blue-color, 15%);
             background-color: darken(@blue-color, 10%);
             .btn-shadow(@blue-color);
         }
+        &.z-btn-outlined{
+            color: @blue-color;
+        }
     }
-    &.z-btn-green {
+    &.z-color-green {
         color: #fff;
-        border-color: darken(@green-color, 10%);
+        border-color: darken(@green-color, 7%);
         background-color: @green-color;
         &:active,
         &.z-active {
-            border-color: darken(@green-color, 20%);
+            border-color: darken(@green-color, 15%);
             background-color: darken(@green-color, 10%);
             .btn-shadow(@green-color);
         }
+        &.z-btn-outlined{
+            color: @green-color;
+        }
     }
-    &.z-btn-red {
+    &.z-color-red {
         color: #fff;
-        border-color: darken(@red-color, 10%);
+        border-color: darken(@red-color, 7%);
         background-color: @red-color;
         &:active,
         &.z-active {
-            border-color: darken(@red-color, 20%);
+            border-color: darken(@red-color, 15%);
             background-color: darken(@red-color, 10%);
             .btn-shadow(@red-color);
         }
+        &.z-btn-outlined{
+            color: @red-color;
+        }
     }
-    &.z-btn-yellow {
+    &.z-color-yellow {
         color: #fff;
-        border-color: darken(@yellow-color, 10%);
+        border-color: darken(@yellow-color, 7%);
         background-color: @yellow-color;
         &:active,
         &.z-active {
-            border-color: darken(@yellow-color, 20%);
+            border-color: darken(@yellow-color, 15%);
             background-color: darken(@yellow-color, 10%);
             .btn-shadow(@yellow-color);
         }
+        &.z-btn-outlined{
+            color: @yellow-color;
+        }
     }
-    &.z-btn-purple {
+    &.z-color-purple {
         color: #fff;
-        border-color: darken(@purple-color, 10%);
+        border-color: darken(@purple-color, 7%);
         background-color: @purple-color;
         &:active,
         &.z-active {
-            border-color: darken(@purple-color, 20%);
+            border-color: darken(@purple-color, 15%);
             background-color: darken(@purple-color, 10%);
             .btn-shadow(@purple-color);
         }
+        &.z-btn-outlined{
+            color: @purple-color;
+        }
     }
-    &.z-btn-cyan {
+    &.z-color-cyan {
         color: #fff;
-        border-color: darken(@cyan-color, 10%);
+        border-color: darken(@cyan-color, 7%);
         background-color: @cyan-color;
         &:active,
         &.z-active {
-            border-color: darken(@cyan-color, 20%);
+            border-color: darken(@cyan-color, 15%);
             background-color: darken(@cyan-color, 10%);
             .btn-shadow(@cyan-color);
         }
+        &.z-btn-outlined{
+            color: @cyan-color;
+        }
     }
-    &.z-btn-gray {
+    &.z-color-gray {
         color: #000000;
         border-color: darken(@gray-color, 10%);
         background-color: @gray-color;
         &:active,
         &.z-active {
-            border-color: darken(@gray-color, 20%);
+            border-color: darken(@gray-color, 15%);
             background-color: darken(@gray-color, 10%);
             .btn-shadow(@gray-color);
         }
+        &.z-btn-outlined{
+            color: @gray-color;
+        }
     }
-    &.z-btn-dark {
+    &.z-color-dark {
         color: #fff;
-        border-color: darken(@dark-color, 10%);
+        border-color: darken(@dark-color, 7%);
         background-color: @dark-color;
         &:active,
         &.z-active {
-            border-color: darken(@dark-color, 20%);
+            border-color: darken(@dark-color, 15%);
             background-color: darken(@dark-color, 10%);
             .btn-shadow(@dark-color);
+        }
+        &.z-btn-outlined{
+            color: @dark-color;
         }
     }
     &.z-btn-outlined {
         background-color: transparent;
-        &.z-btn-blue {
-            color: @blue-color;
-        }
-        &.z-btn-green {
-            color: @green-color;
-        }
-        &.z-btn-red {
-            color: @red-color;
-        }
-        &.z-btn-yellow {
-            color: @yellow-color;
-        }
-        &.z-btn-purple {
-            color: @purple-color;
-        }
-        &.z-btn-cyan {
-            color: @cyan-color;
-        }
-        &.z-btn-gray {
-            color: @gray-color;
-        }
-        &.z-btn-dark {
-            color: @dark-color;
-        }
         &:active,
         &.z-active {
             color: @light-color;

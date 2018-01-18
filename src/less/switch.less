@@ -1,0 +1,126 @@
+.z-switch {
+    border-radius: 20px;
+    height: 30px;
+    background-color: @light-color;
+    z-index: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+    position: relative;
+    padding: 7px 10px 7px 32px;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, .2) inset;
+    display: inline-block;
+    color: @gray-color;
+    text-align: center;
+    .transition();
+    &>.z-switch-handle {
+        height: 28px;
+        width: 28px;
+        border-radius: 16px;
+        background-color: @light-color;
+        position: absolute;
+        z-index: 2;
+        top: 1px;
+        left: -1px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+        transform: translate(0, 0);
+        .transition();
+    }
+    &.z-active {
+        background-color: @blue-color;
+        box-shadow: none;
+        color: @light-color;
+        padding: 7px 32px 7px 10px;
+    }
+    &.z-switch-simple {
+        min-width: 50px;
+        box-shadow: none;
+        border-radius: 45px;
+        height: 14px;
+        background-color: darken(@border-color, 8%);
+        &>.z-switch-handle {
+            height: 20px;
+            width: 20px;
+            border-radius: 20px;
+            top: -3px;
+            .z-active& {
+                background-color: @blue-color;
+            }
+        }
+        &.z-active {
+            background-color: lighten(@blue-color, 30%);
+        }
+    }
+    &.z-color-green.z-active {
+        background-color: @green-color;
+        &.z-switch-simple {
+            background-color: lighten(@green-color, 30%);
+            &>.z-switch-handle {
+                background-color: @green-color;
+            }
+        }
+    }
+    &.z-color-red.z-active {
+        background-color: @red-color;
+        &.z-switch-simple {
+            background-color: lighten(@red-color, 30%);
+            &>.z-switch-handle {
+                background-color: @red-color;
+            }
+        }
+    }
+    &.z-color-yellow.z-active {
+        background-color: @yellow-color;
+        &.z-switch-simple {
+            background-color: lighten(@yellow-color, 30%);
+            &>.z-switch-handle {
+                background-color: @yellow-color;
+            }
+        }
+    }
+    &.z-color-purple.z-active {
+        background-color: @purple-color;
+        &.z-switch-simple {
+            background-color: lighten(@purple-color, 30%);
+            &>.z-switch-handle {
+                background-color: @purple-color;
+            }
+        }
+    }
+    &.z-color-cyan.z-active {
+        background-color: @cyan-color;
+        &.z-switch-simple {
+            background-color: lighten(@cyan-color, 30%);
+            &>.z-switch-handle {
+                background-color: @cyan-color;
+            }
+        }
+    }
+    &.z-color-gray.z-active {
+        background-color: @gray-color;
+        &.z-switch-simple {
+            background-color: lighten(@gray-color, 30%);
+            &>.z-switch-handle {
+                background-color: @gray-color;
+            }
+        }
+    }
+    &.z-color-dark.z-active {
+        background-color: @dark-color;
+        &.z-switch-simple {
+            background-color: lighten(@dark-color, 30%);
+            &>.z-switch-handle {
+                background-color: @dark-color;
+            }
+        }
+    }
+    .z-list-item &,.z-input-item & {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        margin-top: -15px;
+        &.z-switch-simple {
+            margin-top: -7px;
+        }
+    }
+}

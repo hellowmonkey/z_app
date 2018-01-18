@@ -29,7 +29,7 @@
         if ('function' === $.type(cover)) {
             cb = cover
             cover = true
-        } else if ($.type(cover) === undef) cover = true
+        } else if ($.type(cover) === 'undefined') cover = true
         var paths = path.split('/')
         var filepath = ''
         var filename = ''

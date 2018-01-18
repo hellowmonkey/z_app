@@ -4,7 +4,7 @@
  * @returns {undefined}
  */
 ;
-(function ($, document) {
+(function ($, document, window) {
     if (!$.os.plus) return
     // 下拉刷新
     $.pullDownRefresh = function (opts, cb) {
@@ -16,12 +16,14 @@
             opts = $.extend($.config.pullrefresh.down, opts)
         }
         view.setPullToRefresh(opts, cb)
-        opts.auto && begin()
+        if (opts.auto) {
+            setTimeout(function () {
+                begin()
+            }, 15)
+        }
 
         function begin() {
-            setTimeout(function () {
-                view.beginPullToRefresh()
-            }, 15)
+            view.beginPullToRefresh()
         }
 
         function end() {
@@ -42,7 +44,6 @@
             opts = $.extend($.config.pullrefresh.up, opts)
         }
         var lock, isOver, timer, page = 1
-        var notDocment = opts.container && opts.container !== document
         var sElem = $(opts.container)
         var moreBtn = $('<div class="z-loading-up">' + opts.tipText + '</div>')
         moreBtn.hide()
@@ -52,15 +53,15 @@
             cb(++page)
         }
         sElem.append(moreBtn)
-        sElem.on('scroll', function () {
+        $(window).on('scroll', function () {
             clearTimeout(timer)
             timer = setTimeout(function () {
                 if (isOver) return
-                var _this = sElem,
-                    top = _this.scrollTop()
-                var height = notDocment ? _this.innerHeight() : window.innerHeight
-                var scrollHeight = notDocment ? _this.prop('scrollHeight') : document.documentElement.scrollHeight
-                if (scrollHeight - top - height <= 0) {
+                var _this = $(this),
+                    scrollTop = _this.scrollTop(),
+                    scrollHeight = $(document).height(),
+                    windowHeight = _this.height()
+                if (scrollTop + windowHeight >= scrollHeight) {
                     lock || done()
                 }
             }, 60)
@@ -88,4 +89,4 @@
             }
         }
     }
-})(Zepto, document);
+})(Zepto, document, window);

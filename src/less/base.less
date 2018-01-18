@@ -100,8 +100,7 @@ fieldset {
     clear: both;
 }
 
-.z-clearfix,
-.z-row {
+.z-clearfix {
     .clearfix
 }
 
@@ -303,20 +302,41 @@ input[type="button"]:disabled {
     padding: @blank-size;
 }
 
-.z-border:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    right: auto;
-    top: auto;
-    height: 1px;
+.z-border {
+    &:before {
+        .border();
+    }
+    position: relative;
+}
+
+.z-noner {
+    padding: 20px;
+    text-align: center;
+    color: @gray-color;
+}
+
+.z-ripple {
+    position: relative;
+    overflow: hidden;
+    .z-ripple-bg {
+        position: absolute;
+        border-radius: 50%;
+        z-index: 9;
+        transition: all linear .3s;
+        opacity: 1;
+        width: 10px;
+        height: 10px;
+        background-color: transparent;
+    }
+}
+
+.z-shade {
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.12);
-    display: block;
-    z-index: 2;
-    -webkit-transform-origin: 50% 100%;
-    transform-origin: 50% 100%;
-    -webkit-transform: scaleY(0.5);
-    transform: scaleY(0.5);
+    height: 100%;
+    position: fixed;
+    z-index: 99;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .4);
+    display: none;
 }
