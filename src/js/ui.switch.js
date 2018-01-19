@@ -15,6 +15,7 @@
                     'transform': '',
                     '-webkit-transform': '' 
                 })
+                _this.trigger('hideed', _this)
             } else {
                 var w = _this.width() - handle.width()
                 _this.addClass(activeClass)
@@ -22,6 +23,7 @@
                     'transform': 'translate(' + w + 'px, 0px)',
                     '-webkit-transform': 'translate(' + w + 'px, 0px)'
                 })
+                _this.trigger('showed', _this)
             }
         })
         return this

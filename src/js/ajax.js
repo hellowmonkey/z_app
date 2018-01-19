@@ -63,6 +63,7 @@
     function ajaxError(error, type, xhr, settings, deferred, data) {
         var context = settings.context
         console.error("ajax error: " + type + "\nurl: " + settings.url + "\n" + data)
+        if ($.toast && $.config.ajax.errorToast) $.toast(type)
         settings.error.call(context, xhr, type, settings, data)
         if (deferred) deferred.rejectWith(context, [xhr, type, error])
         triggerGlobal(settings, context, 'ajaxError', [xhr, settings, error || type])
@@ -109,7 +110,7 @@
             $(script).off().remove()
 
             if (e.type == 'error' || !responseData) {
-                ajaxError(null, errorType || 'error', xhr, options, deferred)
+                ajaxError(null, errorType || '请求错误', xhr, options, deferred)
             } else {
                 ajaxSuccess(responseData[0], xhr, options, deferred)
             }
@@ -315,19 +316,19 @@
                             error = e
                         }
 
-                        if (error) return ajaxError(error, 'parsererror', xhr, settings, deferred)
+                        if (error) return ajaxError(error, '请求的内部程序出错', xhr, settings, deferred)
                     }
 
                     ajaxSuccess(result, xhr, settings, deferred, result)
                 } else {
-                    ajaxError(xhr.statusText || null, xhr.status ? 'error' : 'abort', xhr, settings, deferred, result)
+                    ajaxError(xhr.statusText || null, xhr.status ? '请求错误' : '请求被中断', xhr, settings, deferred, result)
                 }
             }
         }
 
         if (ajaxBeforeSend(xhr, settings) === false) {
             xhr.abort()
-            ajaxError(null, 'abort', xhr, settings, deferred)
+            ajaxError(null, '请求被中断', xhr, settings, deferred)
             return xhr
         }
 
@@ -342,7 +343,7 @@
         if (settings.timeout > 0) abortTimeout = setTimeout(function () {
             xhr.onreadystatechange = empty
             xhr.abort()
-            ajaxError(null, 'timeout', xhr, settings, deferred)
+            ajaxError(null, '请求超时', xhr, settings, deferred)
         }, settings.timeout)
 
         // avoid sending empty string (#319)
@@ -351,14 +352,14 @@
     }
 
     // handle optional data/success arguments
-    function parseArguments(url, data, success, dataType) {
-        if ($.isFunction(data)) dataType = success, success = data, data = undefined
-        if (!$.isFunction(success)) dataType = success, success = undefined
+    function parseArguments( /* url, data, success, dataType, error */ ) {
+        var args = $.getArgs(arguments)
         return {
-            url: url,
-            data: data,
-            success: success,
-            dataType: dataType
+            url: args['string'][0],
+            data: args['object'][0],
+            success: args['function'][0],
+            dataType: args['string'][1],
+            error: args['function'][1]
         }
     }
 

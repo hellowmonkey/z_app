@@ -287,7 +287,9 @@ input[type="button"]:disabled {
 .z-content,
 .z-content-padding {
     position: relative;
-    padding-top: @bar-height;
+    .z-bar+& {
+        padding-top: @bar-height;
+    }
 }
 
 .z-content-padding {
@@ -322,7 +324,7 @@ input[type="button"]:disabled {
         position: absolute;
         border-radius: 50%;
         z-index: 9;
-        transition: all linear .3s;
+        .transition( all, linear, .3s);
         opacity: 1;
         width: 10px;
         height: 10px;

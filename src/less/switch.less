@@ -12,6 +12,7 @@
     display: inline-block;
     color: @gray-color;
     text-align: center;
+    min-width: 50px;
     .transition();
     &>.z-switch-handle {
         height: 28px;
@@ -33,11 +34,11 @@
         padding: 7px 32px 7px 10px;
     }
     &.z-switch-simple {
-        min-width: 50px;
         box-shadow: none;
         border-radius: 45px;
         height: 14px;
         background-color: darken(@border-color, 8%);
+        min-width: 40px;
         &>.z-switch-handle {
             height: 20px;
             width: 20px;

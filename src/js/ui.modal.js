@@ -83,7 +83,7 @@
         $.createShade(function () {
             html.css('zIndex', $.zIndex())
             $('body').append(html)
-            html.show(transTime).css('marginTop', -(html.height() / 1.7) + 'px')
+            html.show(transTime).css('marginTop', -(html.height() / 1.7) + 'px').trigger('showed', html)
             html.find('.z-modal-btn').tap(function () {
                 if (cb && !cb($(this).index())) {
                     $.closeModal(html)
@@ -122,7 +122,7 @@
     $.closeModal = function (box) {
         if (!box || !box.length) return false
         box.fadeOut(transTime, function () {
-            box.remove()
+            box.remove().trigger('hideed', box)
             $.closeShade()
             // viewShade(1)
         })

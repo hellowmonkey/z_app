@@ -110,6 +110,9 @@
         },
         ripples: ['.z-action-ripple', '.z-list .z-list-item', '.z-btn'],
         transTime: 50,
-        beforeback: []
+        beforeback: [],
+        ajax: {
+            errorToast: true
+        }
     };
 })(Zepto)

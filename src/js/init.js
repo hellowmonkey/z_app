@@ -133,4 +133,15 @@ $(function () {
             _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
         }, 350)
     })
+
+    $('body').on('tap', '.z-disabled,:disabled', function(event){
+        event.stopPropagation()
+        event.preventDefault()
+        return false
+    })
+    $('.z-disabled,:disabled').on('tap', function(event){
+        event.stopPropagation()
+        event.preventDefault()
+        return false
+    })
 });

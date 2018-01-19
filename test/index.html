@@ -36,14 +36,14 @@
         <a class="z-btn z-color-purple" href="/video.html?id=1&cate=2" data-link-opts='{"show":{"auto":true}}'>打开</a>
         <div class="z-input-item z-color-red">
             <span class="z-input-tag">名称名称称</span>
-            <input type="text" class="z-input">
+            <input type="text" class="z-input z-input-clear">
         </div>
         <div class="z-input-item">
             <span class="z-input-tag">名称名称称</span>
             <textarea class="z-input" name="" id="" cols="30" rows="10"></textarea>
         </div>
         <div class="z-input-item z-color-red">
-            <input type="text" class="z-input z-input-clear">
+            <input type="search" class="z-input z-input-clear" placeholder="搜索">
         </div>
         <div class="z-input-checkbox">
             <label>
@@ -73,7 +73,7 @@
                 <span class="z-radio z-color-dark"></span>
             </label>
         </div>
-        <div class="z-input-item z-input-switch z-left">
+        <div class="z-input-item z-input-switch"><span class="z-input-tag">名称名称称</span>
             <div class="z-switch z-switch-simple"><span class="z-switch-handle"></span></div>
         </div>
         <ul class="z-list z-mt10">
@@ -92,10 +92,13 @@
     <script src="../dist/js/z.js" type="text/javascript" charset="utf-8"></script>
     <script>
         $(function () {
-           $('.z-btn').tap(function(){
+           $('.z-btn').on('tap', function(){
                var box = $.modal('内容内容内容内容内容内容内容内容内容','我就是标题', ['哈哈','呵呵'], function(index){
                    console.log(box)
                })
+           })
+           $('.z-switch').on('showed', function(box){
+               console.log(box)
            })
         })
     </script>

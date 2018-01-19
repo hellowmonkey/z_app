@@ -2,9 +2,9 @@
     .z-bar {
         padding-top: 0;
         height: @bar-immersed-height;
-    }
-    .z-content,
-    .z-content-padding {
-        padding-top: @bar-immersed-height;
+        &+.z-content,
+        &+.z-content-padding {
+            padding-top: @bar-immersed-height;
+        }
     }
 }
