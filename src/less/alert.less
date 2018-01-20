@@ -1,0 +1,45 @@
+.z-alert {
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid lighten(@red-color, 25%);
+    background-color: lighten(@red-color, 35%);
+    color: darken(@red-color, 15%);
+    .z-close {
+        margin-left: 5px;
+    }
+    &.z-color-blue {
+        border-color: lighten(@blue-color, 25%);
+        background-color: lighten(@blue-color, 35%);
+        color: darken(@blue-color, 8%);
+    }
+    &.z-color-green {
+        border-color: lighten(@green-color, 25%);
+        background-color: lighten(@green-color, 35%);
+        color: darken(@green-color, 8%);
+    }
+    &.z-color-yellow {
+        border-color: lighten(@yellow-color, 15%);
+        background-color: lighten(@yellow-color, 30%);
+        color: darken(@yellow-color, 15%);
+    }
+    &.z-color-purple {
+        border-color: lighten(@purple-color, 20%);
+        background-color: lighten(@purple-color, 28%);
+        color: darken(@purple-color, 10%);
+    }
+    &.z-color-cyan {
+        border-color: lighten(@cyan-color, 15%);
+        background-color: lighten(@cyan-color, 30%);
+        color: darken(@cyan-color, 15%);
+    }
+    &.z-color-gray {
+        border-color: @border-color;
+        background-color: darken(@light-color, 5%);
+        color: @font-color;
+    }
+    &.z-color-dark {
+        border-color: @dark-color;
+        background-color: lighten(@dark-color, 5%);
+        color: @light-color;
+    }
+}

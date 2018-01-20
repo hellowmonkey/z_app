@@ -3,7 +3,7 @@
 //     Zepto.js may be freely distributed under the MIT license.
 
 ;
-(function ($) {
+(function ($, widnow) {
     var jsonpID = +new Date(),
         document = window.document,
         key,
@@ -321,7 +321,7 @@
 
                     ajaxSuccess(result, xhr, settings, deferred, result)
                 } else {
-                    ajaxError(xhr.statusText || null, xhr.status ? '请求错误' : '请求被中断', xhr, settings, deferred, result)
+                    ajaxError(xhr.statusText || null, getErrorText(xhr.status), xhr, settings, deferred, result)
                 }
             }
         }
@@ -361,6 +361,13 @@
             dataType: args['string'][1],
             error: args['function'][1]
         }
+    }
+
+    // 获取失败信息 主要是加入网络状态判断
+    function getErrorText(status) {
+        if (status) return '请求错误:' + status
+        else if (plus.networkinfo.getCurrentType() < 2) return '无网络连接'
+        else return '请求被拒绝'
     }
 
     $.get = function ( /* url, data, success, dataType */ ) {
@@ -427,4 +434,4 @@
         serialize(params, obj, traditional)
         return params.join('&').replace(/%20/g, '+')
     }
-})(Zepto)
+})(Zepto, window)

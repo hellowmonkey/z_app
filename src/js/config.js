@@ -109,7 +109,7 @@
             path: '_www/tpl/'
         },
         ripples: ['.z-action-ripple', '.z-list .z-list-item', '.z-btn'],
-        transTime: 50,
+        transTime: 150,
         beforeback: [],
         ajax: {
             errorToast: true

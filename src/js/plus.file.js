@@ -68,7 +68,6 @@
 
     $.uploadFile = function (files, url, cb, filename) {
         filename = filename || 'pic'
-        url = $.ajaxSettings.urlPrefix + url
         var task = plus.uploader.createUpload(url, {
                 method: "POST"
             },

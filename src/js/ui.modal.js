@@ -6,7 +6,8 @@
         transTime = $.config.transTime,
         view,
         launchWebview,
-        subNViews
+        subNViews,
+        objShade
 
     $.zIndex = function (z) {
         z = z || 1
@@ -27,11 +28,12 @@
             }() + '"></div>')
             $('body').addClass('z-overflow')
             $('body').append(zShade)
-            zShade.fadeIn(transTime, createCb && createCb)
-        } else {
-            createCb && createCb()
+            zShade.show()
         }
         ++zShades
+        if ($.os.plus) viewShade('show')
+        createCb && createCb()
+        zShade.trigger('showed', zShades)
         zShade.on('tap', function () {
             closeCb && closeCb() && $.closeShade()
         })
@@ -39,7 +41,6 @@
     }
     /**
      * 关闭遮罩层
-     * @param  {num}   time 过渡时间
      * @param  {fn} cb   关闭后的回调
      * @param  {bool}   rm   是否强制关闭
      */
@@ -50,17 +51,11 @@
             --zShades
         if (zShades <= 0) {
             zShades = 0
-            if ($.type(time) === 'function') {
-                cb = time
-                time = transTime
-            }
-            time = time || transTime
-            zShade.fadeOut(time, function () {
-                zShade.remove()
-                $('body').removeClass('z-overflow')
-                zShade = null
-                cb && cb()
-            })
+            zShade.remove()
+            zShade = null
+            $('body').removeClass('z-overflow')
+            if ($.os.plus) viewShade('hide')
+            cb && cb()
         }
     }
     // 模态框
@@ -83,49 +78,51 @@
         $.createShade(function () {
             html.css('zIndex', $.zIndex())
             $('body').append(html)
-            html.show(transTime).css('marginTop', -(html.height() / 1.7) + 'px').trigger('showed', html)
+            html.show(transTime).css('marginTop', -(html.height() / 3) + 'px').trigger('showed', html)
             html.find('.z-modal-btn').tap(function () {
                 if (cb && !cb($(this).index())) {
                     $.closeModal(html)
                 }
             })
         })
-        // if ($.os.plus) viewShade(0)
         return html
     }
-
-    function viewShade(opacity) {
-        view = view || $.currentWebview
-        launchWebview = launchWebview || plus.webview.getLaunchWebview()
-        subNViews = subNViews || launchWebview.getStyle().subNViews
-        if (subNViews && subNViews.length) {
-            $.each(subNViews, function (k, item) {
-                if (item.page_id === view.id) {
-                    toggle(opacity)
-                    return false
-                }
-            })
-        }
-
-        function toggle(opacity) {
-            var opts = []
-            $.each(subNViews, function (k, item) {
-                item.styles.opacity = opacity
-                opts[k] = item
-            })
-            launchWebview.updateSubNViews(opts)
-        }
-    }
-
 
     // 关闭模态框
     $.closeModal = function (box) {
         if (!box || !box.length) return false
         box.fadeOut(transTime, function () {
-            box.remove().trigger('hideed', box)
             $.closeShade()
-            // viewShade(1)
+            box.remove().trigger('hideed', box)
         })
+    }
+
+    function viewShade(type) {
+        view = view || $.currentWebview
+        type = type || 'show'
+        launchWebview = launchWebview || plus.webview.getLaunchWebview()
+        subNViews = subNViews || launchWebview.getStyle().subNViews
+        if (subNViews && subNViews.length) {
+            $.each(subNViews, function (k, item) {
+                if (view.id === plus.runtime.appid || view.id === item.page_id) {
+                    toggle()
+                    return false
+                }
+            })
+        }
+
+        function toggle() {
+            if(!objShade) {
+                objShade = new plus.nativeObj.View('objShade', {
+                    backgroundColor: 'rgba(0,0,0,.4)',
+                    left: '0px',
+                    bottom: '0px',
+                    width: '100%',
+                    height: '51px'
+                })
+            }
+            objShade[type]()
+        }
     }
 
     if ($.beforeback) {

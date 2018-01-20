@@ -16,6 +16,7 @@ body {
     color: @font-color;
     background-color: @body-color;
     -webkit-overflow-scrolling: touch;
+    word-break: break-all;
 }
 
 hr {
@@ -54,14 +55,14 @@ table {
 h1,
 h2,
 h3 {
-    font-size: @font-size + 2;
-    font-weight: bold;
+    font-size: 1.2rem;
+    font-weight: normal;
 }
 
 h4,
 h5,
 h6 {
-    font-size: @font-size;
+    font-size: @font-size + 1;
     font-weight: normal;
 }
 
@@ -125,6 +126,18 @@ fieldset {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+
+.z-font-lg {
+    font-size: 1.2rem!important;
+}
+
+.z-font-sm {
+    font-size: 0.9rem!important;
+}
+
+.z-font-xs {
+    font-size: 0.8rem!important;
 }
 
 .z-box-border {
@@ -252,20 +265,84 @@ input[type="button"]:disabled {
     background-repeat: no-repeat;
 }
 
+.z-mt5 {
+    margin-top: 5px!important;
+}
+
 .z-mt10 {
     margin-top: 10px!important;
 }
 
-.z-mt5 {
-    margin-top: 5px!important;
+.z-mt15 {
+    margin-top: 15px!important;
+}
+
+.z-mt20 {
+    margin-top: 20px!important;
+}
+
+.z-mb5 {
+    margin-bottom: 5px!important;
 }
 
 .z-mb10 {
     margin-bottom: 10px!important;
 }
 
-.z-mb5 {
-    margin-bottom: 5px!important;
+.z-mb15 {
+    margin-bottom: 15px!important;
+}
+
+.z-mb20 {
+    margin-bottom: 20px!important;
+}
+
+.z-pt5 {
+    padding-top: 5px!important;
+}
+
+.z-pt10 {
+    padding-top: 10px!important;
+}
+
+.z-pt15 {
+    padding-top: 15px!important;
+}
+
+.z-pt20 {
+    padding-top: 20px!important;
+}
+
+.z-pb5 {
+    padding-bottom: 5px!important;
+}
+
+.z-pb10 {
+    padding-bottom: 10px!important;
+}
+
+.z-pb15 {
+    padding-bottom: 15px!important;
+}
+
+.z-pb20 {
+    padding-bottom: 20px!important;
+}
+
+.z-pad5 {
+    padding: 5px!important;
+}
+
+.z-pad10 {
+    padding: 10px!important;
+}
+
+.z-pad15 {
+    padding: 15px!important;
+}
+
+.z-pad20 {
+    padding: 20px!important;
 }
 
 .z-close {
@@ -273,7 +350,6 @@ input[type="button"]:disabled {
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
-    color: @font-color;
     opacity: .4;
     -webkit-appearance: none;
     padding: 0;
@@ -322,9 +398,11 @@ input[type="button"]:disabled {
     overflow: hidden;
     .z-ripple-bg {
         position: absolute;
-        border-radius: 50%;
+        border-radius: 10px;
         z-index: 9;
-        .transition( all, linear, .3s);
+        .transition( all,
+        linear,
+        .4s);
         opacity: 1;
         width: 10px;
         height: 10px;
@@ -341,4 +419,27 @@ input[type="button"]:disabled {
     left: 0;
     background: rgba(0, 0, 0, .4);
     display: none;
+}
+
+.z-box,
+.z-box-radius,
+.z-box-border {
+    background-color: @light-color;
+    position: relative;
+}
+
+.z-box-border {
+    &:before {
+        .border(auto,
+        -1px);
+    }
+    &:after {
+        .border();
+    }
+}
+
+.z-box-radius {
+    border-radius: 6px;
+    box-shadow: 0 2px 10px -5px rgba(0, 0, 0, .2);
+    margin-bottom: @blank-size;
 }

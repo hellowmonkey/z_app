@@ -1273,7 +1273,7 @@ window.$ === undefined && (window.$ = Zepto)
             path: '_www/tpl/'
         },
         ripples: ['.z-action-ripple', '.z-list .z-list-item', '.z-btn'],
-        transTime: 50,
+        transTime: 150,
         beforeback: [],
         ajax: {
             errorToast: true
@@ -2189,7 +2189,7 @@ window.$ === undefined && (window.$ = Zepto)
 //     Zepto.js may be freely distributed under the MIT license.
 
 ;
-(function ($) {
+(function ($, widnow) {
     var jsonpID = +new Date(),
         document = window.document,
         key,
@@ -2507,7 +2507,7 @@ window.$ === undefined && (window.$ = Zepto)
 
                     ajaxSuccess(result, xhr, settings, deferred, result)
                 } else {
-                    ajaxError(xhr.statusText || null, xhr.status ? '请求错误' : '请求被中断', xhr, settings, deferred, result)
+                    ajaxError(xhr.statusText || null, getErrorText(xhr.status), xhr, settings, deferred, result)
                 }
             }
         }
@@ -2547,6 +2547,13 @@ window.$ === undefined && (window.$ = Zepto)
             dataType: args['string'][1],
             error: args['function'][1]
         }
+    }
+
+    // 获取失败信息 主要是加入网络状态判断
+    function getErrorText(status) {
+        if (status) return '请求错误:' + status
+        else if (plus.networkinfo.getCurrentType() < 2) return '无网络连接'
+        else return '请求被拒绝'
     }
 
     $.get = function ( /* url, data, success, dataType */ ) {
@@ -2613,7 +2620,7 @@ window.$ === undefined && (window.$ = Zepto)
         serialize(params, obj, traditional)
         return params.join('&').replace(/%20/g, '+')
     }
-})(Zepto)
+})(Zepto, window)
 //     Zepto.js
 //     (c) 2010-2016 Thomas Fuchs
 //     Zepto.js may be freely distributed under the MIT license.
@@ -2813,7 +2820,8 @@ window.$ === undefined && (window.$ = Zepto)
         transTime = $.config.transTime,
         view,
         launchWebview,
-        subNViews
+        subNViews,
+        objShade
 
     $.zIndex = function (z) {
         z = z || 1
@@ -2834,11 +2842,12 @@ window.$ === undefined && (window.$ = Zepto)
             }() + '"></div>')
             $('body').addClass('z-overflow')
             $('body').append(zShade)
-            zShade.fadeIn(transTime, createCb && createCb)
-        } else {
-            createCb && createCb()
+            zShade.show()
         }
         ++zShades
+        if ($.os.plus) viewShade('show')
+        createCb && createCb()
+        zShade.trigger('showed', zShades)
         zShade.on('tap', function () {
             closeCb && closeCb() && $.closeShade()
         })
@@ -2846,7 +2855,6 @@ window.$ === undefined && (window.$ = Zepto)
     }
     /**
      * 关闭遮罩层
-     * @param  {num}   time 过渡时间
      * @param  {fn} cb   关闭后的回调
      * @param  {bool}   rm   是否强制关闭
      */
@@ -2857,17 +2865,11 @@ window.$ === undefined && (window.$ = Zepto)
             --zShades
         if (zShades <= 0) {
             zShades = 0
-            if ($.type(time) === 'function') {
-                cb = time
-                time = transTime
-            }
-            time = time || transTime
-            zShade.fadeOut(time, function () {
-                zShade.remove()
-                $('body').removeClass('z-overflow')
-                zShade = null
-                cb && cb()
-            })
+            zShade.remove()
+            zShade = null
+            $('body').removeClass('z-overflow')
+            if ($.os.plus) viewShade('hide')
+            cb && cb()
         }
     }
     // 模态框
@@ -2890,49 +2892,51 @@ window.$ === undefined && (window.$ = Zepto)
         $.createShade(function () {
             html.css('zIndex', $.zIndex())
             $('body').append(html)
-            html.show(transTime).css('marginTop', -(html.height() / 1.7) + 'px').trigger('showed', html)
+            html.show(transTime).css('marginTop', -(html.height() / 3) + 'px').trigger('showed', html)
             html.find('.z-modal-btn').tap(function () {
                 if (cb && !cb($(this).index())) {
                     $.closeModal(html)
                 }
             })
         })
-        // if ($.os.plus) viewShade(0)
         return html
     }
-
-    function viewShade(opacity) {
-        view = view || $.currentWebview
-        launchWebview = launchWebview || plus.webview.getLaunchWebview()
-        subNViews = subNViews || launchWebview.getStyle().subNViews
-        if (subNViews && subNViews.length) {
-            $.each(subNViews, function (k, item) {
-                if (item.page_id === view.id) {
-                    toggle(opacity)
-                    return false
-                }
-            })
-        }
-
-        function toggle(opacity) {
-            var opts = []
-            $.each(subNViews, function (k, item) {
-                item.styles.opacity = opacity
-                opts[k] = item
-            })
-            launchWebview.updateSubNViews(opts)
-        }
-    }
-
 
     // 关闭模态框
     $.closeModal = function (box) {
         if (!box || !box.length) return false
         box.fadeOut(transTime, function () {
-            box.remove().trigger('hideed', box)
             $.closeShade()
-            // viewShade(1)
+            box.remove().trigger('hideed', box)
         })
+    }
+
+    function viewShade(type) {
+        view = view || $.currentWebview
+        type = type || 'show'
+        launchWebview = launchWebview || plus.webview.getLaunchWebview()
+        subNViews = subNViews || launchWebview.getStyle().subNViews
+        if (subNViews && subNViews.length) {
+            $.each(subNViews, function (k, item) {
+                if (view.id === plus.runtime.appid || view.id === item.page_id) {
+                    toggle()
+                    return false
+                }
+            })
+        }
+
+        function toggle() {
+            if(!objShade) {
+                objShade = new plus.nativeObj.View('objShade', {
+                    backgroundColor: 'rgba(0,0,0,.4)',
+                    left: '0px',
+                    bottom: '0px',
+                    width: '100%',
+                    height: '51px'
+                })
+            }
+            objShade[type]()
+        }
     }
 
     if ($.beforeback) {
@@ -3119,30 +3123,39 @@ $(function () {
         var offset = _this.offset()
         var top = event._args.touch.y1 - offset.top
         var left = event._args.touch.x1 - offset.left
-        _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
+        // _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
         _this.addClass('z-ripple').append('<div class="z-ripple-bg" style="top:' + top +
             'px;left:' + left + 'px"></div>')
         setTimeout(function () {
             _this.find('.z-ripple-bg').css({
                 boxShadow: '0 0 0 ' + size + 'px ' + color,
-                borderRadius: 0,
+                borderRadius: size + 'px',
                 opacity: 0,
                 backgroundColor: color
             })
         }, 10)
         setTimeout(function () {
             _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
-        }, 350)
+        }, 400)
     })
 
-    $('body').on('tap', '.z-disabled,:disabled', function(event){
+    // disabled阻止
+    $('body').on('tap', '.z-disabled,:disabled', function (event) {
         event.stopPropagation()
         event.preventDefault()
         return false
     })
-    $('.z-disabled,:disabled').on('tap', function(event){
+    $('.z-disabled,:disabled').on('tap', function (event) {
         event.stopPropagation()
         event.preventDefault()
         return false
+    })
+
+    // 关闭alert
+    $('body').on('tap', '.z-alert .z-close', function(){
+        var box = $(this).closest('.z-alert')
+        box.hide(300, function(){
+            box.remove()
+        })
     })
 });

@@ -118,30 +118,39 @@ $(function () {
         var offset = _this.offset()
         var top = event._args.touch.y1 - offset.top
         var left = event._args.touch.x1 - offset.left
-        _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
+        // _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
         _this.addClass('z-ripple').append('<div class="z-ripple-bg" style="top:' + top +
             'px;left:' + left + 'px"></div>')
         setTimeout(function () {
             _this.find('.z-ripple-bg').css({
                 boxShadow: '0 0 0 ' + size + 'px ' + color,
-                borderRadius: 0,
+                borderRadius: size + 'px',
                 opacity: 0,
                 backgroundColor: color
             })
         }, 10)
         setTimeout(function () {
             _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
-        }, 350)
+        }, 400)
     })
 
-    $('body').on('tap', '.z-disabled,:disabled', function(event){
+    // disabled阻止
+    $('body').on('tap', '.z-disabled,:disabled', function (event) {
         event.stopPropagation()
         event.preventDefault()
         return false
     })
-    $('.z-disabled,:disabled').on('tap', function(event){
+    $('.z-disabled,:disabled').on('tap', function (event) {
         event.stopPropagation()
         event.preventDefault()
         return false
+    })
+
+    // 关闭alert
+    $('body').on('tap', '.z-alert .z-close', function(){
+        var box = $(this).closest('.z-alert')
+        box.hide(300, function(){
+            box.remove()
+        })
     })
 });
