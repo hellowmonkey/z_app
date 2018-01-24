@@ -1,6 +1,6 @@
 .z-btn {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 6px 15px;
     margin-bottom: 0;
     font-size: @font-size;
     font-weight: normal;
@@ -8,11 +8,8 @@
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    -ms-touch-action: manipulation;
     touch-action: manipulation;
     -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
     background-image: none;
     border: 1px solid transparent;
@@ -26,11 +23,6 @@
     box-shadow: none;
     &.z-block {
         width: 100%;
-    }
-    &.z-btn-link {
-        color: @link-color;
-        border: 0;
-        background-color: transparent;
     }
     &.z-btn-lg {
         padding: 10px 25px;
@@ -46,117 +38,111 @@
     &:active,
     &.z-active {
         background-color: #e0e0e0;
-        .btn-shadow(@border-color);
+    }
+    &[class*="z-color-"] {
+        color: @light-color;
     }
     &.z-color-blue {
-        color: #fff;
         border-color: darken(@blue-color, 7%);
         background-color: @blue-color;
         &:active,
         &.z-active {
             border-color: darken(@blue-color, 15%);
             background-color: darken(@blue-color, 10%);
-            .btn-shadow(@blue-color);
         }
-        &.z-btn-outlined{
+        &.z-btn-outlined,
+        &.z-btn-link {
             color: @blue-color;
         }
     }
     &.z-color-green {
-        color: #fff;
         border-color: darken(@green-color, 7%);
         background-color: @green-color;
         &:active,
         &.z-active {
             border-color: darken(@green-color, 15%);
             background-color: darken(@green-color, 10%);
-            .btn-shadow(@green-color);
         }
-        &.z-btn-outlined{
+        &.z-btn-outlined,
+        &.z-btn-link {
             color: @green-color;
         }
     }
     &.z-color-red {
-        color: #fff;
         border-color: darken(@red-color, 7%);
         background-color: @red-color;
         &:active,
         &.z-active {
             border-color: darken(@red-color, 15%);
             background-color: darken(@red-color, 10%);
-            .btn-shadow(@red-color);
         }
-        &.z-btn-outlined{
+        &.z-btn-outlined,
+        &.z-btn-link {
             color: @red-color;
         }
     }
     &.z-color-yellow {
-        color: #fff;
         border-color: darken(@yellow-color, 7%);
         background-color: @yellow-color;
         &:active,
         &.z-active {
             border-color: darken(@yellow-color, 15%);
             background-color: darken(@yellow-color, 10%);
-            .btn-shadow(@yellow-color);
         }
-        &.z-btn-outlined{
+        &.z-btn-outlined,
+        &.z-btn-link {
             color: @yellow-color;
         }
     }
     &.z-color-purple {
-        color: #fff;
         border-color: darken(@purple-color, 7%);
         background-color: @purple-color;
         &:active,
         &.z-active {
             border-color: darken(@purple-color, 15%);
             background-color: darken(@purple-color, 10%);
-            .btn-shadow(@purple-color);
         }
-        &.z-btn-outlined{
+        &.z-btn-outlined,
+        &.z-btn-link {
             color: @purple-color;
         }
     }
     &.z-color-cyan {
-        color: #fff;
         border-color: darken(@cyan-color, 7%);
         background-color: @cyan-color;
         &:active,
         &.z-active {
             border-color: darken(@cyan-color, 15%);
             background-color: darken(@cyan-color, 10%);
-            .btn-shadow(@cyan-color);
         }
-        &.z-btn-outlined{
+        &.z-btn-outlined,
+        &.z-btn-link {
             color: @cyan-color;
         }
     }
     &.z-color-gray {
-        color: #000000;
-        border-color: darken(@gray-color, 10%);
-        background-color: @gray-color;
+        border-color: @gray-color;
+        background-color: lighten(@gray-color, 10%);
         &:active,
         &.z-active {
             border-color: darken(@gray-color, 15%);
             background-color: darken(@gray-color, 10%);
-            .btn-shadow(@gray-color);
         }
-        &.z-btn-outlined{
+        &.z-btn-outlined,
+        &.z-btn-link {
             color: @gray-color;
         }
     }
     &.z-color-dark {
-        color: #fff;
         border-color: darken(@dark-color, 7%);
         background-color: @dark-color;
         &:active,
         &.z-active {
             border-color: darken(@dark-color, 15%);
             background-color: darken(@dark-color, 10%);
-            .btn-shadow(@dark-color);
         }
-        &.z-btn-outlined{
+        &.z-btn-outlined,
+        &.z-btn-link {
             color: @dark-color;
         }
     }
@@ -166,6 +152,16 @@
         &.z-active {
             color: @light-color;
         }
+    }
+    &.z-btn-link {
+        color: @link-color;
+        border: 0;
+        background-color: transparent;
+    }
+    &.z-btn-round {
+        border-radius: 29px;
+        padding-left: 25px;
+        padding-right: 25px;
     }
 }
 

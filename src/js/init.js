@@ -54,33 +54,48 @@ $(function () {
                 indicator: 'number'
             })
         })
+
+        // 打开新页面
+        $('body').on('click', 'a,.z-action-link', function (event) {
+            event.preventDefault()
+            var _this = $(this)
+            var href = _this.attr('href') || _this.data('link-target')
+            var opts = _this.data('link-opts')
+            var suf = '.html'
+            var pathIndex = href.indexOf(suf)
+            if (pathIndex === -1) return false
+            var filename = href.substr(0, pathIndex)
+            var ids = filename.split('/')
+            var id = ids[ids.length - 1]
+            var url = filename + suf
+            var options = {
+                url: url,
+                id: id,
+                extras: $.parseUrlQuery(href)
+            }
+            if (opts) {
+                opts = JSON.parse(opts)
+                options = $.extend(options, opts)
+            }
+            $.openWindow(options)
+            return false
+        })
     }
+
     // 返回
     $('body').on('tap', '.z-action-back', function () {
         $.back()
     })
 
-    // 打开新页面
-    $('body').on('click', 'a,.z-action-link', function (event) {
+    // disabled阻止
+    $('body').on('tap', '.z-disabled,:disabled', function (event) {
         event.stopPropagation()
         event.preventDefault()
-        var _this = $(this)
-        var href = _this.attr('href') || _this.data('link-href')
-        var opts = _this.data('link-opts')
-        var suf = '.html'
-        var pathIndex = href.indexOf(suf)
-        if (pathIndex === -1) return false
-        var filename = href.substr(0, pathIndex)
-        var ids = filename.split('/')
-        var id = ids[ids.length - 1]
-        var url = filename + suf
-        var options = {
-            url: url,
-            id: id,
-            extras: $.parseUrlQuery(href)
-        }
-        if (opts) options = $.extend(options, opts)
-        $.openWindow(options)
+        return false
+    })
+    $('.z-disabled,:disabled').on('tap', function (event) {
+        event.stopPropagation()
+        event.preventDefault()
         return false
     })
 
@@ -114,19 +129,15 @@ $(function () {
         event.stopPropagation()
         var _this = $(this)
         var size = Math.max(this.offsetWidth, this.offsetHeight)
-        var color = (_this.is('[class*="z-color-"]') || _this.hasClass('z-ripple-light')) ? 'rgba(255,255,255,.5)' : 'rgba(0,0,0,.3)'
+        var color = (_this.is('[class*="z-color-"]') || _this.hasClass('z-ripple-light')) ? 'rgba(255,255,255,0)' : 'rgba(0,0,0,0)'
         var offset = _this.offset()
-        var top = event._args.touch.y1 - offset.top
-        var left = event._args.touch.x1 - offset.left
-        // _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
+        var top = event.detail.touch.y1 - offset.top
+        var left = event.detail.touch.x1 - offset.left
         _this.addClass('z-ripple').append('<div class="z-ripple-bg" style="top:' + top +
             'px;left:' + left + 'px"></div>')
         setTimeout(function () {
             _this.find('.z-ripple-bg').css({
                 boxShadow: '0 0 0 ' + size + 'px ' + color,
-                borderRadius: size + 'px',
-                opacity: 0,
-                backgroundColor: color
             })
         }, 10)
         setTimeout(function () {
@@ -134,23 +145,36 @@ $(function () {
         }, 400)
     })
 
-    // disabled阻止
-    $('body').on('tap', '.z-disabled,:disabled', function (event) {
-        event.stopPropagation()
-        event.preventDefault()
-        return false
-    })
-    $('.z-disabled,:disabled').on('tap', function (event) {
-        event.stopPropagation()
-        event.preventDefault()
-        return false
-    })
-
     // 关闭alert
-    $('body').on('tap', '.z-alert .z-close', function(){
+    $('body').on('tap', '.z-alert .z-close', function () {
         var box = $(this).closest('.z-alert')
-        box.hide(300, function(){
+        box.hide(300, function () {
             box.remove()
         })
     })
+
+    // 数字输入框
+    $('.z-action-numberbox').numberbox()
+
+    // 下拉组件
+    $('body').on('tap', '.z-action-dropdown', function (event) {
+        var _this = $(this)
+        var target = _this.data('dropdown-target')
+        if (target) target = $(target)
+        else target = _this.find('.z-dropdown')
+        if (!target.length) return this
+        var position = _this.position()
+        var top = position.top + _this.height() + 2
+        var left = position.left - 160 + _this.width() / 2 + 16
+        target.modal({
+            top: top + 'px',
+            left: left + 'px'
+        }, function () {
+            target.closeModal()
+        })
+    })
+
+    // 透明导航
+    $('.z-action-transparent').transparent()
+
 });

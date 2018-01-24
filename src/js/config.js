@@ -76,9 +76,9 @@
                 auto: false
             },
             up: {
-                nonerText: '没有更多数据了',
-                loadingText: '加载中...',
-                tipText: '上拉加载更多数据',
+                nonerText: '没有了',
+                loadingText: '<span class="z-loader z-loader-inline"></span> 加载中...',
+                tipText: '加载更多',
                 container: $('.z-content,.z-content-padding')[0]
             }
         },
@@ -108,11 +108,26 @@
         template: {
             path: '_www/tpl/'
         },
-        ripples: ['.z-action-ripple', '.z-list .z-list-item', '.z-btn'],
+        ripples: ['.z-action-ripple', '.z-list .z-list-item', '.z-btn', '.z-input-group-addon'],
         transTime: 150,
         beforeback: [],
         ajax: {
             errorToast: true
-        }
+        },
+        anims: ['z-anim-upbit', 'z-anim-scale', 'z-anim-scaleSpring', 'z-anim-up', 'z-anim-downbit'],
+        animCls: 'z-anim-ms3',
+        numberbox: {
+            prev: '.z-input-group-addon:first',
+            next: '.z-input-group-addon:last',
+            input: 'input',
+            min: 1,
+            max: null,
+            step: 1
+        },
+        transparent: {
+            start: 0,
+            end: 250
+        },
+        buttonLoading: '<span class="z-anim-rotate z-icon">&#xe624;</span>'
     };
 })(Zepto)

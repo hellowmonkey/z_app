@@ -1,3 +1,58 @@
+input,
+textarea,
+select {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-tap-highlight-color: transparent;
+    &:focus {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+        -webkit-user-modify: read-write-plaintext-only;
+    }
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="search"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="tel"],
+input[type="color"] {
+    width: 100%;
+    -webkit-appearance: none;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid @border-color;
+    -webkit-user-select: text;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+textarea {
+    height: auto;
+    resize: none;
+}
+
+select {
+    background-color: #fff;
+    border: 0!important;
+    &:focus {
+        -webkit-user-modify: read-only;
+    }
+}
+
 .z-input-item {
     position: relative;
     background-color: @light-color;
@@ -10,7 +65,7 @@
         width: 100%;
         background-color: transparent;
         display: block;
-        &[type="search"]{
+        &[type="search"] {
             background-image: url("data:image/svg+xml;charset=utf-8,<svg%20fill%3D'%23999999'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%20width%3D'24'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'><path%20d%3D'M15.5%2014h-.79l-.28-.27C15.41%2012.59%2016%2011.11%2016%209.5%2016%205.91%2013.09%203%209.5%203S3%205.91%203%209.5%205.91%2016%209.5%2016c1.61%200%203.09-.59%204.23-1.57l.27.28v.79l5%204.99L20.49%2019l-4.99-5zm-6%200C7.01%2014%205%2011.99%205%209.5S7.01%205%209.5%205%2014%207.01%2014%209.5%2011.99%2014%209.5%2014z'%2F><path%20d%3D'M0%200h24v24H0z'%20fill%3D'none'%2F><%2Fsvg>");
             background-position: 5px center;
             background-repeat: no-repeat;
@@ -31,14 +86,14 @@
         position: absolute;
         right: 10px;
         top: 50%;
-        margin-top: -10px;
+        margin-top: -8px;
         border-radius: 50%;
         background-color: rgba(0, 0, 0, .4);
         color: @light-color;
         z-index: 1;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
         text-align: center;
         display: none;
     }
@@ -311,4 +366,131 @@
             }
         }
     }
+}
+
+.z-input-group {
+    position: relative;
+    display: table;
+    border-collapse: separate;
+    width: 100%;
+}
+
+.z-input-group .z-input {
+    position: relative;
+    z-index: 2;
+    float: left;
+    width: 100%;
+}
+
+.z-input-group .z-input:focus {
+    z-index: 3;
+}
+
+.z-input-group-btn,
+.z-input-group-addon,
+.z-input-group .z-input {
+    display: table-cell;
+}
+
+.z-input-group-addon:not(:first-child):not(:last-child),
+.z-input-group-btn:not(:first-child):not(:last-child),
+.z-input-group .z-input:not(:first-child):not(:last-child) {
+    border-radius: 0;
+}
+
+.z-input-group-addon,
+.z-input-group-btn {
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.z-input-group-addon {
+    padding: 6px 12px;
+    font-weight: normal;
+    line-height: 1;
+    color: #666;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid @border-color;
+    border-radius: 4px;
+}
+
+.z-input-group .z-input:first-child,
+.z-input-group-addon:first-child,
+.z-input-group-btn:first-child>.z-btn,
+.z-input-group-btn:first-child>.z-btn-group>.z-btn,
+.z-input-group-btn:last-child>.z-btn:not(:last-child),
+.z-input-group-btn:last-child>.z-btn-group:not(:last-child)>.z-btn {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.z-input-group .z-input:last-child,
+.z-input-group-addon:last-child,
+.z-input-group-btn:last-child>.z-btn,
+.z-input-group-btn:last-child>.z-btn-group>.z-btn,
+.z-input-group-btn:first-child>.z-btn:not(:first-child),
+.z-input-group-btn:first-child>.z-btn-group:not(:first-child)>.z-btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.z-input-group-addon:first-child {
+    border-right: 0;
+}
+
+.z-input-group-addon:last-child {
+    border-left: 0;
+}
+
+.z-input-group-btn {
+    position: relative;
+    font-size: 0;
+    white-space: nowrap;
+}
+
+.z-input-group-btn>.z-btn {
+    position: relative;
+}
+
+.z-input-group-btn>.z-btn+.z-btn {
+    margin-left: -1px;
+}
+
+.z-input-group-btn>.z-btn:hover,
+.z-input-group-btn>.z-btn:focus,
+.z-input-group-btn>.z-btn:active {
+    z-index: 2;
+}
+
+.z-input-group-btn:first-child>.z-btn,
+.z-input-group-btn:first-child>.z-btn-group {
+    margin-right: -2px;
+}
+
+.z-input-group-btn:last-child>.z-btn,
+.z-input-group-btn:last-child>.z-btn-group {
+    z-index: 2;
+    margin-left: -1px;
+}
+
+.z-input-group .z-input,
+.z-input-group .z-btn,
+.z-btn-group .z-btn {
+    height: 34px;
+}
+
+.z-input-group .z-btn.z-btn-lg,
+.z-input-group .z-btn.z-btn-sm,
+.z-input-group .z-btn.z-btn-xs,
+.z-btn-group .z-btn.z-btn-lg,
+.z-btn-group .z-btn.z-btn-sm,
+.z-btn-group .z-btn.z-btn-xs {
+    height: auto;
+}
+
+.z-action-numberbox .z-input-group-addon {
+    font-size: 1.5rem;
+    padding: 0 10px;
 }

@@ -3,10 +3,12 @@
     z-index: 9;
     background-color: @light-color;
     height: @bar-height;
-    box-shadow: 0 0 1px @border-color;
     padding-top: @immersed-height;
     vertical-align: middle;
     width: 100%;
+    &:before {
+        .border;
+    }
     .z-icon {
         font-size: 1.3em;
         &~.z-bar-tip {
@@ -40,9 +42,42 @@
     &[class*='z-color-'] {
         color: @light-color;
         box-shadow: none;
-        border-bottom: 1px solid rgba(0, 0, 0, .1);
+        &:before {
+            content: none;
+        }
         a {
             color: @light-color;
+        }
+    }
+    &.z-bar-transparent {
+        background-color: rgba(red(@light-color), green(@light-color), blue(@light-color), 0);
+        .transition(background-color, linear, .05s);
+        &:before {
+            content: none;
+        }
+        &.z-color-blue {
+            background-color: rgba(red(@blue-color), green(@blue-color), blue(@blue-color), 0);
+        }
+        &.z-color-green {
+            background-color: rgba(red(@green-color), green(@green-color), blue(@green-color), 0);
+        }
+        &.z-color-red {
+            background-color: rgba(red(@red-color), green(@red-color), blue(@red-color), 0);
+        }
+        &.z-color-yellow {
+            background-color: rgba(red(@yellow-color), green(@yellow-color), blue(@yellow-color), 0);
+        }
+        &.z-color-purple {
+            background-color: rgba(red(@purple-color), green(@purple-color), blue(@purple-color), 0);
+        }
+        &.z-color-cyan {
+            background-color: rgba(red(@cyan-color), green(@cyan-color), blue(@cyan-color), 0);
+        }
+        &.z-color-gray {
+            background-color: rgba(red(@gray-color), green(@gray-color), blue(@gray-color), 0);
+        }
+        &.z-color-dark {
+            background-color: rgba(red(@dark-color), green(@dark-color), blue(@dark-color), 0);
         }
     }
     &.z-color-blue {

@@ -353,7 +353,7 @@
 
     // handle optional data/success arguments
     function parseArguments( /* url, data, success, dataType, error */ ) {
-        var args = $.getArgs(arguments)
+        var args = $.orderArgs(arguments)
         return {
             url: args['string'][0],
             data: args['object'][0],

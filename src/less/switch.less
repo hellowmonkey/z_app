@@ -28,7 +28,7 @@
         .transition();
     }
     &.z-active {
-        background-color: @blue-color;
+        background-color: @green-color;
         box-shadow: none;
         color: @light-color;
         padding: 7px 32px 7px 10px;
@@ -51,6 +51,9 @@
         &.z-active {
             background-color: lighten(@blue-color, 30%);
         }
+    }
+    &.z-color-blue.z-active {
+        background-color: @green-color;
     }
     &.z-color-green.z-active {
         background-color: @green-color;

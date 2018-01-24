@@ -1,72 +1,79 @@
 .z-message {
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    padding: 10px;
+    padding: @blank-size;
     .z-message-item {
-        box-sizing: border-box;
-        margin: 1px 10px 10px;
-        max-width: 70%;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-flex-direction: column;
-        flex-direction: column;
+        .clearfix;
+        margin-bottom: @blank-size;
+        position: relative;
         &.z-message-me {
-            -webkit-align-self: flex-end;
-            align-self: flex-end;
-            -webkit-box-align: end;
-            -webkit-align-items: flex-end;
-            align-items: flex-end;
-            .z-message-text {
+            padding-right: 30px;
+            .z-message-box {
                 border-radius: 16px 16px 0 16px;
-                -webkit-mask-box-image: url("data:image/svg+xml;charset=utf-8,<svg height='35' viewBox='0 0 96 70' width…28 42 35z'/><path d='m96 70c-6-2-12-10-12-19v-16l-14 27s8 8 26 8z'/></svg>") 50% 56% 46% 42%;
-                padding-right: 22px;
-                background-color: #00d449;
+                -webkit-mask-box-image: url("data:image/svg+xml;charset=utf-8,<svg height='35' viewBox='0 0 96 70' width='48' xmlns='http://www.w3.org/2000/svg'><path d='m84 35c1 7-5 37-42 35-37 2-43-28-42-35-1-7 5-37 42-35 37-2 43 28 42 35z'/><path d='m96 70c-6-2-12-10-12-19v-16l-14 27s8 8 26 8z'/></svg>") 50% 56% 46% 42%;
+                background-color: saturate(@green-color, 15%);
                 color: #fff;
-                margin-left: auto;
+                float: right;
             }
             .z-message-avatar {
-                margin-left: 29px;
+                right: 0;
             }
         }
         &.z-message-other {
-            -webkit-align-self: flex-start;
-            align-self: flex-start;
-            -webkit-box-align: start;
-            -webkit-align-items: flex-start;
-            align-items: flex-start;
-            .z-message-text {
+            padding-left: 30px;
+            .z-message-box {
                 border-radius: 16px 16px 16px 0;
-                -webkit-mask-box-image: url("data:image/svg+xml;charset=utf-8,<svg height='35' viewBox='0 0 96 70' width…3 28 42 35z'/><path d='m0 70c6-2 12-10 12-19v-16l14 27s-8 8-26 8z'/></svg>") 50% 42% 46% 56%;
-                padding-left: 22px;
-                background-color: #e5e5ea;
-                color: #000;
+                -webkit-mask-box-image: url("data:image/svg+xml;charset=utf-8,<svg height='35' viewBox='0 0 96 70' width='48' xmlns='http://www.w3.org/2000/svg'><path d='m96 35c1 7-5 37-42 35-37 2-43-28-42-35-1-7 5-37 42-35 37-2 43 28 42 35z'/><path d='m0 70c6-2 12-10 12-19v-16l14 27s-8 8-26 8z'/></svg>") 50% 42% 46% 56%;
+                background-color: @light-color;
+                float: left;
             }
             .z-message-avatar {
-                margin-left: 29px;
+                left: 0;
             }
         }
         .z-message-avatar {
             width: 29px;
             height: 29px;
             border-radius: 50%;
-            margin-top: -29px;
-            position: relative;
-            top: 1px;
-            background-size: cover;
-            opacity: 1;
-            -webkit-transition-duration: .4s;
-            transition-duration: .4s;
+            position: absolute;
+            background-color: @light-color;
+            bottom: 0;
+            .cover;
         }
-        .z-message-text {
+        .z-message-box {
             border-radius: 16px;
             padding: 6px 16px 9px;
             min-width: 48px;
             min-height: 35px;
+            max-width: 80%;
+            &.z-message-img {
+                padding: 0;
+            }
+            &[class*="z-color-"] {
+                color: @light-color;
+            }
+            &.z-color-blue {
+                background-color: saturate(@blue-color, 15%);
+            }
+            &.z-color-red {
+                background-color: saturate(@red-color, 15%);
+            }
+            &.z-color-yellow {
+                background-color: saturate(@yellow-color, 15%);
+            }
+            &.z-color-purple {
+                background-color: saturate(@purple-color, 15%);
+            }
+            &.z-color-cyan {
+                background-color: saturate(@cyan-color, 15%);
+            }
+            &.z-color-gray {
+                background-color: saturate(@gray-color, 15%);
+            }
+            &.z-color-dark {
+                background-color: saturate(@dark-color, 15%);
+            }
+        }
+        img {
+            max-width: 100%;
         }
     }
     .z-message-date {

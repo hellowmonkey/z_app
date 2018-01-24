@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>测试</title>
+    <link rel="stylesheet" type="text/css" href="../dist/css/z.css" />
+</head>
+
+<body>
+    <div class="z-bar z-color-red">
+        <h4 class="z-title">沙哈</h4>
+        <a href="#" class="z-bar-item z-pull-left z-action-back">
+            <span class="z-icon">&#xe693;</span>
+            <span class="z-bar-tip">sasasa
+                <span class="z-loader z-loader-inline z-color-cyan"></span>
+            </span>
+        </a>
+        <a href="#" class="z-bar-item z-pull-right z-action-dropdown" data-dropdown-target="#dropdown">
+            <span class="z-icon">&#xe73a;</span>
+        </a>
+    </div>
+    <div class="z-content-padding">
+        <ul class="z-dropdown z-anim-ms3 z-anim-scaleSpring z-dropdown-right" id="dropdown">
+            <li>
+                <a href="#zttb">字体图标
+                    <code>z-icon</code>
+                </a>
+            </li>
+            <li>
+                <a href="#jc">基础样式</a>
+            </li>
+            <li>
+                <a href="#an">按钮
+                    <code>z-btn</code>
+                </a>
+            </li>
+            <li>
+                <a href="#biaodan">表单
+                    <code>z-form</code>
+                </a>
+            </li>
+            <li>
+                <a href="#biaoge">表格
+                    <code>z-table</code>
+                </a>
+            </li>
+        </ul>
+        <div class="z-loader"></div>
+        <div class="z-message">
+            <div class="z-message-date">2018/8/5</div>
+            <div class="z-message-item z-message-me">
+                <div class="z-message-avatar" style="background-image:url(https://ss3.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=6d0bf83bda00baa1a52c41bb7711b9b1/0b55b319ebc4b745b19f82c1c4fc1e178b8215d9.jpg)"></div>
+                <div class="z-message-box">aaaaaaaa</div>
+            </div>
+            <div class="z-message-item z-message-me">
+                <div class="z-message-avatar"></div>
+                <div class="z-message-box z-color-red">aaaaaaaa</div>
+            </div>
+            <div class="z-message-item z-message-other">
+                <div class="z-message-avatar"></div>
+                <div class="z-message-box z-color-blue">哈哈哈哈哈哈或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或</div>
+            </div>
+            <div class="z-message-item z-message-other">
+                <div class="z-message-avatar"></div>
+                <div class="z-message-box z-color-cyan">哈哈哈哈哈哈或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或</div>
+            </div>
+            <div class="z-message-item z-message-other">
+                <div class="z-message-avatar"></div>
+                <div class="z-message-box">哈哈哈哈哈哈或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或或</div>
+            </div>
+            <div class="z-message-item z-message-me">
+                <div class="z-message-avatar"></div>
+                <div class="z-message-box z-message-img">
+                    <img src="https://ss0.baidu.com/7Po3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=836eeeae16950a7b6a3548c43ad0625c/c8ea15ce36d3d5397966ba5b3187e950342ab0cb.jpg"
+                        alt="">
+                </div>
+            </div>
+            <div class="z-message-item z-message-other">
+                <div class="z-message-avatar"></div>
+                <div class="z-message-box z-message-img">
+                    <img src="https://ss0.baidu.com/-Po3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=9af99ce45efbb2fb2b2b5e127f4b2043/a044ad345982b2b713b5ad7d3aadcbef76099b65.jpg"
+                        alt="">
+                </div>
+            </div>
+        </div>
+        <form action="">
+            <div class="z-input-group z-action-numberbox" style="width:150px;">
+                <div class="z-input-group-addon">－</div>
+                <input type="number" class="z-input" value="3">
+                <div class="z-input-group-addon">＋</div>
+            </div>
+            <select name="select" id="">
+                <option value="1">aaa</option>
+            </select>
+            <div class="z-mt10">
+                <div class="z-btn-group">
+                    <button class="z-btn">按钮</button>
+                    <button class="z-btn z-color-gray">按钮</button>
+                    <button class="z-btn z-color-cyan">按钮</button>
+                    <button class="z-btn z-color-purple z-disabled">按钮</button>
+                    <button class="z-btn z-color-purple z-btn-outlined">按钮</button>
+                </div>
+                <button class="z-btn z-color-purple z-block z-btn-lg" type="button">按钮</button>
+            </div>
+            <button class="z-btn z-color-purple z-btn-link">打开</button>
+            <a class="z-btn z-color-purple" href="/video.html?id=1&cate=2" data-link-opts='{"show":{"auto":true}}'>打开</a>
+            <div class="z-input-item z-color-red">
+                <span class="z-input-tag">名称名称称</span>
+                <input type="text" class="z-input z-input-clear">
+            </div>
+            <div class="z-btn-group">
+                <button class="z-btn z-color-purple z-btn-outlined z-btn-round">打开</button>
+                <button class="z-btn z-color-purple z-btn-outlined z-btn-round z-active">打开</button>
+                <button class="z-btn z-color-purple z-btn-outlined z-btn-round">打开</button>
+            </div>
+            <div class="z-input-item">
+                <span class="z-input-tag">名称名称称</span>
+                <textarea class="z-input" name="textarea" id="" cols="30" rows="10"></textarea>
+            </div>
+            <div class="z-input-item z-color-red">
+                <input type="search" class="z-input z-input-clear" placeholder="搜索">
+            </div>
+            <div class="z-input-checkbox">
+                <label>
+                    <span class="z-pull-left">全选</span>
+                    <input type="checkbox" name="checkbox" value="1" checked>
+                    <span class="z-checkbox z-color-red"></span>
+                </label>
+            </div>
+            <div class="z-input-item z-input-checkbox">
+                <label>
+                    <span class="z-input-tag">名称名称称</span>
+                    <input type="checkbox" name="checkbox" value="2" checked>
+                    <span class="z-checkbox z-color-red"></span>
+                </label>
+            </div>
+            <div class="z-input-item z-input-radio">
+                <label>
+                    <span class="z-input-tag">名称名称称</span>
+                    <input type="radio" name="radio">
+                    <span class="z-radio z-color-purple"></span>
+                </label>
+            </div>
+            <div class="z-input-item z-input-radio z-left">
+                <label>
+                    <span class="z-input-tag">名称名称称</span>
+                    <input type="radio" name="radio">
+                    <span class="z-radio z-color-dark"></span>
+                </label>
+            </div>
+            <div class="z-input-item z-input-switch">
+                <span class="z-input-tag">名称名称称</span>
+                <div class="z-switch z-switch-simple">
+                    <span class="z-switch-handle"></span>
+                </div>
+            </div>
+        </form>
+        <ul class="z-list z-mt10">
+            <li class="z-list-item z-list-arrow">啊啊啊啊啊</li>
+            <li class="z-list-item z-list-arrow">啊啊啊啊啊</li>
+            <li class="z-list-item z-list-arrow">啊啊啊啊啊</li>
+            <li class="z-list-item z-list-arrow">啊啊啊啊啊
+                <div class="z-switch">
+                    <span class="z-switch-handle"></span>
+                </div>
+            </li>
+            <li class="z-list-item">啊啊啊啊啊
+                <div class="z-switch z-switch-simple z-color-red z-disabled">
+                    <span class="z-switch-handle"></span>
+                </div>
+            </li>
+        </ul>
+        <div class="z-alert">
+            <span class="z-close">&times;</span>哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</div>
+        <div class="z-modal z-anim-ms3 z-anim-downbit" id="modal">
+            <div class="z-modal-header">头部</div>
+            <div class="z-modal-content">内容</div>
+            <div class="z-modal-footer">
+                <div class="z-modal-btn">哈哈</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../dist/js/z.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        $(function () {
+            /* $('body').on('tap', '.z-btn', function () {
+                var box = $.modal('内容内容内容内容内容内容内容内容内容', '我就是标题', ['哈哈', '呵呵'], function (index) {
+                    console.log(box)
+                })
+            })
+            $('.z-switch').on('showed', function (box) {
+                console.log(box)
+            }) */
+            // $('#modal').modal() 
+            // $('#modal .z-modal-btn').tap(function(){ $('#modal').closeModal() })
+
+            $('.z-bar-transparent').on('change', function (event) {
+                console.log(event.detail.opacity)
+            })
+
+            $('body').on('tap', '.z-btn', function () {
+                $.modal('aa')
+                // $(this).button()
+            })
+
+            $.pullUpRefresh(function(){})
+
+        })
+    </script>
+</body>
+
+</html>

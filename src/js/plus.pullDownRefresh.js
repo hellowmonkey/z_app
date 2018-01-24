@@ -3,12 +3,12 @@
 (function ($, document, window) {
     if (!$.os.plus) return
     $.pullDownRefresh = function (opts, cb) {
-        var view = plus.webview.currentWebview()
+        var view = $.currentWebview
         if ($.type(opts) === 'function') {
             cb = opts
             opts = $.config.pullrefresh.down
         } else {
-            opts = $.extend($.config.pullrefresh.down, opts)
+            opts = $.extend($.config.pullrefresh.down, opts || {})
         }
         view.setPullToRefresh(opts, cb)
         if (opts.auto) {

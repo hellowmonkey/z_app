@@ -40,11 +40,10 @@
     }
 
     $.useCamera = function (cb, opts) {
-        opts = opts || {}
-        opts = $.extend(true, {
+        opts = $.extend({
             multiple: true,
             filter: 'image'
-        }, opts)
+        }, opts || {})
         var bts = [{
             title: "现在拍摄"
         }, {

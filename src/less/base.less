@@ -148,6 +148,10 @@ fieldset {
     box-sizing: content-box!important;
 }
 
+.z-text-through {
+    text-decoration: line-through;
+}
+
 .z-text-center {
     text-align: center!important;
 }
@@ -174,6 +178,10 @@ fieldset {
 
 .z-text-capitalize {
     text-transform: capitalize!important;
+}
+
+.z-text-light {
+    color: @light-color!important;
 }
 
 .z-text-gray {
@@ -206,6 +214,10 @@ fieldset {
 
 .z-text-cyan {
     color: @cyan-color!important;
+}
+
+.z-bg-light {
+    background-color: @light-color!important;
 }
 
 .z-bg-gray {
@@ -260,9 +272,7 @@ input[type="button"]:disabled {
 }
 
 .z-cover {
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
+    .cover;
 }
 
 .z-mt5 {
@@ -363,7 +373,7 @@ input[type="button"]:disabled {
 .z-content,
 .z-content-padding {
     position: relative;
-    .z-bar+& {
+    .z-bar:not(.z-bar-transparent)+& {
         padding-top: @bar-height;
     }
 }
@@ -378,6 +388,9 @@ input[type="button"]:disabled {
     color: @gray-color;
     font-size: .92rem;
     padding: @blank-size;
+    .z-loader.z-loader-inline {
+        margin-top: -4px;
+    }
 }
 
 .z-border {
@@ -398,15 +411,20 @@ input[type="button"]:disabled {
     overflow: hidden;
     .z-ripple-bg {
         position: absolute;
-        border-radius: 10px;
+        border-radius: 50%;
         z-index: 9;
-        .transition( all,
+        .transition( box-shadow,
         linear,
-        .4s);
-        opacity: 1;
-        width: 10px;
-        height: 10px;
-        background-color: transparent;
+        .5s);
+        width: 1px;
+        height: 1px;
+        background-color: rgba(0, 0, 0, .2);
+        box-shadow: 0 0 0 rgba(0, 0, 0, .2);
+        [class*="z-color-"]&,
+        .z-ripple-light& {
+            background-color: rgba(255, 255, 255, .3);
+            box-shadow: 0 0 0 rgba(255, 255, 255, .3);
+        }
     }
 }
 
@@ -417,7 +435,7 @@ input[type="button"]:disabled {
     z-index: 99;
     top: 0;
     left: 0;
-    background: rgba(0, 0, 0, .4);
+    background: rgba(0, 0, 0, .3);
     display: none;
 }
 

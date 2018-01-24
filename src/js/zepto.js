@@ -58,7 +58,8 @@ var Zepto = (function () {
             'colspan': 'colSpan',
             'usemap': 'useMap',
             'frameborder': 'frameBorder',
-            'contenteditable': 'contentEditable'
+            'contenteditable': 'contentEditable',
+            'disabled': 'disabled'
         },
         isArray = Array.isArray ||
         function (object) {
@@ -526,20 +527,33 @@ var Zepto = (function () {
     }
 
     // 按类别排序参数
-    $.getArgs = function (args) {
+    $.orderArgs = function (args) {
         var rets = {
             string: [],
             function: [],
             array: [],
             object: [],
-            number: []
+            number: [],
+            boolean: []
         }
         $.each(args, function (k, item) {
             var type = $.type(item)
-            if (rets[type]) rets[type].push(item)
-            else rets[type] = []
+            if ($.type(rets[type]) === 'undefined') rets[type] = []
+            else rets[type].push(item)
         })
         return rets
+    }
+
+    // 从标签排序参数
+    $.orderOpts = function (ele, inits, opts, suf) {
+        var options = inits
+        suf = suf || ''
+        if (opts) options = $.extend({}, inits, opts)
+        $.each(options, function (key, val) {
+            var name = suf + key
+            if ($.type(ele.data(name)) !== 'undefined') options[key] = ele.data(name)
+        })
+        return options
     }
 
     // 解析url参数

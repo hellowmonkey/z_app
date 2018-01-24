@@ -6,7 +6,7 @@
             cb = opts
             opts = $.config.pullrefresh.up
         } else {
-            opts = $.extend($.config.pullrefresh.up, opts)
+            opts = $.extend($.config.pullrefresh.up, opts || {})
         }
         var lock, isOver, timer, page = 1
         var sElem = $(opts.container)

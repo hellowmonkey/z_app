@@ -58,7 +58,8 @@ var Zepto = (function () {
             'colspan': 'colSpan',
             'usemap': 'useMap',
             'frameborder': 'frameBorder',
-            'contenteditable': 'contentEditable'
+            'contenteditable': 'contentEditable',
+            'disabled': 'disabled'
         },
         isArray = Array.isArray ||
         function (object) {
@@ -526,20 +527,33 @@ var Zepto = (function () {
     }
 
     // 按类别排序参数
-    $.getArgs = function (args) {
+    $.orderArgs = function (args) {
         var rets = {
             string: [],
             function: [],
             array: [],
             object: [],
-            number: []
+            number: [],
+            boolean: []
         }
         $.each(args, function (k, item) {
             var type = $.type(item)
-            if (rets[type]) rets[type].push(item)
-            else rets[type] = []
+            if ($.type(rets[type]) === 'undefined') rets[type] = []
+            else rets[type].push(item)
         })
         return rets
+    }
+
+    // 从标签排序参数
+    $.orderOpts = function (ele, inits, opts, suf) {
+        var options = inits
+        suf = suf || ''
+        if (opts) options = $.extend({}, inits, opts)
+        $.each(options, function (key, val) {
+            var name = suf + key
+            if ($.type(ele.data(name)) !== 'undefined') options[key] = ele.data(name)
+        })
+        return options
     }
 
     // 解析url参数
@@ -1240,9 +1254,9 @@ window.$ === undefined && (window.$ = Zepto)
                 auto: false
             },
             up: {
-                nonerText: '没有更多数据了',
-                loadingText: '加载中...',
-                tipText: '上拉加载更多数据',
+                nonerText: '没有了',
+                loadingText: '<span class="z-loader z-loader-inline"></span> 加载中...',
+                tipText: '加载更多',
                 container: $('.z-content,.z-content-padding')[0]
             }
         },
@@ -1272,12 +1286,27 @@ window.$ === undefined && (window.$ = Zepto)
         template: {
             path: '_www/tpl/'
         },
-        ripples: ['.z-action-ripple', '.z-list .z-list-item', '.z-btn'],
+        ripples: ['.z-action-ripple', '.z-list .z-list-item', '.z-btn', '.z-input-group-addon'],
         transTime: 150,
         beforeback: [],
         ajax: {
             errorToast: true
-        }
+        },
+        anims: ['z-anim-upbit', 'z-anim-scale', 'z-anim-scaleSpring', 'z-anim-up', 'z-anim-downbit'],
+        animCls: 'z-anim-ms3',
+        numberbox: {
+            prev: '.z-input-group-addon:first',
+            next: '.z-input-group-addon:last',
+            input: 'input',
+            min: 1,
+            max: null,
+            step: 1
+        },
+        transparent: {
+            start: 0,
+            end: 250
+        },
+        buttonLoading: '<span class="z-anim-rotate z-icon">&#xe624;</span>'
     };
 })(Zepto)
 //     Zepto.js
@@ -1779,43 +1808,62 @@ window.$ === undefined && (window.$ = Zepto)
 //     (c) 2010-2016 Thomas Fuchs
 //     Zepto.js may be freely distributed under the MIT license.
 
-;(function($){
-  $.fn.serializeArray = function() {
-    var name, type, result = [],
-      add = function(value) {
-        if (value.forEach) return value.forEach(add)
-        result.push({ name: name, value: value })
-      }
-    if (this[0]) $.each(this[0].elements, function(_, field){
-      type = field.type, name = field.name
-      if (name && field.nodeName.toLowerCase() != 'fieldset' &&
-        !field.disabled && type != 'submit' && type != 'reset' && type != 'button' && type != 'file' &&
-        ((type != 'radio' && type != 'checkbox') || field.checked))
-          add($(field).val())
-    })
-    return result
-  }
-
-  $.fn.serialize = function(){
-    var result = []
-    this.serializeArray().forEach(function(elm){
-      result.push(encodeURIComponent(elm.name) + '=' + encodeURIComponent(elm.value))
-    })
-    return result.join('&')
-  }
-
-  $.fn.submit = function(callback) {
-    if (0 in arguments) this.bind('submit', callback)
-    else if (this.length) {
-      var event = $.Event('submit')
-      this.eq(0).trigger(event)
-      if (!event.isDefaultPrevented()) this.get(0).submit()
+;
+(function ($) {
+    $.fn.serializeArray = function () {
+        var name, type, result = [],
+            add = function (value) {
+                if (value.forEach) return value.forEach(add)
+                result.push({
+                    name: name,
+                    value: value
+                })
+            }
+        if (this[0]) $.each(this[0].elements, function (_, field) {
+            type = field.type, name = field.name
+            if (name && field.nodeName.toLowerCase() != 'fieldset' &&
+                !field.disabled && type != 'submit' && type != 'reset' && type != 'button' && type != 'file' &&
+                ((type != 'radio' && type != 'checkbox') || field.checked))
+                add($(field).val())
+        })
+        return result
     }
-    return this
-  }
+
+    $.fn.serialize = function () {
+        var result = []
+        this.serializeArray().forEach(function (elm) {
+            result.push(encodeURIComponent(elm.name) + '=' + encodeURIComponent(elm.value))
+        })
+        return result.join('&')
+    }
+
+    $.fn.submit = function (callback) {
+        if (0 in arguments) this.bind('submit', callback)
+        else if (this.length) {
+            var event = $.Event('submit')
+            this.eq(0).trigger(event)
+            if (!event.isDefaultPrevented()) this.get(0).submit()
+        }
+        return this
+    }
+
+    $.fn.serializeForm = function () {
+        var result = {}
+        $.each(this.serializeArray(), function (k, item) {
+            var name = item.name
+            var value = item.value
+            if ($.type(result[name]) === 'undefined') {
+                result[name] = value
+            } else {
+                var temp = [result[name]]
+                temp.push(value)
+                result[name] = temp
+            }
+        })
+        return result
+    }
 
 })(Zepto)
-
 //     Zepto.js
 //     (c) 2010-2016 Thomas Fuchs
 //     Zepto.js may be freely distributed under the MIT license.
@@ -1884,7 +1932,7 @@ window.$ === undefined && (window.$ = Zepto)
         e = compatible(e)
         if (e.isImmediatePropagationStopped()) return
         e.data = data
-        var result = callback.apply(element, e._args == undefined ? [e] : [e].concat(e._args))
+        var result = callback.apply(element, e.detail == undefined ? [e] : [e].concat(e.detail))
         if (result === false) e.preventDefault(), e.stopPropagation()
         return result
       }
@@ -2047,7 +2095,7 @@ window.$ === undefined && (window.$ = Zepto)
 
   $.fn.trigger = function(event, args){
     event = (isString(event) || $.isPlainObject(event)) ? $.Event(event) : compatible(event)
-    event._args = args
+    event.detail = args
     return this.each(function(){
       // handle focus(), blur() by calling them directly
       if (event.type in focus && typeof this[event.type] == "function") this[event.type]()
@@ -2063,7 +2111,7 @@ window.$ === undefined && (window.$ = Zepto)
     var e, result
     this.each(function(i, element){
       e = createProxy(isString(event) ? $.Event(event) : event)
-      e._args = args
+      e.detail = args
       e.target = element
       $.each(findHandlers(element, event.type || event), function(i, handler){
         result = handler.proxy(e)
@@ -2539,7 +2587,7 @@ window.$ === undefined && (window.$ = Zepto)
 
     // handle optional data/success arguments
     function parseArguments( /* url, data, success, dataType, error */ ) {
-        var args = $.getArgs(arguments)
+        var args = $.orderArgs(arguments)
         return {
             url: args['string'][0],
             data: args['object'][0],
@@ -2786,26 +2834,25 @@ window.$ === undefined && (window.$ = Zepto)
     var activeClass = 'z-active'
     var switchClass = 'z-switch'
     $.fn.switch = function (type) {
+        if (!this.length) return this
         this.each(function () {
             var _this = $(this)
             if (!_this.hasClass(switchClass)) return this
             if (type === 'show' && _this.hasClass(activeClass)) return this
             if (type === 'hide' && !_this.hasClass(activeClass)) return this
             var handle = _this.find('.z-switch-handle')
+            var transName = $.fx.cssPrefix + 'transform'
+            var transOpts = {}
             if (_this.hasClass(activeClass)) {
                 _this.removeClass(activeClass)
-                handle.css({
-                    'transform': '',
-                    '-webkit-transform': '' 
-                })
+                transOpts[transName] = ''
+                handle.css(transOpts)
                 _this.trigger('hideed', _this)
             } else {
                 var w = _this.width() - handle.width()
                 _this.addClass(activeClass)
-                handle.css({
-                    'transform': 'translate(' + w + 'px, 0px)',
-                    '-webkit-transform': 'translate(' + w + 'px, 0px)'
-                })
+                transOpts[transName] = 'translate(' + w + 'px, 0px)'
+                handle.css(transOpts)
                 _this.trigger('showed', _this)
             }
         })
@@ -2821,7 +2868,11 @@ window.$ === undefined && (window.$ = Zepto)
         view,
         launchWebview,
         subNViews,
-        objShade
+        objShade,
+        objClick,
+        animCls = $.config.animCls,
+        anims = $.config.anims
+
 
     $.zIndex = function (z) {
         z = z || 1
@@ -2831,55 +2882,55 @@ window.$ === undefined && (window.$ = Zepto)
 
     /**
      * 创建遮罩
-     * @param  {fn} createCb 成功后的回调
      * @param  {fn} closeCb  关闭时的回调
      * @param  {str} opacity  透明度
      */
-    $.createShade = function (createCb, closeCb, opacity) {
+    $.createShade = function (closeCb, opacity) {
         if (!zShade) {
             zShade = $('<div class="z-shade" style="z-index:' + $.zIndex() + ';' + function () {
                 return $.type(opacity) === 'undefined' ? 'opacity:' + opacity : ''
             }() + '"></div>')
             $('body').addClass('z-overflow')
             $('body').append(zShade)
-            zShade.show()
         }
-        ++zShades
-        if ($.os.plus) viewShade('show')
-        createCb && createCb()
+        zShade.show()
+            ++zShades
+        if ($.os.plus) {
+            objClick = closeCb
+            viewShade('show')
+        }
         zShade.trigger('showed', zShades)
-        zShade.on('tap', function () {
+        zShade.on('touchstart', function () {
             closeCb && closeCb() && $.closeShade()
         })
         return zShade
     }
     /**
      * 关闭遮罩层
-     * @param  {fn} cb   关闭后的回调
      * @param  {bool}   rm   是否强制关闭
      */
-    $.closeShade = function (time, cb, rm) {
+    $.closeShade = function (rm) {
         if (!zShade) return false
-        zShade.trigger('hideed', zShades)
         if (rm) zShades = 0
-            --zShades
+        --zShades
         if (zShades <= 0) {
+            zShade.trigger('hideed', zShades)
             zShades = 0
             zShade.remove()
             zShade = null
             $('body').removeClass('z-overflow')
             if ($.os.plus) viewShade('hide')
-            cb && cb()
         }
     }
     // 模态框
     $.modal = function ( /* content, title, btns, cb */ ) {
-        var args = $.getArgs(arguments),
+        var args = $.orderArgs(arguments),
             content = args['string'][0],
             title = args['string'][1],
             btns = args['array'][0] || ['确认'],
             cb = args['function'][0]
-        var html = '<div class="z-modal">' + function () {
+        var animName = getAnim()
+        var html = '<div class="z-modal ' + animCls + '">' + function () {
             return title ? '<div class="z-modal-header">' + title + '</div>' : ''
         }() + '<div class="z-modal-content z-border">' + content + '</div><div class="z-modal-footer">' + function () {
             var h = ''
@@ -2889,15 +2940,14 @@ window.$ === undefined && (window.$ = Zepto)
             return h
         }() + '</div></div>'
         html = $(html)
-        $.createShade(function () {
-            html.css('zIndex', $.zIndex())
-            $('body').append(html)
-            html.show(transTime).css('marginTop', -(html.height() / 3) + 'px').trigger('showed', html)
-            html.find('.z-modal-btn').tap(function () {
-                if (cb && !cb($(this).index())) {
-                    $.closeModal(html)
-                }
-            })
+        $.createShade()
+        html.css('zIndex', $.zIndex())
+        $('body').append(html)
+        html.css('display', 'block').css('marginTop', -(html.height() / 2) + 'px').addClass(animName).trigger('showed', html)
+        html.find('.z-modal-btn').tap(function () {
+            if (cb && !cb($(this).index())) {
+                $.closeModal(html)
+            }
         })
         return html
     }
@@ -2909,6 +2959,24 @@ window.$ === undefined && (window.$ = Zepto)
             $.closeShade()
             box.remove().trigger('hideed', box)
         })
+    }
+
+    // 原型上的modal
+    $.fn.modal = function (opts, shadeCb) {
+        $.createShade(shadeCb)
+        opts = $.orderOpts(this, {
+            'zIndex': $.zIndex(),
+            'display': 'block',
+            'top': '30%'
+        }, opts, 'modal')
+        return this.css(opts).trigger('showed')
+    }
+
+    // 原型上的关闭modal
+    $.fn.closeModal = function () {
+        return this.fadeOut(transTime, function () {
+            $.closeShade()
+        }).trigger('hideed')
     }
 
     function viewShade(type) {
@@ -2926,7 +2994,7 @@ window.$ === undefined && (window.$ = Zepto)
         }
 
         function toggle() {
-            if(!objShade) {
+            if (!objShade) {
                 objShade = new plus.nativeObj.View('objShade', {
                     backgroundColor: 'rgba(0,0,0,.4)',
                     left: '0px',
@@ -2934,9 +3002,16 @@ window.$ === undefined && (window.$ = Zepto)
                     width: '100%',
                     height: '51px'
                 })
+                objShade.addEventListener('click', function () {
+                    objClick && objClick()
+                }, false)
             }
             objShade[type]()
         }
+    }
+
+    function getAnim() {
+        return anims[Math.floor(Math.random() * anims.length)]
     }
 
     if ($.beforeback) {
@@ -2946,6 +3021,135 @@ window.$ === undefined && (window.$ = Zepto)
     }
 
 })(Zepto)
+// 数字输入框
+;
+(function ($) {
+    var disabled = 'z-disabled'
+
+    $.fn.numberbox = function (opts) {
+        if (!this.length) return this
+        return this.each(function () {
+            var _this = $(this)
+            var options = $.orderOpts(_this, $.config.numberbox, opts, 'numberbox-')
+            numberBox(_this, options)
+        })
+
+        function numberBox(ele, opts) {
+            var ipt = ele.find(opts.input)
+            var next = ele.find(opts.next)
+            var prev = ele.find(opts.prev)
+            var step = parseFloat(opts.step)
+            var max = parseFloat(opts.max)
+            var min = parseFloat(opts.min)
+            if (!ipt || !next || !prev || !ipt.length || !next.length || !prev.length) return
+            if (max && max < min) max = min
+            ipt.on('change', function () {
+                var val = parseFloat(ipt.val())
+                if (isNaN(val)) val = min
+                if (val <= min) {
+                    ipt.val(min)
+                    prev.addClass(disabled)
+                } else {
+                    prev.removeClass(disabled)
+                }
+                if (max && val >= max) {
+                    ipt.val(max)
+                    next.addClass(disabled)
+                } else {
+                    next.removeClass(disabled)
+                }
+            })
+            ipt.on('keyup', function () {
+                ipt.change()
+            })
+            next.on('tap', function () {
+                var val = parseFloat(ipt.val())
+                if (next.hasClass(disabled)) return
+                val += step
+                ipt.val(val).change()
+            })
+            prev.on('tap', function () {
+                var val = parseFloat(ipt.val())
+                if (prev.hasClass(disabled)) return
+                val -= step
+                ipt.val(val).change()
+            })
+            ipt.change()
+        }
+    }
+
+    
+})(Zepto)
+// 按钮loading
+;
+(function ($) {
+    var disabled = 'z-disabled'
+    var newText = 'button-text'
+    var oldText = 'button-oldtext'
+    var loading = $.config.buttonLoading
+    $.fn.button = function (type, loadingText) {
+        if (!this.length) return this
+        this.each(function () {
+            var _this = $(this)
+            var text = ''
+            if (type === 'loading' && _this.hasClass(disabled)) return this
+            if (type === 'reset' && !_this.hasClass(disabled)) return this
+            if (_this.hasClass(disabled)) {
+                text = _this.data(oldText)
+                _this.removeClass(disabled).removeData(oldText).removeAttr('disabled').html(text)
+            } else {
+                text = loadingText || _this.data(newText) || ''
+                text = loading + text
+                _this.addClass(disabled).data(oldText, _this.html()).attr('disabled', 'disabled').html(text)
+            }
+        })
+        return this
+    }
+})(Zepto)
+// 透明导航
+;
+(function ($, window) {
+    var rgbaRegex = /^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/;
+    var getColor = function (colorStr) {
+        var matches = colorStr.match(rgbaRegex);
+        if (matches && matches.length === 5) {
+            return [
+                matches[1],
+                matches[2],
+                matches[3],
+                matches[4]
+            ];
+        }
+        return [];
+    };
+
+    $.fn.transparent = function (opts) {
+        if (!this.length) return this
+        var self = this
+        var color = self.css('background-color')
+        var colors = getColor(color)
+        var top
+        opts = $.orderOpts(self, $.config.transparent, opts, 'transparent-')
+        if (!colors.length) throw new Error("ui.transparent: 元素背景颜色必须为RGBA");
+        $(window).on('scroll', function () {
+            var _this = $(this)
+            var scrollTop = _this.scrollTop()
+            if (scrollTop < opts.start) {
+                scrollTop = opts.start
+            } else if (scrollTop > opts.end) {
+                scrollTop = opts.end
+            }
+            var opacity = parseFloat(scrollTop / opts.end)
+            if (top === scrollTop) return
+            self.css('background-color', 'rgba(' + colors[0] + ',' + colors[1] + ',' + colors[2] + ',' + opacity + ')').trigger('change', {
+                opacity: opacity
+            })
+            top = scrollTop
+        })
+
+        return this
+    }
+})(Zepto, window)
 // 上拉加载
 ;
 (function ($, document, window) {
@@ -2954,7 +3158,7 @@ window.$ === undefined && (window.$ = Zepto)
             cb = opts
             opts = $.config.pullrefresh.up
         } else {
-            opts = $.extend($.config.pullrefresh.up, opts)
+            opts = $.extend($.config.pullrefresh.up, opts || {})
         }
         var lock, isOver, timer, page = 1
         var sElem = $(opts.container)
@@ -3003,6 +3207,7 @@ window.$ === undefined && (window.$ = Zepto)
         }
     }
 })(Zepto, document, window);
+
 $(function () {
     var activeClass = 'z-active'
     var options = $.config;
@@ -3059,33 +3264,48 @@ $(function () {
                 indicator: 'number'
             })
         })
+
+        // 打开新页面
+        $('body').on('click', 'a,.z-action-link', function (event) {
+            event.preventDefault()
+            var _this = $(this)
+            var href = _this.attr('href') || _this.data('link-target')
+            var opts = _this.data('link-opts')
+            var suf = '.html'
+            var pathIndex = href.indexOf(suf)
+            if (pathIndex === -1) return false
+            var filename = href.substr(0, pathIndex)
+            var ids = filename.split('/')
+            var id = ids[ids.length - 1]
+            var url = filename + suf
+            var options = {
+                url: url,
+                id: id,
+                extras: $.parseUrlQuery(href)
+            }
+            if (opts) {
+                opts = JSON.parse(opts)
+                options = $.extend(options, opts)
+            }
+            $.openWindow(options)
+            return false
+        })
     }
+
     // 返回
     $('body').on('tap', '.z-action-back', function () {
         $.back()
     })
 
-    // 打开新页面
-    $('body').on('click', 'a,.z-action-link', function (event) {
+    // disabled阻止
+    $('body').on('tap', '.z-disabled,:disabled', function (event) {
         event.stopPropagation()
         event.preventDefault()
-        var _this = $(this)
-        var href = _this.attr('href') || _this.data('link-href')
-        var opts = _this.data('link-opts')
-        var suf = '.html'
-        var pathIndex = href.indexOf(suf)
-        if (pathIndex === -1) return false
-        var filename = href.substr(0, pathIndex)
-        var ids = filename.split('/')
-        var id = ids[ids.length - 1]
-        var url = filename + suf
-        var options = {
-            url: url,
-            id: id,
-            extras: $.parseUrlQuery(href)
-        }
-        if (opts) options = $.extend(options, opts)
-        $.openWindow(options)
+        return false
+    })
+    $('.z-disabled,:disabled').on('tap', function (event) {
+        event.stopPropagation()
+        event.preventDefault()
         return false
     })
 
@@ -3119,19 +3339,15 @@ $(function () {
         event.stopPropagation()
         var _this = $(this)
         var size = Math.max(this.offsetWidth, this.offsetHeight)
-        var color = (_this.is('[class*="z-color-"]') || _this.hasClass('z-ripple-light')) ? 'rgba(255,255,255,.5)' : 'rgba(0,0,0,.3)'
+        var color = (_this.is('[class*="z-color-"]') || _this.hasClass('z-ripple-light')) ? 'rgba(255,255,255,0)' : 'rgba(0,0,0,0)'
         var offset = _this.offset()
-        var top = event._args.touch.y1 - offset.top
-        var left = event._args.touch.x1 - offset.left
-        // _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
+        var top = event.detail.touch.y1 - offset.top
+        var left = event.detail.touch.x1 - offset.left
         _this.addClass('z-ripple').append('<div class="z-ripple-bg" style="top:' + top +
             'px;left:' + left + 'px"></div>')
         setTimeout(function () {
             _this.find('.z-ripple-bg').css({
                 boxShadow: '0 0 0 ' + size + 'px ' + color,
-                borderRadius: size + 'px',
-                opacity: 0,
-                backgroundColor: color
             })
         }, 10)
         setTimeout(function () {
@@ -3139,23 +3355,36 @@ $(function () {
         }, 400)
     })
 
-    // disabled阻止
-    $('body').on('tap', '.z-disabled,:disabled', function (event) {
-        event.stopPropagation()
-        event.preventDefault()
-        return false
-    })
-    $('.z-disabled,:disabled').on('tap', function (event) {
-        event.stopPropagation()
-        event.preventDefault()
-        return false
-    })
-
     // 关闭alert
-    $('body').on('tap', '.z-alert .z-close', function(){
+    $('body').on('tap', '.z-alert .z-close', function () {
         var box = $(this).closest('.z-alert')
-        box.hide(300, function(){
+        box.hide(300, function () {
             box.remove()
         })
     })
+
+    // 数字输入框
+    $('.z-action-numberbox').numberbox()
+
+    // 下拉组件
+    $('body').on('tap', '.z-action-dropdown', function (event) {
+        var _this = $(this)
+        var target = _this.data('dropdown-target')
+        if (target) target = $(target)
+        else target = _this.find('.z-dropdown')
+        if (!target.length) return this
+        var position = _this.position()
+        var top = position.top + _this.height() + 2
+        var left = position.left - 160 + _this.width() / 2 + 16
+        target.modal({
+            top: top + 'px',
+            left: left + 'px'
+        }, function () {
+            target.closeModal()
+        })
+    })
+
+    // 透明导航
+    $('.z-action-transparent').transparent()
+
 });

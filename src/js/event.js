@@ -66,7 +66,7 @@
         e = compatible(e)
         if (e.isImmediatePropagationStopped()) return
         e.data = data
-        var result = callback.apply(element, e._args == undefined ? [e] : [e].concat(e._args))
+        var result = callback.apply(element, e.detail == undefined ? [e] : [e].concat(e.detail))
         if (result === false) e.preventDefault(), e.stopPropagation()
         return result
       }
@@ -229,7 +229,7 @@
 
   $.fn.trigger = function(event, args){
     event = (isString(event) || $.isPlainObject(event)) ? $.Event(event) : compatible(event)
-    event._args = args
+    event.detail = args
     return this.each(function(){
       // handle focus(), blur() by calling them directly
       if (event.type in focus && typeof this[event.type] == "function") this[event.type]()
@@ -245,7 +245,7 @@
     var e, result
     this.each(function(i, element){
       e = createProxy(isString(event) ? $.Event(event) : event)
-      e._args = args
+      e.detail = args
       e.target = element
       $.each(findHandlers(element, event.type || event), function(i, handler){
         result = handler.proxy(e)
