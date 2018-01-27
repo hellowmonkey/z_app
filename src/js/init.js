@@ -45,7 +45,7 @@ $(function () {
             group = group === null ? '' : '[data-album-group="' + group + '"]'
             $('.mui-action-album' + group).each(function (k) {
                 var _this = $(this)
-                var src = _this.data('album-src') || this.src || _this.getBackgroundUrl()
+                var src = _this.data('album-src') || this.src || _this.backgroundImage()
                 if (self === this) current = k
                 images.push(src)
             })
@@ -178,6 +178,9 @@ $(function () {
     $('.z-action-slider').each(function(){
         $(this).slider()
     })
+
+    // 图片懒加载
+    $('.z-action-lazyimg').lazyImg()
 
     // 透明导航
     $('.z-action-transparent').transparent()

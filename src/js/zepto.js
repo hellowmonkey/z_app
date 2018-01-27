@@ -1061,15 +1061,6 @@ var Zepto = (function () {
                     parent = parent.offsetParent
                 return parent
             })
-        },
-        getBackgroundUrl: function (src) {
-            if (src) {
-                return this.each(function () {
-                    this.css('backgroundImage', 'url(' + src + ')')
-                })
-            } else {
-                return this.css('backgroundImage').replace(/url\([\'\"]?(.*?)[\'\"]?\)/g, "$1")
-            }
         }
     }
 
