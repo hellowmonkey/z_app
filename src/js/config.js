@@ -128,6 +128,19 @@
             start: 0,
             end: 250
         },
-        buttonLoading: '<span class="z-anim-rotate z-icon">&#xe624;</span>'
+        buttonLoading: '<span class="z-anim-rotate z-icon">&#xe624;</span>',
+        slider: {
+            loop: true,
+            interval: 3000,
+            checkY: false,
+            resetHeight: false,
+            handler: '.z-slider-group',
+            items: '.z-slider-item',
+            offset: 0.2,
+            duration: 200,
+            indicator: 'dots',
+            activeDot: 0,
+            spring: true
+        }
     };
 })(Zepto)

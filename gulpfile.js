@@ -23,11 +23,10 @@ let js_modules = function ( /* modules */ ) {
     return rets
 }
 
-let z_src = js_modules(js_modules_fn, js_modules_plus, js_modules_ui)
+let z_src = js_modules(js_modules_fn, js_modules_plus, js_modules_tpl, js_modules_ui)
 let web_src = js_modules(js_modules_fn, js_modules_ui)
-let tpl_src = js_modules(js_modules_tpl)
 
-gulp.task('buildJs', ['z', 'web', 'tpl'])
+gulp.task('buildJs', ['z', 'web'])
 
 gulp.task('z', function () {
     gulp.src(z_src)
@@ -53,19 +52,6 @@ gulp.task('web', function () {
         .pipe(gulp.dest('dist/js/'))
 })
 
-gulp.task('tpl', function () {
-    gulp.src(tpl_src)
-        .pipe(concat('z-template.js'))
-        .pipe(gulp.dest('dist/js/'))
-        .pipe(gulp.dest('../../git/av/js/'))
-        .pipe(uglify())
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(gulp.dest('dist/js/'))
-        .pipe(gulp.dest('../../git/av/js/'))
-})
-
 gulp.task('buildCss', function () {
     gulp.src('src/less/z.less')
         .pipe(less())
@@ -89,7 +75,4 @@ gulp.watch(z_src, ['z']).on('change', function (event) {
 });
 gulp.watch(web_src, ['web']).on('change', function (event) {
     console.log('File ' + event.path + ' was ' + event.type + ', running tasks [web]...');
-});
-gulp.watch(tpl_src, ['tpl']).on('change', function (event) {
-    console.log('File ' + event.path + ' was ' + event.type + ', running tasks [tpl]...');
 });

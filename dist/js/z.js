@@ -529,16 +529,16 @@ var Zepto = (function () {
     // 按类别排序参数
     $.orderArgs = function (args) {
         var rets = {
-            string: [],
-            function: [],
-            array: [],
-            object: [],
-            number: [],
-            boolean: []
+            string: emptyArray,
+            function: emptyArray,
+            array: emptyArray,
+            object: emptyArray,
+            number: emptyArray,
+            boolean: emptyArray
         }
         $.each(args, function (k, item) {
             var type = $.type(item)
-            if ($.type(rets[type]) === 'undefined') rets[type] = []
+            if (rets[type] === emptyArray || $.type(rets[type]) === 'undefined') rets[type] = [item]
             else rets[type].push(item)
         })
         return rets
@@ -1306,222 +1306,261 @@ window.$ === undefined && (window.$ = Zepto)
             start: 0,
             end: 250
         },
-        buttonLoading: '<span class="z-anim-rotate z-icon">&#xe624;</span>'
+        buttonLoading: '<span class="z-anim-rotate z-icon">&#xe624;</span>',
+        slider: {
+            loop: true,
+            interval: 3000,
+            checkY: false,
+            resetHeight: false,
+            handler: '.z-slider-group',
+            items: '.z-slider-item',
+            offset: 0.2,
+            duration: 200,
+            indicator: 'dots',
+            activeDot: 0,
+            spring: true
+        }
     };
 })(Zepto)
 //     Zepto.js
 //     (c) 2010-2016 Thomas Fuchs
 //     Zepto.js may be freely distributed under the MIT license.
 
-;(function($){
-  var touch = {},
-    touchTimeout, tapTimeout, swipeTimeout, longTapTimeout,
-    longTapDelay = 750,
-    gesture,
-    down, up, move,
-    eventMap,
-    initialized = false
+;
+(function ($) {
+    var touch = {},
+        touchTimeout, tapTimeout, swipeTimeout, longTapTimeout,
+        longTapDelay = 750,
+        gesture,
+        down, up, move,
+        eventMap,
+        initialized = false
 
-  function swipeDirection(x1, x2, y1, y2) {
-    return Math.abs(x1 - x2) >=
-      Math.abs(y1 - y2) ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down')
-  }
-
-  function longTap() {
-    longTapTimeout = null
-    if (touch.last) {
-      touch.el.trigger('longTap')
-      touch = {}
-    }
-  }
-
-  function cancelLongTap() {
-    if (longTapTimeout) clearTimeout(longTapTimeout)
-    longTapTimeout = null
-  }
-
-  function cancelAll() {
-    if (touchTimeout) clearTimeout(touchTimeout)
-    if (tapTimeout) clearTimeout(tapTimeout)
-    if (swipeTimeout) clearTimeout(swipeTimeout)
-    if (longTapTimeout) clearTimeout(longTapTimeout)
-    touchTimeout = tapTimeout = swipeTimeout = longTapTimeout = null
-    touch = {}
-  }
-
-  function isPrimaryTouch(event){
-    return (event.pointerType == 'touch' ||
-      event.pointerType == event.MSPOINTER_TYPE_TOUCH)
-      && event.isPrimary
-  }
-
-  function isPointerEventType(e, type){
-    return (e.type == 'pointer'+type ||
-      e.type.toLowerCase() == 'mspointer'+type)
-  }
-
-  // helper function for tests, so they check for different APIs
-  function unregisterTouchEvents(){
-    if (!initialized) return
-    $(document).off(eventMap.down, down)
-      .off(eventMap.up, up)
-      .off(eventMap.move, move)
-      .off(eventMap.cancel, cancelAll)
-    $(window).off('scroll', cancelAll)
-    cancelAll()
-    initialized = false
-  }
-
-  function setup(__eventMap){
-    var now, delta, deltaX = 0, deltaY = 0, firstTouch, _isPointerType
-
-    unregisterTouchEvents()
-
-    eventMap = (__eventMap && ('down' in __eventMap)) ? __eventMap :
-      ('ontouchstart' in document ?
-      { 'down': 'touchstart', 'up': 'touchend',
-        'move': 'touchmove', 'cancel': 'touchcancel' } :
-      'onpointerdown' in document ?
-      { 'down': 'pointerdown', 'up': 'pointerup',
-        'move': 'pointermove', 'cancel': 'pointercancel' } :
-       'onmspointerdown' in document ?
-      { 'down': 'MSPointerDown', 'up': 'MSPointerUp',
-        'move': 'MSPointerMove', 'cancel': 'MSPointerCancel' } : false)
-
-    // No API availables for touch events
-    if (!eventMap) return
-
-    if ('MSGesture' in window) {
-      gesture = new MSGesture()
-      gesture.target = document.body
-
-      $(document)
-        .bind('MSGestureEnd', function(e){
-          var swipeDirectionFromVelocity =
-            e.velocityX > 1 ? 'Right' : e.velocityX < -1 ? 'Left' : e.velocityY > 1 ? 'Down' : e.velocityY < -1 ? 'Up' : null
-          if (swipeDirectionFromVelocity) {
-            touch.el.trigger('swipe')
-            touch.el.trigger('swipe'+ swipeDirectionFromVelocity)
-          }
-        })
+    function swipeDirection(x1, x2, y1, y2) {
+        return Math.abs(x1 - x2) >=
+            Math.abs(y1 - y2) ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down')
     }
 
-    down = function(e){
-      if((_isPointerType = isPointerEventType(e, 'down')) &&
-        !isPrimaryTouch(e)) return
-      firstTouch = _isPointerType ? e : e.touches[0]
-      if (e.touches && e.touches.length === 1 && touch.x2) {
-        // Clear out touch movement data if we have it sticking around
-        // This can occur if touchcancel doesn't fire due to preventDefault, etc.
-        touch.x2 = undefined
-        touch.y2 = undefined
-      }
-      now = Date.now()
-      delta = now - (touch.last || now)
-      touch.el = $('tagName' in firstTouch.target ?
-        firstTouch.target : firstTouch.target.parentNode)
-      touchTimeout && clearTimeout(touchTimeout)
-      touch.x1 = firstTouch.pageX
-      touch.y1 = firstTouch.pageY
-      if (delta > 0 && delta <= 250) touch.isDoubleTap = true
-      touch.last = now
-      longTapTimeout = setTimeout(longTap, longTapDelay)
-      // adds the current touch contact for IE gesture recognition
-      if (gesture && _isPointerType) gesture.addPointer(e.pointerId)
-    }
-
-    move = function(e){
-      if((_isPointerType = isPointerEventType(e, 'move')) &&
-        !isPrimaryTouch(e)) return
-      firstTouch = _isPointerType ? e : e.touches[0]
-      cancelLongTap()
-      touch.x2 = firstTouch.pageX
-      touch.y2 = firstTouch.pageY
-
-      deltaX += Math.abs(touch.x1 - touch.x2)
-      deltaY += Math.abs(touch.y1 - touch.y2)
-    }
-
-    up = function(e){
-      if((_isPointerType = isPointerEventType(e, 'up')) &&
-        !isPrimaryTouch(e)) return
-      cancelLongTap()
-
-      // swipe
-      if ((touch.x2 && Math.abs(touch.x1 - touch.x2) > 30) ||
-          (touch.y2 && Math.abs(touch.y1 - touch.y2) > 30))
-
-        swipeTimeout = setTimeout(function() {
-          if (touch.el){
-            touch.el.trigger('swipe')
-            touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)))
-          }
-          touch = {}
-        }, 0)
-
-      // normal tap
-      else if ('last' in touch)
-        // don't fire tap when delta position changed by more than 30 pixels,
-        // for instance when moving to a point and back to origin
-        if (deltaX < 30 && deltaY < 30) {
-          // delay by one tick so we can cancel the 'tap' event if 'scroll' fires
-          // ('tap' fires before 'scroll')
-          tapTimeout = setTimeout(function() {
-
-            // trigger universal 'tap' with the option to cancelTouch()
-            // (cancelTouch cancels processing of single vs double taps for faster 'tap' response)
-            var event = $.Event('tap')
-            event.cancelTouch = cancelAll
-            // [by paper] fix -> "TypeError: 'undefined' is not an object (evaluating 'touch.el.trigger'), when double tap
-            if (touch.el) touch.el.trigger(event,{touch: touch})
-
-            // trigger double tap immediately
-            if (touch.isDoubleTap) {
-              if (touch.el) touch.el.trigger('doubleTap',{touch: touch})
-              touch = {}
-            }
-
-            // trigger single tap after 250ms of inactivity
-            else {
-              touchTimeout = setTimeout(function(){
-                touchTimeout = null
-                if (touch.el) touch.el.trigger('singleTap',{touch: touch})
-                touch = {}
-              }, 250)
-            }
-          }, 0)
-        } else {
-          touch = {}
+    function longTap() {
+        longTapTimeout = null
+        if (touch.last) {
+            touch.el.trigger('longTap')
+            touch = {}
         }
-        deltaX = deltaY = 0
     }
 
-    $(document).on(eventMap.up, up)
-      .on(eventMap.down, down)
-      .on(eventMap.move, move)
+    function cancelLongTap() {
+        if (longTapTimeout) clearTimeout(longTapTimeout)
+        longTapTimeout = null
+    }
 
-    // when the browser window loses focus,
-    // for example when a modal dialog is shown,
-    // cancel all ongoing events
-    $(document).on(eventMap.cancel, cancelAll)
+    function cancelAll() {
+        if (touchTimeout) clearTimeout(touchTimeout)
+        if (tapTimeout) clearTimeout(tapTimeout)
+        if (swipeTimeout) clearTimeout(swipeTimeout)
+        if (longTapTimeout) clearTimeout(longTapTimeout)
+        touchTimeout = tapTimeout = swipeTimeout = longTapTimeout = null
+        touch = {}
+    }
 
-    // scrolling the window indicates intention of the user
-    // to scroll, not tap or swipe, so cancel all ongoing events
-    $(window).on('scroll', cancelAll)
+    function isPrimaryTouch(event) {
+        return (event.pointerType == 'touch' ||
+                event.pointerType == event.MSPOINTER_TYPE_TOUCH) &&
+            event.isPrimary
+    }
 
-    initialized = true
-  }
+    function isPointerEventType(e, type) {
+        return (e.type == 'pointer' + type ||
+            e.type.toLowerCase() == 'mspointer' + type)
+    }
 
-  ;['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown',
-    'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(eventName){
-    $.fn[eventName] = function(callback){ return this.on(eventName, callback) }
-  })
+    // helper function for tests, so they check for different APIs
+    function unregisterTouchEvents() {
+        if (!initialized) return
+        $(document).off(eventMap.down, down)
+            .off(eventMap.up, up)
+            .off(eventMap.move, move)
+            .off(eventMap.cancel, cancelAll)
+        $(window).off('scroll', cancelAll)
+        cancelAll()
+        initialized = false
+    }
 
-  $.touch = { setup: setup }
+    function setup(__eventMap) {
+        var now, delta, deltaX = 0,
+            deltaY = 0,
+            firstTouch, _isPointerType
 
-  $(document).ready(setup)
+        unregisterTouchEvents()
+
+        eventMap = (__eventMap && ('down' in __eventMap)) ? __eventMap :
+            ('ontouchstart' in document ? {
+                    'down': 'touchstart',
+                    'up': 'touchend',
+                    'move': 'touchmove',
+                    'cancel': 'touchcancel'
+                } :
+                'onpointerdown' in document ? {
+                    'down': 'pointerdown',
+                    'up': 'pointerup',
+                    'move': 'pointermove',
+                    'cancel': 'pointercancel'
+                } :
+                'onmspointerdown' in document ? {
+                    'down': 'MSPointerDown',
+                    'up': 'MSPointerUp',
+                    'move': 'MSPointerMove',
+                    'cancel': 'MSPointerCancel'
+                } : false)
+
+        // No API availables for touch events
+        if (!eventMap) return
+
+        if ('MSGesture' in window) {
+            gesture = new MSGesture()
+            gesture.target = document.body
+
+            $(document)
+                .bind('MSGestureEnd', function (e) {
+                    var swipeDirectionFromVelocity =
+                        e.velocityX > 1 ? 'Right' : e.velocityX < -1 ? 'Left' : e.velocityY > 1 ? 'Down' : e.velocityY < -1 ? 'Up' : null
+                    if (swipeDirectionFromVelocity) {
+                        touch.el.trigger('swipe')
+                        touch.el.trigger('swipe' + swipeDirectionFromVelocity)
+                    }
+                })
+        }
+
+        down = function (e) {
+            if ((_isPointerType = isPointerEventType(e, 'down')) &&
+                !isPrimaryTouch(e)) return
+            firstTouch = _isPointerType ? e : e.touches[0]
+            if (e.touches && e.touches.length === 1 && touch.x2) {
+                // Clear out touch movement data if we have it sticking around
+                // This can occur if touchcancel doesn't fire due to preventDefault, etc.
+                touch.x2 = undefined
+                touch.y2 = undefined
+            }
+            now = Date.now()
+            delta = now - (touch.last || now)
+            touch.el = $('tagName' in firstTouch.target ?
+                firstTouch.target : firstTouch.target.parentNode)
+            touchTimeout && clearTimeout(touchTimeout)
+            touch.x1 = firstTouch.pageX
+            touch.y1 = firstTouch.pageY
+            if (delta > 0 && delta <= 250) touch.isDoubleTap = true
+            touch.last = now
+            longTapTimeout = setTimeout(longTap, longTapDelay)
+            // adds the current touch contact for IE gesture recognition
+            if (gesture && _isPointerType) gesture.addPointer(e.pointerId)
+        }
+
+        move = function (e) {
+            if ((_isPointerType = isPointerEventType(e, 'move')) &&
+                !isPrimaryTouch(e)) return
+            firstTouch = _isPointerType ? e : e.touches[0]
+            cancelLongTap()
+            touch.x2 = firstTouch.pageX
+            touch.y2 = firstTouch.pageY
+
+            deltaX += Math.abs(touch.x1 - touch.x2)
+            deltaY += Math.abs(touch.y1 - touch.y2)
+        }
+
+        up = function (e) {
+            if ((_isPointerType = isPointerEventType(e, 'up')) &&
+                !isPrimaryTouch(e)) return
+            cancelLongTap()
+
+            // swipe
+            if ((touch.x2 && Math.abs(touch.x1 - touch.x2) > 30) ||
+                (touch.y2 && Math.abs(touch.y1 - touch.y2) > 30))
+
+                swipeTimeout = setTimeout(function () {
+                    if (touch.el) {
+                        touch.el.trigger('swipe')
+                        touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)))
+                    }
+                    touch = {}
+                }, 0)
+
+            // normal tap
+            else if ('last' in touch)
+                // don't fire tap when delta position changed by more than 30 pixels,
+                // for instance when moving to a point and back to origin
+                if (deltaX < 30 && deltaY < 30) {
+                    // delay by one tick so we can cancel the 'tap' event if 'scroll' fires
+                    // ('tap' fires before 'scroll')
+                    tapTimeout = setTimeout(function () {
+
+                        // trigger universal 'tap' with the option to cancelTouch()
+                        // (cancelTouch cancels processing of single vs double taps for faster 'tap' response)
+                        var event = $.Event('tap')
+                        event.cancelTouch = cancelAll
+                        // [by paper] fix -> "TypeError: 'undefined' is not an object (evaluating 'touch.el.trigger'), when double tap
+                        if (touch.el) touch.el.trigger(event, {
+                            touch: touch
+                        })
+
+                        // trigger double tap immediately
+                        if (touch.isDoubleTap) {
+                            if (touch.el) touch.el.trigger('doubleTap', {
+                                touch: touch
+                            })
+                            touch = {}
+                        }
+
+                        // trigger single tap after 250ms of inactivity
+                        else {
+                            touchTimeout = setTimeout(function () {
+                                touchTimeout = null
+                                if (touch.el) touch.el.trigger('singleTap', {
+                                    touch: touch
+                                })
+                                touch = {}
+                            }, 250)
+                        }
+                    }, 0)
+                } else {
+                    touch = {}
+                }
+            deltaX = deltaY = 0
+        }
+
+        $(document).on(eventMap.up, up)
+            .on(eventMap.down, down)
+            .on(eventMap.move, move)
+
+        // when the browser window loses focus,
+        // for example when a modal dialog is shown,
+        // cancel all ongoing events
+        $(document).on(eventMap.cancel, cancelAll)
+
+        // scrolling the window indicates intention of the user
+        // to scroll, not tap or swipe, so cancel all ongoing events
+        $(window).on('scroll', cancelAll)
+
+        initialized = true
+
+        $.eventMap = eventMap
+
+    }
+
+    ;
+    ['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown',
+        'doubleTap', 'tap', 'singleTap', 'longTap'
+    ].forEach(function (eventName) {
+        $.fn[eventName] = function (callback) {
+            return this.on(eventName, callback)
+        }
+    })
+
+    $.touch = {
+        setup: setup
+    }
+
+    $(document).ready(setup)
 })(Zepto)
-
 //     Zepto.js
 //     (c) 2010-2016 Thomas Fuchs
 //     Zepto.js may be freely distributed under the MIT license.
@@ -3402,6 +3441,25 @@ window.$ === undefined && (window.$ = Zepto)
         plus.nativeUI.prompt(args['string'][0], args['function'][0], args['string'][1], args['string'][2], args['array'][0])
     }
 
+    /* 选择按钮框 */
+    $.actionSheet = function ( /* opts, cb */ ) {
+        var args = $.orderArgs(arguments)
+        var objs = args['object'][0]
+        var opts = {}
+        opts.title = objs ? objs.title : args['string'][0]
+        opts.cancel = objs ? objs.cancel : args['string'][1]
+        opts.buttons = objs ? objs.buttons : args['array'][0]
+        if (!opts.buttons || !opts.buttons.length) return
+        $.each(opts.buttons, function (k, item) {
+            if ($.type(item) === 'string') {
+                item = {
+                    title: item
+                }
+            }
+        })
+        plus.nativeUI.actionSheet(opts, args['function'][0])
+    }
+
     /**
      * 自动消失提示框
      */
@@ -3629,6 +3687,60 @@ window.$ === undefined && (window.$ = Zepto)
         );
     }
 })(Zepto)
+/*!art-template - Template Engine | http://aui.github.com/artTemplate/*/
+!function(){function a(a){return a.replace(t,"").replace(u,",").replace(v,"").replace(w,"").replace(x,"").split(y)}function b(a){return"'"+a.replace(/('|\\)/g,"\\$1").replace(/\r/g,"\\r").replace(/\n/g,"\\n")+"'"}function c(c,d){function e(a){return m+=a.split(/\n/).length-1,k&&(a=a.replace(/\s+/g," ").replace(/<!--[\w\W]*?-->/g,"")),a&&(a=s[1]+b(a)+s[2]+"\n"),a}function f(b){var c=m;if(j?b=j(b,d):g&&(b=b.replace(/\n/g,function(){return m++,"$line="+m+";"})),0===b.indexOf("=")){var e=l&&!/^=[=#]/.test(b);if(b=b.replace(/^=[=#]?|[\s;]*$/g,""),e){var f=b.replace(/\s*\([^\)]+\)/,"");n[f]||/^(include|print)$/.test(f)||(b="$escape("+b+")")}else b="$string("+b+")";b=s[1]+b+s[2]}return g&&(b="$line="+c+";"+b),r(a(b),function(a){if(a&&!p[a]){var b;b="print"===a?u:"include"===a?v:n[a]?"$utils."+a:o[a]?"$helpers."+a:"$data."+a,w+=a+"="+b+",",p[a]=!0}}),b+"\n"}var g=d.debug,h=d.openTag,i=d.closeTag,j=d.parser,k=d.compress,l=d.escape,m=1,p={$data:1,$filename:1,$utils:1,$helpers:1,$out:1,$line:1},q="".trim,s=q?["$out='';","$out+=",";","$out"]:["$out=[];","$out.push(",");","$out.join('')"],t=q?"$out+=text;return $out;":"$out.push(text);",u="function(){var text=''.concat.apply('',arguments);"+t+"}",v="function(filename,data){data=data||$data;var text=$utils.$include(filename,data,$filename);"+t+"}",w="'use strict';var $utils=this,$helpers=$utils.$helpers,"+(g?"$line=0,":""),x=s[0],y="return new String("+s[3]+");";r(c.split(h),function(a){a=a.split(i);var b=a[0],c=a[1];1===a.length?x+=e(b):(x+=f(b),c&&(x+=e(c)))});var z=w+x+y;g&&(z="try{"+z+"}catch(e){throw {filename:$filename,name:'Render Error',message:e.message,line:$line,source:"+b(c)+".split(/\\n/)[$line-1].replace(/^\\s+/,'')};}");try{var A=new Function("$data","$filename",z);return A.prototype=n,A}catch(a){throw a.temp="function anonymous($data,$filename) {"+z+"}",a}}var d=function(a,b){return"string"==typeof b?q(b,{filename:a}):g(a,b)};d.version="3.0.0",d.config=function(a,b){e[a]=b};var e=d.defaults={openTag:"<%",closeTag:"%>",escape:!0,cache:!0,compress:!1,parser:null},f=d.cache={};d.render=function(a,b){return q(a)(b)};var g=d.renderFile=function(a,b){var c=d.get(a)||p({filename:a,name:"Render Error",message:"Template not found"});return b?c(b):c};d.get=function(a){var b;if(f[a])b=f[a];else if("object"==typeof document){var c=document.getElementById(a);if(c){var d=(c.value||c.innerHTML).replace(/^\s*|\s*$/g,"");b=q(d,{filename:a})}}return b};var h=function(a,b){return"string"!=typeof a&&(b=typeof a,"number"===b?a+="":a="function"===b?h(a.call(a)):""),a},i={"<":"&#60;",">":"&#62;",'"':"&#34;","'":"&#39;","&":"&#38;"},j=function(a){return i[a]},k=function(a){return h(a).replace(/&(?![\w#]+;)|[<>"']/g,j)},l=Array.isArray||function(a){return"[object Array]"==={}.toString.call(a)},m=function(a,b){var c,d;if(l(a))for(c=0,d=a.length;c<d;c++)b.call(a,a[c],c,a);else for(c in a)b.call(a,a[c],c)},n=d.utils={$helpers:{},$include:g,$string:h,$escape:k,$each:m};d.helper=function(a,b){o[a]=b};var o=d.helpers=n.$helpers;d.onerror=function(a){var b="Template Error\n\n";for(var c in a)b+="<"+c+">\n"+a[c]+"\n\n";"object"==typeof console&&console.error(b)};var p=function(a){return d.onerror(a),function(){return"{Template Error}"}},q=d.compile=function(a,b){function d(c){try{return new i(c,h)+""}catch(d){return b.debug?p(d)():(b.debug=!0,q(a,b)(c))}}b=b||{};for(var g in e)void 0===b[g]&&(b[g]=e[g]);var h=b.filename;try{var i=c(a,b)}catch(a){return a.filename=h||"anonymous",a.name="Syntax Error",p(a)}return d.prototype=i.prototype,d.toString=function(){return i.toString()},h&&b.cache&&(f[h]=d),d},r=n.$each,s="break,case,catch,continue,debugger,default,delete,do,else,false,finally,for,function,if,in,instanceof,new,null,return,switch,this,throw,true,try,typeof,var,void,while,with,abstract,boolean,byte,char,class,const,double,enum,export,extends,final,float,goto,implements,import,int,interface,long,native,package,private,protected,public,short,static,super,synchronized,throws,transient,volatile,arguments,let,yield,undefined",t=/\/\*[\w\W]*?\*\/|\/\/[^\n]*\n|\/\/[^\n]*$|"(?:[^"\\]|\\[\w\W])*"|'(?:[^'\\]|\\[\w\W])*'|\s*\.\s*[$\w\.]+/g,u=/[^\w$]+/g,v=new RegExp(["\\b"+s.replace(/,/g,"\\b|\\b")+"\\b"].join("|"),"g"),w=/^\d[^,]*|,\d[^,]*/g,x=/^,+|,+$/g,y=/^$|,+/;e.openTag="{{",e.closeTag="}}";var z=function(a,b){var c=b.split(":"),d=c.shift(),e=c.join(":")||"";return e&&(e=", "+e),"$helpers."+d+"("+a+e+")"};e.parser=function(a,b){a=a.replace(/^\s/,"");var c=a.split(" "),e=c.shift(),f=c.join(" ");switch(e){case"if":a="if("+f+"){";break;case"else":c="if"===c.shift()?" if("+c.join(" ")+")":"",a="}else"+c+"{";break;case"/if":a="}";break;case"each":var g=c[0]||"$data",h=c[1]||"as",i=c[2]||"$value",j=c[3]||"$index",k=i+","+j;"as"!==h&&(g="[]"),a="$each("+g+",function("+k+"){";break;case"/each":a="});";break;case"echo":a="print("+f+");";break;case"print":case"include":a=e+"("+c.join(",")+");";break;default:if(/^\s*\|\s*[\w\$]/.test(f)){var l=!0;0===a.indexOf("#")&&(a=a.substr(1),l=!1);for(var m=0,n=a.split("|"),o=n.length,p=n[m++];m<o;m++)p=z(p,n[m]);a=(l?"=":"=#")+p}else a=d.helpers[e]?"=#"+e+"("+c.join(",")+");":"="+a}return a},"object"==typeof exports&&"undefined"!=typeof module?module.exports=d:"function"==typeof define?define(function(){return d}):this.template=d}();
+// 优化模板引擎
+;
+(function ($, window) {
+    if (!$.os.plus || !template) return
+    var tempFiles = {}
+    var tempLoadings = {}
+    $.template = function (filename, tempData, cb) {
+        if (!filename) {
+            console.error('请先指定模板文件')
+            return
+        }
+        var tempfile = tempFiles[filename]
+        var data = null
+        if (tempfile) {
+            data = render()
+            cb && cb(data)
+        } else {
+            if (!cb) {
+                console.error('首次加载模板文件必须使用回调')
+                return
+            }
+            if (tempLoadings[filename]) {
+                $.toast('模板文件获取中，请稍后重试')
+                return
+            }
+            $.loadTemplate(filename, function (html) {
+                tempfile = tempFiles[filename] = html
+                data = render()
+                cb(data)
+            })
+        }
+        return data
+
+        function render() {
+            return template.render(tempfile, tempData)
+        }
+    }
+
+    $.loadTemplate = function (filename, cb) {
+        if(tempFiles[filename]) return
+        tempLoadings[filename] = true
+        $.readFile($.config.template.path + filename + '.html', function (html) {
+            delete tempLoadings[filename]
+            tempFiles[filename] = html
+            cb && cb(html)
+        }, function (e) {
+            delete tempLoadings[filename]
+            $.toast('模板文件获取失败：' + e.message)
+        })
+    }
+
+})(Zepto, window)
 ;
 (function ($) {
     $.date = function (format, time) {
@@ -4087,7 +4199,248 @@ window.$ === undefined && (window.$ = Zepto)
         }
     }
 })(Zepto, document, window);
+/* 轮播组件 */ ;
+(function ($, window, document) {
+    var cssPrefix = $.fx.cssPrefix
+    var active = 'z-active'
 
+    $.fn.slider = function (opts) {
+        if (!this.length) return this
+        var _this = this.eq(0)
+        var eventMap = $.eventMap
+        var lock,
+            startTime,
+            startX,
+            startY,
+            moveDist,
+            activeDist = 0,
+            activeDot = 0,
+            critical = 0,
+            targetDot,
+            timer
+
+        opts = $.orderOpts(_this, $.config.slider, opts, 'slider-')
+
+        var handler, items, itemWidth, itemHeight, itemLength, itemSize, indicator, sliderWidth
+        var indicatorType, interval
+
+        init()
+
+        _this.on(eventMap.down, startHandler)
+        _this.on(eventMap.move, moveHandler)
+        _this.on(eventMap.up, endHandler)
+        _this.on(eventMap.cancel, endHandler)
+        _this.on(eventMap.cancel, endHandler)
+
+        _this.on('slideMove', function (event) {
+            anim()
+        })
+
+        _this.init = init
+        _this.nextItem = nextItem
+        _this.prevItem = prevItem
+        _this.gotoItem = gotoItem
+
+        return _this
+
+        function init() {
+            indicatorType = opts.indicator
+            interval = opts.interval
+            handler = _this.find(opts.handler)
+            items = _this.find(opts.items)
+            itemWidth = items.width()
+            itemHeight = items.height()
+            itemLength = items.length
+            itemSize = itemLength
+            activeDot = targetDot = opts.activeDot || 0
+            if (opts.loop && itemLength > 1) {
+                var pre = items.first().clone()
+                var next = items.last().clone()
+                handler.prepend(next).append(pre)
+                critical = -itemWidth
+                itemSize += 2
+            }
+            sliderWidth = (itemLength - 1) * itemWidth
+            activeDist = moveDist = -(activeDot * itemWidth) + critical
+            anim()
+            initIndicator()
+            setLoop()
+        }
+
+        function setLoop(clear) {
+            if (clear) timer && clearInterval(timer)
+            else if (interval > 0) timer = setInterval(function () {
+                nextItem()
+            }, interval)
+        }
+
+        function initIndicator() {
+            if (!indicatorType) return
+            if (indicatorType === 'dots') {
+                indicator = _this.find('.z-slider-indicator-group')
+                if (!indicator.length) {
+                    indicator = $('<ul class="z-slider-indicator-group"></ul>')
+                    _this.append(indicator)
+                }
+                var html = ''
+                for (var i = 0; i < itemLength; i++) {
+                    html += '<li class="z-slider-indicator"></li>'
+                }
+                indicator.html(html)
+            } else if (indicatorType === 'number') {
+                indicator = _this.find('.z-slider-indicator-number')
+                if (!indicator.length) {
+                    indicator = $('<div class="z-slider-indicator-number"></div>')
+                    _this.append(indicator)
+                }
+            }
+            updateIndicator()
+        }
+
+        function updateIndicator() {
+            if (!indicatorType) return
+            if (indicatorType === 'dots') {
+                var list = indicator.find('.z-slider-indicator')
+                list.removeClass(active)
+                list.eq(activeDot).addClass(active)
+            } else if (indicatorType === 'number') {
+                indicator.html((activeDot + 1) + ' / ' + itemLength)
+            }
+        }
+
+        function anim(duration, cb) {
+            var cssOpts = {}
+            duration = duration || 0
+            if (!opts.spring && !opts.loop && (moveDist > 0 || moveDist < -(itemSize - 1) * itemWidth)) return
+            cssOpts[cssPrefix + 'transform'] = 'translate3d(' + moveDist + 'px,0,0)'
+            cssOpts[cssPrefix + 'transition-duration'] = duration + 'ms'
+            handler.css(cssOpts)
+            if (duration > 0) {
+                setTimeout(function () {
+                    cb && cb(cssOpts)
+                }, duration)
+            } else {
+                cb && cb(cssOpts)
+            }
+        }
+
+        function startHandler(event) {
+            if (lock) return
+            var pos = getPosition(event)
+            startTime = new Date().getTime()
+            startX = pos.x
+            startY = pos.y
+            setLoop(true)
+            trigger('slideStart')
+        }
+
+        function moveHandler(event) {
+            if (lock || startTime <= 0) return
+            var pos = getPosition(event)
+            var moveX = pos.x - startX
+            var moveY = pos.y - startY
+            setLoop(true)
+            if (opts.checkY && (Math.abs(moveY) * 5) > Math.abs(moveX)) return
+            moveDist = activeDist + moveX
+            trigger('slideMove')
+            trigger('slide')
+        }
+
+        function endHandler(event) {
+            if (lock) return
+            activeDist = moveDist
+            var offset = itemWidth * opts.offset
+            var activeLeft = targetDot * itemWidth - critical
+            if (activeDist > 0) {
+                targetDot = 0
+            } else if (activeDist < -((itemSize - 1) * itemWidth)) {
+                targetDot = itemLength - 1
+            } else if (Math.abs(activeDist) > activeLeft + offset) {
+                targetDot = activeDot + 1
+            } else if (Math.abs(activeDist) < activeLeft - offset) {
+                targetDot = activeDot - 1
+            } else {
+                targetDot = activeDot
+            }
+            setLoop()
+            move()
+        }
+
+        function move() {
+            var duration = opts.duration
+            moveDist = -(targetDot * itemWidth) + critical
+            lock = true
+            startTime = 0
+            anim(duration, function () {
+                lock = false
+                if (critical !== 0) {
+                    if (targetDot < 0) {
+                        targetDot = itemLength - 1
+                        moveDist = -(itemLength * itemWidth)
+                        anim()
+                    } else if (targetDot > itemLength - 1) {
+                        targetDot = 0
+                        moveDist = critical
+                        anim()
+                    }
+                }
+                activeDot = targetDot
+                activeDist = moveDist
+                if (opts.resetHeight) {
+                    _this.height(items.eq(activeDot).height())
+                }
+                updateIndicator()
+                trigger('slideEnd', duration)
+                trigger('slide', duration)
+            })
+        }
+
+        function nextItem() {
+            ++targetDot
+            if (targetDot > (itemSize - 1)) {
+                if (critical !== 0) targetDot = 0
+                else return
+            }
+            move()
+        }
+
+        function prevItem() {
+            --targetDot
+            if (targetDot < 0) {
+                if (critical !== 0) targetDot = itemLength - 1
+                else return
+            }
+            move()
+        }
+
+        function gotoItem(number) {
+            number = number - 1
+            if (number >= 0 && number <= itemLength - 1) {
+                targetDot = number
+                move()
+            }
+        }
+
+        function trigger(name, duration) {
+            var percent = -moveDist / sliderWidth
+            duration = duration || 0
+            _this.trigger(name, {
+                move: moveDist,
+                active: activeDot,
+                percent: percent,
+                duration: duration
+            })
+        }
+    }
+
+    function getPosition(e) {
+        return {
+            x: e.targetTouches ? e.targetTouches[0].pageX : e.pageX,
+            y: e.targetTouches ? e.targetTouches[0].pageY : e.pageY
+        }
+    }
+
+})(Zepto, window, document)
 $(function () {
     var activeClass = 'z-active'
     var options = $.config;
@@ -4262,6 +4615,11 @@ $(function () {
         }, function () {
             target.closeModal()
         })
+    })
+
+    // 轮播
+    $('.z-action-slider').each(function(){
+        $(this).slider()
     })
 
     // 透明导航

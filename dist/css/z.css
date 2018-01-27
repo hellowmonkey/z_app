@@ -1738,6 +1738,9 @@ input[type="radio"]:checked + .z-radio.z-color-dark:after {
 .z-list {
   position: relative;
 }
+.z-list a {
+  display: block;
+}
 .z-list:before {
   content: '';
   position: absolute;
@@ -2200,6 +2203,57 @@ input[type="radio"]:checked + .z-radio.z-color-dark:after {
   line-height: 1.42857143;
   color: #999;
   white-space: nowrap;
+}
+.z-slider {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  width: 100%;
+}
+.z-slider .z-slider-group {
+  font-size: 0;
+  position: relative;
+  -webkit-transition: all 0s linear;
+  transition: all 0s linear;
+  white-space: nowrap;
+}
+.z-slider .z-slider-group .z-slider-item {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  vertical-align: top;
+  white-space: normal;
+  min-height: 200px;
+}
+.z-slider .z-slider-indicator-group {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+}
+.z-slider .z-slider-indicator-group .z-slider-indicator {
+  width: 5px;
+  height: 5px;
+  display: inline-block;
+  border-radius: 50%;
+  margin: 0 3px;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.z-slider .z-slider-indicator-group .z-slider-indicator.z-active {
+  background-color: #fff;
+}
+.z-slider .z-slider-indicator-number {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 3px 8px;
+  font-size: .9em;
+  border-radius: 20px;
+  color: #fff;
 }
 .z-immersed .z-bar {
   padding-top: 0;

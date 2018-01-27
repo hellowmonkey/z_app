@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>按钮</title>
+    <title>轮播</title>
     <link rel="stylesheet" href="../dist/css/z.css">
 </head>
 
@@ -15,35 +15,30 @@
             <span class="z-icon">&#xe693;</span>
             <span class="z-bar-tip">返回</span>
         </a>
-        <h4 class="z-title">按钮</h4>
+        <h4 class="z-title">轮播</h4>
     </div>
 
-    <div class="z-content-padding">
-        <div class="z-mt10">
-            <button class="z-btn">默认按钮</button>
-            <button class="z-btn z-color-red">使用color的按钮</button>
-            <button class="z-btn z-btn-outlined z-color-dark">空心按钮</button>
-            <button class="z-btn z-btn-link z-color-cyan">只有字体颜色</button>
-            <button class="z-btn z-btn-lg z-color-purple">大按钮</button>
-            <button class="z-btn z-btn-sm z-color-purple">小按钮</button>
-            <button class="z-btn z-disabled">禁止</button>
-            <button class="z-btn z-btn-lg z-block">配合block变成块按钮</button>
-        </div>
-        <div class="z-mt10">
-            <div class="z-btn-group">
-                <button class="z-btn z-btn-round">按钮组</button>
-                <button class="z-btn z-btn-round">圆形按钮</button>
-                <button class="z-btn z-btn-round z-color-blue z-active">激活状态</button>
-            </div>
+    <div class="z-content">
+        <div class="z-slider">
+            <ul class="z-slider-group">
+                <li class="z-slider-item z-cover" style="background-image:url('http://img.netbian.com/file/2017/1222/0a2cb7da1f58710ceb9ebe1b732e7301.jpg')"></li>
+                <li class="z-slider-item z-cover" style="background-image:url('http://img.netbian.com/file/2018/0124/53d3b4675c4f32d4be3f4f52362531af.jpg')"></li>
+                <li class="z-slider-item z-cover" style="background-image:url('http://img.netbian.com/file/2017/1102/131e36a013070988098469080ee7cde2.jpg')"></li>
+            </ul>
         </div>
     </div>
 
     <script src="../dist/js/z.js"></script>
     <script>
-        $(function(){
-            $('.z-btn.z-block').tap(function(){
-                $(this).button()
+        $(function () {
+            var slider = $('.z-slider').slider({
+                indicator: 'number',
+                loop: false,
+                checkY: true,
+                interval: 0,
+                spring: false
             })
+            console.log(slider)
         })
     </script>
 </body>

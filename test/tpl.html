@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>模板</title>
+    <link rel="stylesheet" href="../dist/css/z.css">
+</head>
+
+<body>
+    <div class="z-bar">
+        <a href="#" class="z-bar-item z-pull-left z-action-back">
+            <span class="z-icon">&#xe693;</span>
+            <span class="z-bar-tip">返回</span>
+        </a>
+        <h4 class="z-title">模板</h4>
+    </div>
+
+    <div class="z-content">
+        <div id="box"></div>
+    </div>
+
+    <script type="text/html" id="tpl-test">
+        {{each list}}
+        <button class="z-btn">{{$value.name}}</button>
+        {{/each}}
+    </script>
+
+    <script src="../dist/js/z.js"></script>
+    <script>
+        var data = {
+            name: 'name',
+            list: [{
+                name: 'aa',
+                age: '1'
+            }, {
+                name: 'bb',
+                age: '2'
+            }]
+        }
+        var html = template('tpl-test', data)
+        $('#box').html(html)
+    </script>
+</body>
+
+</html>

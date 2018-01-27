@@ -174,6 +174,11 @@ $(function () {
         })
     })
 
+    // 轮播
+    $('.z-action-slider').each(function(){
+        $(this).slider()
+    })
+
     // 透明导航
     $('.z-action-transparent').transparent()
 

@@ -26,6 +26,25 @@
         plus.nativeUI.prompt(args['string'][0], args['function'][0], args['string'][1], args['string'][2], args['array'][0])
     }
 
+    /* 选择按钮框 */
+    $.actionSheet = function ( /* opts, cb */ ) {
+        var args = $.orderArgs(arguments)
+        var objs = args['object'][0]
+        var opts = {}
+        opts.title = objs ? objs.title : args['string'][0]
+        opts.cancel = objs ? objs.cancel : args['string'][1]
+        opts.buttons = objs ? objs.buttons : args['array'][0]
+        if (!opts.buttons || !opts.buttons.length) return
+        $.each(opts.buttons, function (k, item) {
+            if ($.type(item) === 'string') {
+                item = {
+                    title: item
+                }
+            }
+        })
+        plus.nativeUI.actionSheet(opts, args['function'][0])
+    }
+
     /**
      * 自动消失提示框
      */

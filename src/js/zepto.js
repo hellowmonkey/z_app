@@ -529,16 +529,16 @@ var Zepto = (function () {
     // 按类别排序参数
     $.orderArgs = function (args) {
         var rets = {
-            string: [],
-            function: [],
-            array: [],
-            object: [],
-            number: [],
-            boolean: []
+            string: emptyArray,
+            function: emptyArray,
+            array: emptyArray,
+            object: emptyArray,
+            number: emptyArray,
+            boolean: emptyArray
         }
         $.each(args, function (k, item) {
             var type = $.type(item)
-            if ($.type(rets[type]) === 'undefined') rets[type] = []
+            if (rets[type] === emptyArray || $.type(rets[type]) === 'undefined') rets[type] = [item]
             else rets[type].push(item)
         })
         return rets
