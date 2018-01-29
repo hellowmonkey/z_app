@@ -1310,7 +1310,8 @@ window.$ === undefined && (window.$ = Zepto)
             indicator: 'dots',
             activeDot: 0,
             spring: true
-        }
+        },
+        host: 'http://127.0.0.1:8020'
     };
 })(Zepto)
 //     Zepto.js
@@ -2630,7 +2631,7 @@ window.$ === undefined && (window.$ = Zepto)
     // 获取失败信息 主要是加入网络状态判断
     function getErrorText(status) {
         if (status) return '请求错误:' + status
-        else if (plus.networkinfo.getCurrentType() < 2) return '无网络连接'
+        else if ($.os.plus && plus.networkinfo.getCurrentType() < 2) return '无网络连接'
         else return '请求被拒绝'
     }
 
@@ -3467,35 +3468,6 @@ window.$ === undefined && (window.$ = Zepto)
 ;
 (function ($) {
     if (!$.os.plus) return
-    $.getStorage = function (keyName) {
-        var value = plus.storage.getItem(keyName)
-        if (value) {
-            if ($.likeObject(value)) {
-                return $.parseJSON(value)
-            } else {
-                return eval(value)
-            }
-        } else {
-            return null
-        }
-    }
-    $.setStorage = function (keyName, val) {
-        keyName = keyName.toString()
-        if (typeof val === 'object') val = JSON.stringify(val)
-        else val = val.toString()
-        plus.storage.setItem(keyName, val)
-        return $.getStorage(keyName)
-    }
-    $.removeStorage = function (keyName) {
-        plus.storage.removeItem(keyName)
-    }
-    $.clearStorage = function (keyName) {
-        plus.storage.clear()
-    }
-})(Zepto)
-;
-(function ($) {
-    if (!$.os.plus) return
     var fileDoc = '_doc/',
         fileExt = '.txt',
         fileErr = ['文件写入失败: ', '文件创建失败: ', '文件获取失败: ']
@@ -3683,7 +3655,7 @@ window.$ === undefined && (window.$ = Zepto)
 // 优化模板引擎
 ;
 (function ($, window) {
-    if (!$.os.plus || !template) return
+    if (!template) return
     var tempFiles = {}
     var tempLoadings = {}
     $.template = function (filename, tempData, cb) {
@@ -4224,7 +4196,7 @@ window.$ === undefined && (window.$ = Zepto)
     }
 
     // 图片懒加载
-    $.fn.lazyImg = function (cb) {
+    $.fn.lazyimg = function (cb) {
         if (!this.length) return this
         var haveScroll, timer, _this = this
         render()
@@ -4256,17 +4228,13 @@ window.$ === undefined && (window.$ = Zepto)
 
         function render(othis) {
             var end = scrollEle.scrollTop() + winHeight
-            if (othis) {
-                show(othis)
-            } else {
-                _this.each(function () {
-                    var item = $(this)
-                    var top = item.offset().top
-                    if (top <= end) {
-                        show(item)
-                    }
-                })
-            }
+            _this.each(function () {
+                var item = $(this)
+                var top = item.offset().top
+                if (top <= end) {
+                    show(item)
+                }
+            })
         }
     }
 })(Zepto, window)
@@ -4512,6 +4480,35 @@ window.$ === undefined && (window.$ = Zepto)
     }
 
 })(Zepto, window, document)
+;
+(function ($, window) {
+    var localStorage = $.os.plus ? plus.storage : window;
+    $.getStorage = function (keyName) {
+        var value = localStorage.getItem(keyName)
+        if (value) {
+            if ($.likeObject(value)) {
+                return $.parseJSON(value)
+            } else {
+                return eval(value)
+            }
+        } else {
+            return null
+        }
+    }
+    $.setStorage = function (keyName, val) {
+        keyName = keyName.toString()
+        if (typeof val === 'object') val = JSON.stringify(val)
+        else val = val.toString()
+        localStorage.setItem(keyName, val)
+        return $.getStorage(keyName)
+    }
+    $.removeStorage = function (keyName) {
+        localStorage.removeItem(keyName)
+    }
+    $.clearStorage = function (keyName) {
+        localStorage.clear()
+    }
+})(Zepto, window)
 $(function () {
     var activeClass = 'z-active'
     var options = $.config;
@@ -4520,17 +4517,15 @@ $(function () {
         if ($.os.ios && $.config.statusBarBackground) {
             plus.navigator.setStatusBarBackground($.config.statusBarBackground);
         }
-        if ($.os.android && parseFloat($.os.version) < 4.4) {
-            //解决Android平台4.4版本以下，resume后，父窗体标题延迟渲染的问题；
-            if (plus.webview.currentWebview().parent() == null) {
-                document.addEventListener("resume", function () {
-                    var body = document.body;
-                    body.style.display = 'none';
-                    setTimeout(function () {
-                        body.style.display = '';
-                    }, 10);
-                });
-            }
+        //解决Android平台4.4版本以下，resume后，父窗体标题延迟渲染的问题；
+        if ($.os.android && parseFloat($.os.version) < 4.4 && $.currentWebview.parent() == null) {
+            document.addEventListener("resume", function () {
+                var body = document.body;
+                body.style.display = 'none';
+                setTimeout(function () {
+                    body.style.display = '';
+                }, 10);
+            });
         }
 
         if ($.config.keyEventBind.backbutton) {
@@ -4694,7 +4689,7 @@ $(function () {
     })
 
     // 图片懒加载
-    $('.z-action-lazyimg').lazyImg()
+    $('.z-action-lazyimg').lazyimg()
 
     // 透明导航
     $('.z-action-transparent').transparent()

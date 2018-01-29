@@ -1,8 +1,8 @@
 ;
-(function ($) {
-    if (!$.os.plus) return
+(function ($, window) {
+    var localStorage = $.os.plus ? plus.storage : window;
     $.getStorage = function (keyName) {
-        var value = plus.storage.getItem(keyName)
+        var value = localStorage.getItem(keyName)
         if (value) {
             if ($.likeObject(value)) {
                 return $.parseJSON(value)
@@ -17,13 +17,13 @@
         keyName = keyName.toString()
         if (typeof val === 'object') val = JSON.stringify(val)
         else val = val.toString()
-        plus.storage.setItem(keyName, val)
+        localStorage.setItem(keyName, val)
         return $.getStorage(keyName)
     }
     $.removeStorage = function (keyName) {
-        plus.storage.removeItem(keyName)
+        localStorage.removeItem(keyName)
     }
     $.clearStorage = function (keyName) {
-        plus.storage.clear()
+        localStorage.clear()
     }
-})(Zepto)
+})(Zepto, window)

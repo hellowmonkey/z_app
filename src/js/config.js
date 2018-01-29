@@ -141,6 +141,7 @@
             indicator: 'dots',
             activeDot: 0,
             spring: true
-        }
+        },
+        host: 'http://127.0.0.1:8020'
     };
 })(Zepto)

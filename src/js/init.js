@@ -6,17 +6,15 @@ $(function () {
         if ($.os.ios && $.config.statusBarBackground) {
             plus.navigator.setStatusBarBackground($.config.statusBarBackground);
         }
-        if ($.os.android && parseFloat($.os.version) < 4.4) {
-            //解决Android平台4.4版本以下，resume后，父窗体标题延迟渲染的问题；
-            if (plus.webview.currentWebview().parent() == null) {
-                document.addEventListener("resume", function () {
-                    var body = document.body;
-                    body.style.display = 'none';
-                    setTimeout(function () {
-                        body.style.display = '';
-                    }, 10);
-                });
-            }
+        //解决Android平台4.4版本以下，resume后，父窗体标题延迟渲染的问题；
+        if ($.os.android && parseFloat($.os.version) < 4.4 && $.currentWebview.parent() == null) {
+            document.addEventListener("resume", function () {
+                var body = document.body;
+                body.style.display = 'none';
+                setTimeout(function () {
+                    body.style.display = '';
+                }, 10);
+            });
         }
 
         if ($.config.keyEventBind.backbutton) {
@@ -180,7 +178,7 @@ $(function () {
     })
 
     // 图片懒加载
-    $('.z-action-lazyimg').lazyImg()
+    $('.z-action-lazyimg').lazyimg()
 
     // 透明导航
     $('.z-action-transparent').transparent()

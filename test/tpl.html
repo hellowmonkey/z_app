@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>模板</title>
-    <link rel="stylesheet" href="../dist/css/z.css">
+    <link rel="stylesheet" href="../dist/css/z.min.css">
 </head>
 
 <body>
@@ -22,14 +22,9 @@
         <div id="box"></div>
     </div>
 
-    <script type="text/html" id="tpl-test">
-        {{each list}}
-        <button class="z-btn">{{$value.name}}</button>
-        {{/each}}
-    </script>
-
-    <script src="../dist/js/z.js"></script>
+    <script src="../dist/js/z-web.min.js"></script>
     <script>
+        $.config.host = 'http://localhost/github/z_app/test'
         var data = {
             name: 'name',
             list: [{
@@ -40,8 +35,17 @@
                 age: '2'
             }]
         }
-        var html = template('tpl-test', data)
-        $('#box').html(html)
+        $.template('test', data, function(html){
+            $('#box').html(html)
+        })
+        setTimeout(function(){
+            $.template('test', data, function(html){
+                $('#box').html(html)
+            })
+            $.template('test', data, function(html){
+                $('#box').html(html)
+            })
+        }, 1000)
     </script>
 </body>
 

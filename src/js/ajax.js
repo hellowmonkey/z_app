@@ -366,7 +366,7 @@
     // 获取失败信息 主要是加入网络状态判断
     function getErrorText(status) {
         if (status) return '请求错误:' + status
-        else if (plus.networkinfo.getCurrentType() < 2) return '无网络连接'
+        else if ($.os.plus && plus.networkinfo.getCurrentType() < 2) return '无网络连接'
         else return '请求被拒绝'
     }
 

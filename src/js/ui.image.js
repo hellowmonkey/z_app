@@ -32,7 +32,7 @@
     }
 
     // 图片懒加载
-    $.fn.lazyImg = function (cb) {
+    $.fn.lazyimg = function (cb) {
         if (!this.length) return this
         var haveScroll, timer, _this = this
         render()
@@ -64,17 +64,13 @@
 
         function render(othis) {
             var end = scrollEle.scrollTop() + winHeight
-            if (othis) {
-                show(othis)
-            } else {
-                _this.each(function () {
-                    var item = $(this)
-                    var top = item.offset().top
-                    if (top <= end) {
-                        show(item)
-                    }
-                })
-            }
+            _this.each(function () {
+                var item = $(this)
+                var top = item.offset().top
+                if (top <= end) {
+                    show(item)
+                }
+            })
         }
     }
 })(Zepto, window)

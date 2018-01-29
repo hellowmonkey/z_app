@@ -8,9 +8,9 @@ const rename = require('gulp-rename');
 const uglify = require('gulp-uglify');
 
 let js_modules_fn = ['zepto', 'config', 'touch', 'selector', 'fx', 'fx_methods', 'form', 'event', 'data', 'ajax', 'detect'];
-let js_modules_tpl = ['art-template', 'plus.template']
-let js_modules_plus = ['plus.back', 'plus.webview', 'plus.pullDownRefresh', 'plus.dialog', 'plus.storage', 'plus.file', 'plus.image'];
-let js_modules_ui = ['ui.date', 'ui.switch', 'ui.modal', 'ui.numberbox', 'ui.button', 'ui.transparent', 'ui.pullUpRefresh', 'ui.image', 'ui.slider', 'init'];
+let js_modules_tpl = ['art-template', 'ui.template']
+let js_modules_plus = ['plus.back', 'plus.webview', 'plus.pullDownRefresh', 'plus.dialog', 'plus.file', 'plus.image'];
+let js_modules_ui = ['ui.date', 'ui.switch', 'ui.modal', 'ui.numberbox', 'ui.button', 'ui.transparent', 'ui.pullUpRefresh', 'ui.image', 'ui.slider', 'ui.storage', 'init'];
 
 let js_modules = function ( /* modules */ ) {
     let rets = []
@@ -24,7 +24,7 @@ let js_modules = function ( /* modules */ ) {
 }
 
 let z_src = js_modules(js_modules_fn, js_modules_plus, js_modules_tpl, js_modules_ui)
-let web_src = js_modules(js_modules_fn, js_modules_ui)
+let web_src = js_modules(js_modules_fn, js_modules_tpl, js_modules_ui, ['web.plus'])
 
 gulp.task('buildJs', ['z', 'web'])
 

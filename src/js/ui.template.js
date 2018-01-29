@@ -1,7 +1,7 @@
 // 优化模板引擎
 ;
 (function ($, window) {
-    if (!$.os.plus || !template) return
+    if (!template) return
     var tempFiles = {}
     var tempLoadings = {}
     $.template = function (filename, tempData, cb) {

@@ -1310,7 +1310,8 @@ window.$ === undefined && (window.$ = Zepto)
             indicator: 'dots',
             activeDot: 0,
             spring: true
-        }
+        },
+        host: 'http://127.0.0.1:8020'
     };
 })(Zepto)
 //     Zepto.js
@@ -2630,7 +2631,7 @@ window.$ === undefined && (window.$ = Zepto)
     // 获取失败信息 主要是加入网络状态判断
     function getErrorText(status) {
         if (status) return '请求错误:' + status
-        else if (plus.networkinfo.getCurrentType() < 2) return '无网络连接'
+        else if ($.os.plus && plus.networkinfo.getCurrentType() < 2) return '无网络连接'
         else return '请求被拒绝'
     }
 
@@ -2779,6 +2780,60 @@ window.$ === undefined && (window.$ = Zepto)
     $.__detect = detect
 
 })(Zepto)
+/*!art-template - Template Engine | http://aui.github.com/artTemplate/*/
+!function(){function a(a){return a.replace(t,"").replace(u,",").replace(v,"").replace(w,"").replace(x,"").split(y)}function b(a){return"'"+a.replace(/('|\\)/g,"\\$1").replace(/\r/g,"\\r").replace(/\n/g,"\\n")+"'"}function c(c,d){function e(a){return m+=a.split(/\n/).length-1,k&&(a=a.replace(/\s+/g," ").replace(/<!--[\w\W]*?-->/g,"")),a&&(a=s[1]+b(a)+s[2]+"\n"),a}function f(b){var c=m;if(j?b=j(b,d):g&&(b=b.replace(/\n/g,function(){return m++,"$line="+m+";"})),0===b.indexOf("=")){var e=l&&!/^=[=#]/.test(b);if(b=b.replace(/^=[=#]?|[\s;]*$/g,""),e){var f=b.replace(/\s*\([^\)]+\)/,"");n[f]||/^(include|print)$/.test(f)||(b="$escape("+b+")")}else b="$string("+b+")";b=s[1]+b+s[2]}return g&&(b="$line="+c+";"+b),r(a(b),function(a){if(a&&!p[a]){var b;b="print"===a?u:"include"===a?v:n[a]?"$utils."+a:o[a]?"$helpers."+a:"$data."+a,w+=a+"="+b+",",p[a]=!0}}),b+"\n"}var g=d.debug,h=d.openTag,i=d.closeTag,j=d.parser,k=d.compress,l=d.escape,m=1,p={$data:1,$filename:1,$utils:1,$helpers:1,$out:1,$line:1},q="".trim,s=q?["$out='';","$out+=",";","$out"]:["$out=[];","$out.push(",");","$out.join('')"],t=q?"$out+=text;return $out;":"$out.push(text);",u="function(){var text=''.concat.apply('',arguments);"+t+"}",v="function(filename,data){data=data||$data;var text=$utils.$include(filename,data,$filename);"+t+"}",w="'use strict';var $utils=this,$helpers=$utils.$helpers,"+(g?"$line=0,":""),x=s[0],y="return new String("+s[3]+");";r(c.split(h),function(a){a=a.split(i);var b=a[0],c=a[1];1===a.length?x+=e(b):(x+=f(b),c&&(x+=e(c)))});var z=w+x+y;g&&(z="try{"+z+"}catch(e){throw {filename:$filename,name:'Render Error',message:e.message,line:$line,source:"+b(c)+".split(/\\n/)[$line-1].replace(/^\\s+/,'')};}");try{var A=new Function("$data","$filename",z);return A.prototype=n,A}catch(a){throw a.temp="function anonymous($data,$filename) {"+z+"}",a}}var d=function(a,b){return"string"==typeof b?q(b,{filename:a}):g(a,b)};d.version="3.0.0",d.config=function(a,b){e[a]=b};var e=d.defaults={openTag:"<%",closeTag:"%>",escape:!0,cache:!0,compress:!1,parser:null},f=d.cache={};d.render=function(a,b){return q(a)(b)};var g=d.renderFile=function(a,b){var c=d.get(a)||p({filename:a,name:"Render Error",message:"Template not found"});return b?c(b):c};d.get=function(a){var b;if(f[a])b=f[a];else if("object"==typeof document){var c=document.getElementById(a);if(c){var d=(c.value||c.innerHTML).replace(/^\s*|\s*$/g,"");b=q(d,{filename:a})}}return b};var h=function(a,b){return"string"!=typeof a&&(b=typeof a,"number"===b?a+="":a="function"===b?h(a.call(a)):""),a},i={"<":"&#60;",">":"&#62;",'"':"&#34;","'":"&#39;","&":"&#38;"},j=function(a){return i[a]},k=function(a){return h(a).replace(/&(?![\w#]+;)|[<>"']/g,j)},l=Array.isArray||function(a){return"[object Array]"==={}.toString.call(a)},m=function(a,b){var c,d;if(l(a))for(c=0,d=a.length;c<d;c++)b.call(a,a[c],c,a);else for(c in a)b.call(a,a[c],c)},n=d.utils={$helpers:{},$include:g,$string:h,$escape:k,$each:m};d.helper=function(a,b){o[a]=b};var o=d.helpers=n.$helpers;d.onerror=function(a){var b="Template Error\n\n";for(var c in a)b+="<"+c+">\n"+a[c]+"\n\n";"object"==typeof console&&console.error(b)};var p=function(a){return d.onerror(a),function(){return"{Template Error}"}},q=d.compile=function(a,b){function d(c){try{return new i(c,h)+""}catch(d){return b.debug?p(d)():(b.debug=!0,q(a,b)(c))}}b=b||{};for(var g in e)void 0===b[g]&&(b[g]=e[g]);var h=b.filename;try{var i=c(a,b)}catch(a){return a.filename=h||"anonymous",a.name="Syntax Error",p(a)}return d.prototype=i.prototype,d.toString=function(){return i.toString()},h&&b.cache&&(f[h]=d),d},r=n.$each,s="break,case,catch,continue,debugger,default,delete,do,else,false,finally,for,function,if,in,instanceof,new,null,return,switch,this,throw,true,try,typeof,var,void,while,with,abstract,boolean,byte,char,class,const,double,enum,export,extends,final,float,goto,implements,import,int,interface,long,native,package,private,protected,public,short,static,super,synchronized,throws,transient,volatile,arguments,let,yield,undefined",t=/\/\*[\w\W]*?\*\/|\/\/[^\n]*\n|\/\/[^\n]*$|"(?:[^"\\]|\\[\w\W])*"|'(?:[^'\\]|\\[\w\W])*'|\s*\.\s*[$\w\.]+/g,u=/[^\w$]+/g,v=new RegExp(["\\b"+s.replace(/,/g,"\\b|\\b")+"\\b"].join("|"),"g"),w=/^\d[^,]*|,\d[^,]*/g,x=/^,+|,+$/g,y=/^$|,+/;e.openTag="{{",e.closeTag="}}";var z=function(a,b){var c=b.split(":"),d=c.shift(),e=c.join(":")||"";return e&&(e=", "+e),"$helpers."+d+"("+a+e+")"};e.parser=function(a,b){a=a.replace(/^\s/,"");var c=a.split(" "),e=c.shift(),f=c.join(" ");switch(e){case"if":a="if("+f+"){";break;case"else":c="if"===c.shift()?" if("+c.join(" ")+")":"",a="}else"+c+"{";break;case"/if":a="}";break;case"each":var g=c[0]||"$data",h=c[1]||"as",i=c[2]||"$value",j=c[3]||"$index",k=i+","+j;"as"!==h&&(g="[]"),a="$each("+g+",function("+k+"){";break;case"/each":a="});";break;case"echo":a="print("+f+");";break;case"print":case"include":a=e+"("+c.join(",")+");";break;default:if(/^\s*\|\s*[\w\$]/.test(f)){var l=!0;0===a.indexOf("#")&&(a=a.substr(1),l=!1);for(var m=0,n=a.split("|"),o=n.length,p=n[m++];m<o;m++)p=z(p,n[m]);a=(l?"=":"=#")+p}else a=d.helpers[e]?"=#"+e+"("+c.join(",")+");":"="+a}return a},"object"==typeof exports&&"undefined"!=typeof module?module.exports=d:"function"==typeof define?define(function(){return d}):this.template=d}();
+// 优化模板引擎
+;
+(function ($, window) {
+    if (!template) return
+    var tempFiles = {}
+    var tempLoadings = {}
+    $.template = function (filename, tempData, cb) {
+        if (!filename) {
+            console.error('请先指定模板文件')
+            return
+        }
+        var tempfile = tempFiles[filename]
+        var data = null
+        if (tempfile) {
+            data = render()
+            cb && cb(data)
+        } else {
+            if (!cb) {
+                console.error('首次加载模板文件必须使用回调')
+                return
+            }
+            if (tempLoadings[filename]) {
+                $.toast('模板文件获取中，请稍后重试')
+                return
+            }
+            $.loadTemplate(filename, function (html) {
+                tempfile = tempFiles[filename] = html
+                data = render()
+                cb(data)
+            })
+        }
+        return data
+
+        function render() {
+            return template.render(tempfile, tempData)
+        }
+    }
+
+    $.loadTemplate = function (filename, cb) {
+        if(tempFiles[filename]) return
+        tempLoadings[filename] = true
+        $.readFile($.config.template.path + filename + '.html', function (html) {
+            delete tempLoadings[filename]
+            tempFiles[filename] = html
+            cb && cb(html)
+        }, function (e) {
+            delete tempLoadings[filename]
+            $.toast('模板文件获取失败：' + e.message)
+        })
+    }
+
+})(Zepto, window)
 ;
 (function ($) {
     $.date = function (format, time) {
@@ -3271,7 +3326,7 @@ window.$ === undefined && (window.$ = Zepto)
     }
 
     // 图片懒加载
-    $.fn.lazyImg = function (cb) {
+    $.fn.lazyimg = function (cb) {
         if (!this.length) return this
         var haveScroll, timer, _this = this
         render()
@@ -3303,17 +3358,13 @@ window.$ === undefined && (window.$ = Zepto)
 
         function render(othis) {
             var end = scrollEle.scrollTop() + winHeight
-            if (othis) {
-                show(othis)
-            } else {
-                _this.each(function () {
-                    var item = $(this)
-                    var top = item.offset().top
-                    if (top <= end) {
-                        show(item)
-                    }
-                })
-            }
+            _this.each(function () {
+                var item = $(this)
+                var top = item.offset().top
+                if (top <= end) {
+                    show(item)
+                }
+            })
         }
     }
 })(Zepto, window)
@@ -3559,6 +3610,35 @@ window.$ === undefined && (window.$ = Zepto)
     }
 
 })(Zepto, window, document)
+;
+(function ($, window) {
+    var localStorage = $.os.plus ? plus.storage : window;
+    $.getStorage = function (keyName) {
+        var value = localStorage.getItem(keyName)
+        if (value) {
+            if ($.likeObject(value)) {
+                return $.parseJSON(value)
+            } else {
+                return eval(value)
+            }
+        } else {
+            return null
+        }
+    }
+    $.setStorage = function (keyName, val) {
+        keyName = keyName.toString()
+        if (typeof val === 'object') val = JSON.stringify(val)
+        else val = val.toString()
+        localStorage.setItem(keyName, val)
+        return $.getStorage(keyName)
+    }
+    $.removeStorage = function (keyName) {
+        localStorage.removeItem(keyName)
+    }
+    $.clearStorage = function (keyName) {
+        localStorage.clear()
+    }
+})(Zepto, window)
 $(function () {
     var activeClass = 'z-active'
     var options = $.config;
@@ -3567,17 +3647,15 @@ $(function () {
         if ($.os.ios && $.config.statusBarBackground) {
             plus.navigator.setStatusBarBackground($.config.statusBarBackground);
         }
-        if ($.os.android && parseFloat($.os.version) < 4.4) {
-            //解决Android平台4.4版本以下，resume后，父窗体标题延迟渲染的问题；
-            if (plus.webview.currentWebview().parent() == null) {
-                document.addEventListener("resume", function () {
-                    var body = document.body;
-                    body.style.display = 'none';
-                    setTimeout(function () {
-                        body.style.display = '';
-                    }, 10);
-                });
-            }
+        //解决Android平台4.4版本以下，resume后，父窗体标题延迟渲染的问题；
+        if ($.os.android && parseFloat($.os.version) < 4.4 && $.currentWebview.parent() == null) {
+            document.addEventListener("resume", function () {
+                var body = document.body;
+                body.style.display = 'none';
+                setTimeout(function () {
+                    body.style.display = '';
+                }, 10);
+            });
         }
 
         if ($.config.keyEventBind.backbutton) {
@@ -3741,9 +3819,71 @@ $(function () {
     })
 
     // 图片懒加载
-    $('.z-action-lazyimg').lazyImg()
+    $('.z-action-lazyimg').lazyimg()
 
     // 透明导航
     $('.z-action-transparent').transparent()
 
 });
+/* plus的web处理 */ ;
+(function ($, window) {
+    if ($.os.plus) return
+    var noop = $.noop
+
+    // plus.back
+    $.beforeback = noop;
+    $.back = function () {
+        window.history.go(-1)
+    }
+
+    // plus.dialog
+    $.alert = window.alert;
+    $.confirm = window.confirm;
+    $.prompt = window.prompt;
+    $.actionSheet = noop;
+    $.toast = console.log;
+
+    // plus.file
+    $.readFile = function (filename, success, error) {
+        var suf = '_www'
+        if (filename.indexOf(suf) === -1) {
+            new Error('只能读取本地文件')
+            return
+        }
+        filename = filename.replace(suf, '')
+        $.get($.config.host + filename, 'html', function (data) {
+            success(data)
+        }, error)
+    }
+    $.writeFile = noop;
+    $.uploadFile = noop;
+
+    // plus.image
+    $.compressImage = noop;
+    $.useCamera = noop;
+
+    // plus.pullDownRefresh
+    $.pullDownRefresh = function (opts, cb) {
+        if ($.type(opts) === 'function') {
+            cb = opts
+            opts = $.config.pullrefresh.down
+        } else {
+            opts = $.extend($.config.pullrefresh.down, opts || {})
+        }
+        if (opts.auto) cb()
+        return {
+            begin: cb,
+            end: noop
+        }
+    }
+
+    // plus.webview
+    $.fire = $.receive = $.createWindow = $.preload = $.closeOpened = $.closeAll = $.createWindows = $.appendWebview = $.showView = $.supportStatusbarOffset = noop;
+    $.openWindow = function (url) {
+        location.href = url
+    }
+    $.openWindowWithTitle = function (options) {
+        location.href = options.url
+    }
+
+})(Zepto, window)
