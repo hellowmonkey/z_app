@@ -140,7 +140,8 @@
             duration: 200,
             indicator: 'dots',
             activeDot: 0,
-            spring: true
+            spring: true,
+            preview: true
         },
         host: 'http://127.0.0.1:8020'
     };

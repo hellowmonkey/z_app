@@ -272,6 +272,7 @@ template {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
+  user-select: none;
   outline: none;
   margin: 0;
   padding: 0;
@@ -1241,6 +1242,7 @@ input[type="color"] {
   background-color: #fff;
   border: 1px solid #ddd;
   -webkit-user-select: text;
+  user-select: text;
 }
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -1952,7 +1954,6 @@ input[type="radio"]:checked + .z-radio.z-color-dark:after {
   background-color: #fff;
   z-index: 0;
   -webkit-appearance: none;
-  appearance: none;
   border: none;
   position: relative;
   padding: 7px 10px 7px 32px;

@@ -34,18 +34,18 @@ $(function () {
         }
 
         // 相册
-        $('body').on('tap', '.mui-action-album', function (event) {
+        $('body').on('tap', '.z-action-album', function (event) {
             event.stopPropagation()
             var self = this
             var group = $(this).data('album-group')
             var images = []
             var current = 0
             group = group === null ? '' : '[data-album-group="' + group + '"]'
-            $('.mui-action-album' + group).each(function (k) {
+            $('.z-action-album' + group).each(function (k) {
                 var _this = $(this)
                 var src = _this.data('album-src') || this.src || _this.backgroundImage()
                 if (self === this) current = k
-                images.push(src)
+                src && images.push(src)
             })
             plus.nativeUI.previewImage(images, {
                 current: current,
@@ -113,12 +113,6 @@ $(function () {
     $('body').on('tap', '.z-input-clear-btn', function (event) {
         event.stopPropagation()
         $(this).closest('.z-input-item').find('.z-input').val('')
-    })
-
-    // switch
-    $('body').on('tap', '.z-switch', function (event) {
-        event.stopPropagation()
-        $(this).switch()
     })
 
     // 水波纹

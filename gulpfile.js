@@ -10,7 +10,7 @@ const uglify = require('gulp-uglify');
 let js_modules_fn = ['zepto', 'config', 'touch', 'selector', 'fx', 'fx_methods', 'form', 'event', 'data', 'ajax', 'detect'];
 let js_modules_tpl = ['art-template', 'ui.template']
 let js_modules_plus = ['plus.back', 'plus.webview', 'plus.pullDownRefresh', 'plus.dialog', 'plus.file', 'plus.image'];
-let js_modules_ui = ['ui.date', 'ui.switch', 'ui.modal', 'ui.numberbox', 'ui.button', 'ui.transparent', 'ui.pullUpRefresh', 'ui.image', 'ui.slider', 'ui.storage', 'init'];
+let js_modules_ui = ['ui.date', 'ui.modal', 'ui.numberbox', 'ui.button', 'ui.transparent', 'ui.pullUpRefresh', 'ui.image', 'ui.slider', 'ui.storage', 'ui.switch', 'init'];
 
 let js_modules = function ( /* modules */ ) {
     let rets = []

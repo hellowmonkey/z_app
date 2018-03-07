@@ -59,11 +59,16 @@
                 critical = -itemWidth
                 itemSize += 2
             }
+            if (opts.preview) preview(items)
             sliderWidth = (itemLength - 1) * itemWidth
             activeDist = moveDist = -(activeDot * itemWidth) + critical
             anim()
             initIndicator()
             setLoop()
+        }
+
+        function preview(items) {
+            items.addClass('z-action-album').attr('data-album-group', 'slider_' + Math.random())
         }
 
         function setLoop(clear) {

@@ -7,7 +7,7 @@
     var loading = $.config.buttonLoading
     $.fn.button = function (type, loadingText) {
         if (!this.length) return this
-        this.each(function () {
+        return this.each(function () {
             var _this = $(this)
             var text = ''
             if (type === 'loading' && _this.hasClass(disabled)) return this
@@ -21,6 +21,5 @@
                 _this.addClass(disabled).data(oldText, _this.html()).attr('disabled', 'disabled').html(text)
             }
         })
-        return this
     }
 })(Zepto)

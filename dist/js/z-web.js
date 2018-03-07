@@ -579,6 +579,74 @@ var Zepto = (function () {
         return query;
     }
 
+    /**
+     * 简易数据驱动(mvvm)
+     * @param  {json} opts 数据对象
+     * @return {json}      数据整合结果和set函数
+     */
+    $.viewModel = function (opts) {
+        var callbacks = opts
+        var eves = ['animationend', 'blur', 'change', 'input', 'click', 'dblclick', 'focus', 'keydown', 'keypress', 'keyup', 'scroll', 'submit', 'swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap']
+        var attrs = ['attr', 'css', 'text', 'html', 'addClass', 'addAttr', 'addData', 'removeClass', 'removeAttr', 'removeData', 'visible']
+        var event_models = []
+        var attr_models = []
+        putModels()
+
+        function putModels() {
+            $.each(eves.concat(attrs), function (i, on) {
+                var model = 'z-' + on
+                var objs = $('[' + model + ']')
+                objs.length && objs.each(function () {
+                    var _this = $(this)
+                    var tar = _this.attr(model)
+                    var val = {
+                        ele: _this,
+                        eve: on,
+                        tar: tar
+                    }
+                    _this.removeAttr(model)
+                    if ($.inArray(on, eves)) {
+                        event_models.push(val)
+                        _this.on(on, opts[tar])
+                    } else if ($.inArray(on, attrs)) {
+                        attr_models.push(val)
+                        _this.on(on, function () {
+                            var target = opts[tar]
+                            if ('visible' == on) {
+                                if (target) {
+                                    _this.show().css('transform-origin', '')
+                                } else {
+                                    _this.hide()
+                                }
+                            } else {
+                                _this[on](target)
+                            }
+                        })
+                        if ($.type(opts[tar]) !== 'undefined') {
+                            _this.trigger(on)
+                        }
+                    }
+                })
+            })
+        }
+
+        function setModels(key, val, doPut) {
+            opts[key] = val
+            $.each(attr_models, function (i, item) {
+                if (item.tar == key) {
+                    item.ele.trigger(item.eve)
+                }
+            })
+            doPut && callbacks.Put()
+            return callbacks
+        }
+        callbacks.$events = event_models
+        callbacks.$attrs = attr_models
+        callbacks.Put = putModels
+        callbacks.Set = setModels
+        return callbacks
+    }
+
     // Define methods that will be available on all
     // Zepto collections
     $.fn = {
@@ -1309,7 +1377,8 @@ window.$ === undefined && (window.$ = Zepto)
             duration: 200,
             indicator: 'dots',
             activeDot: 0,
-            spring: true
+            spring: true,
+            preview: true
         },
         host: 'http://127.0.0.1:8020'
     };
@@ -2916,36 +2985,6 @@ window.$ === undefined && (window.$ = Zepto)
 })(Zepto)
 ;
 (function ($) {
-    var activeClass = 'z-active'
-    var switchClass = 'z-switch'
-    $.fn.switch = function (type) {
-        if (!this.length) return this
-        this.each(function () {
-            var _this = $(this)
-            if (!_this.hasClass(switchClass)) return this
-            if (type === 'show' && _this.hasClass(activeClass)) return this
-            if (type === 'hide' && !_this.hasClass(activeClass)) return this
-            var handle = _this.find('.z-switch-handle')
-            var transName = $.fx.cssPrefix + 'transform'
-            var transOpts = {}
-            if (_this.hasClass(activeClass)) {
-                _this.removeClass(activeClass)
-                transOpts[transName] = ''
-                handle.css(transOpts)
-                _this.trigger('hideed', _this)
-            } else {
-                var w = _this.width() - handle.width()
-                _this.addClass(activeClass)
-                transOpts[transName] = 'translate(' + w + 'px, 0px)'
-                handle.css(transOpts)
-                _this.trigger('showed', _this)
-            }
-        })
-        return this
-    }
-})(Zepto)
-;
-(function ($) {
     var zShade = null,
         zShades = 0,
         zIndex = 99,
@@ -3174,7 +3213,7 @@ window.$ === undefined && (window.$ = Zepto)
     var loading = $.config.buttonLoading
     $.fn.button = function (type, loadingText) {
         if (!this.length) return this
-        this.each(function () {
+        return this.each(function () {
             var _this = $(this)
             var text = ''
             if (type === 'loading' && _this.hasClass(disabled)) return this
@@ -3188,7 +3227,6 @@ window.$ === undefined && (window.$ = Zepto)
                 _this.addClass(disabled).data(oldText, _this.html()).attr('disabled', 'disabled').html(text)
             }
         })
-        return this
     }
 })(Zepto)
 // 透明导航
@@ -3252,22 +3290,28 @@ window.$ === undefined && (window.$ = Zepto)
         var done = function () {
             lock = true
             moreBtn.show().html(opts.loadingText)
-            cb(++page)
+            cb && cb(++page)
         }
         sElem.append(moreBtn)
-        $(window).on('scroll', function () {
-            clearTimeout(timer)
-            timer = setTimeout(function () {
-                if (isOver) return
-                var _this = $(this),
-                    scrollTop = _this.scrollTop(),
-                    scrollHeight = $(document).height(),
-                    windowHeight = _this.height()
-                if (scrollTop + windowHeight >= scrollHeight) {
-                    lock || done()
-                }
-            }, 60)
-        })
+        if ($.os.plus) {
+            document.addEventListener("plusscrollbottom", function () {
+                lock || done()
+            }, false);
+        } else {
+            $(window).on('scroll', function () {
+                clearTimeout(timer)
+                timer = setTimeout(function () {
+                    if (isOver) return
+                    var _this = $(window),
+                        scrollTop = _this.scrollTop(),
+                        scrollHeight = $(document).height(),
+                        windowHeight = _this.height()
+                    if (scrollTop + windowHeight >= scrollHeight) {
+                        lock || done()
+                    }
+                }, 60)
+            })
+        }
 
         return {
             reset: function () {
@@ -3429,11 +3473,16 @@ window.$ === undefined && (window.$ = Zepto)
                 critical = -itemWidth
                 itemSize += 2
             }
+            if (opts.preview) preview(items)
             sliderWidth = (itemLength - 1) * itemWidth
             activeDist = moveDist = -(activeDot * itemWidth) + critical
             anim()
             initIndicator()
             setLoop()
+        }
+
+        function preview(items) {
+            items.addClass('z-action-album').attr('data-album-group', 'slider_' + Math.random())
         }
 
         function setLoop(clear) {
@@ -3612,9 +3661,11 @@ window.$ === undefined && (window.$ = Zepto)
 })(Zepto, window, document)
 ;
 (function ($, window) {
-    var localStorage = $.os.plus ? plus.storage : window;
+    var localStorage = function () {
+        return $.os.plus ? plus.storage : window.localStorage
+    };
     $.getStorage = function (keyName) {
-        var value = localStorage.getItem(keyName)
+        var value = localStorage().getItem(keyName)
         if (value) {
             if ($.likeObject(value)) {
                 return $.parseJSON(value)
@@ -3629,16 +3680,93 @@ window.$ === undefined && (window.$ = Zepto)
         keyName = keyName.toString()
         if (typeof val === 'object') val = JSON.stringify(val)
         else val = val.toString()
-        localStorage.setItem(keyName, val)
+        localStorage().setItem(keyName, val)
         return $.getStorage(keyName)
     }
     $.removeStorage = function (keyName) {
-        localStorage.removeItem(keyName)
+        localStorage().removeItem(keyName)
     }
     $.clearStorage = function (keyName) {
-        localStorage.clear()
+        localStorage().clear()
     }
 })(Zepto, window)
+;
+(function ($) {
+    var activeClass = 'z-active'
+    var switchClass = 'z-switch'
+    var switchEl = '.' + switchClass
+    var disabledClass = 'z-disabled'
+    var startX, moveX
+    $.fn.switch = function (type) {
+        if (!this.length) return this
+        return this.each(function () {
+            var _this = $(this)
+            if (!_this.hasClass(switchClass)) return this
+            if (type === 'show' && _this.hasClass(activeClass)) return this
+            if (type === 'hide' && !_this.hasClass(activeClass)) return this
+            var handle = _this.find('.z-switch-handle')
+            var transName = $.fx.cssPrefix + 'transform'
+            var transOpts = {}
+            if (_this.hasClass(activeClass)) {
+                _this.removeClass(activeClass)
+                transOpts[transName] = ''
+                handle.css(transOpts)
+                _this.trigger('hideed', _this)
+            } else {
+                var w = _this.width() - handle.width()
+                _this.addClass(activeClass)
+                transOpts[transName] = 'translate(' + w + 'px, 0px)'
+                handle.css(transOpts)
+                _this.trigger('showed', _this)
+            }
+        })
+    }
+
+    $(function () {
+        var eventMap = $.eventMap
+        $('body').on('tap', switchEl, function (event) {
+            event.stopPropagation()
+            var _this = $(this)
+            if (_this.hasClass(disabledClass)) return
+            _this.switch()
+        })
+
+        $('body').on(eventMap.down, switchEl, function (event) {
+            startHandler(event, this)
+        })
+        $('body').on(eventMap.move, switchEl, function (event) {
+            moveHandler(event, this)
+        })
+        $('body').on(eventMap.up, switchEl, function (event) {
+            endHandler(event, this)
+        })
+        $('body').on(eventMap.cancel, switchEl, function (event) {
+            endHandler(event, this)
+        })
+    })
+
+    function startHandler(e, ele) {
+        if ($(ele).hasClass(disabledClass)) return
+        startX = getX(e)
+    }
+
+    function moveHandler(e, ele) {
+        var _this = $(ele)
+        moveX = getX(e) - startX
+        if (_this.hasClass(disabledClass) || !startX || !moveX || Math.abs(moveX) < _this.width() * 0.2) return
+        _this.switch(moveX > 0 ? 'show' : 'hide')
+    }
+
+    function endHandler(e, ele) {
+        startX = moveX = null
+    }
+
+    function getX(e) {
+        return e.targetTouches ? e.targetTouches[0].pageX : e.pageX
+    }
+
+
+})(Zepto)
 $(function () {
     var activeClass = 'z-active'
     var options = $.config;
@@ -3675,18 +3803,18 @@ $(function () {
         }
 
         // 相册
-        $('body').on('tap', '.mui-action-album', function (event) {
+        $('body').on('tap', '.z-action-album', function (event) {
             event.stopPropagation()
             var self = this
             var group = $(this).data('album-group')
             var images = []
             var current = 0
             group = group === null ? '' : '[data-album-group="' + group + '"]'
-            $('.mui-action-album' + group).each(function (k) {
+            $('.z-action-album' + group).each(function (k) {
                 var _this = $(this)
                 var src = _this.data('album-src') || this.src || _this.backgroundImage()
                 if (self === this) current = k
-                images.push(src)
+                src && images.push(src)
             })
             plus.nativeUI.previewImage(images, {
                 current: current,
@@ -3754,12 +3882,6 @@ $(function () {
     $('body').on('tap', '.z-input-clear-btn', function (event) {
         event.stopPropagation()
         $(this).closest('.z-input-item').find('.z-input').val('')
-    })
-
-    // switch
-    $('body').on('tap', '.z-switch', function (event) {
-        event.stopPropagation()
-        $(this).switch()
     })
 
     // 水波纹

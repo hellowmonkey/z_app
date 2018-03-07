@@ -579,6 +579,74 @@ var Zepto = (function () {
         return query;
     }
 
+    /**
+     * 简易数据驱动(mvvm)
+     * @param  {json} opts 数据对象
+     * @return {json}      数据整合结果和set函数
+     */
+    $.viewModel = function (opts) {
+        var callbacks = opts
+        var eves = ['animationend', 'blur', 'change', 'input', 'click', 'dblclick', 'focus', 'keydown', 'keypress', 'keyup', 'scroll', 'submit', 'swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap']
+        var attrs = ['attr', 'css', 'text', 'html', 'addClass', 'addAttr', 'addData', 'removeClass', 'removeAttr', 'removeData', 'visible']
+        var event_models = []
+        var attr_models = []
+        putModels()
+
+        function putModels() {
+            $.each(eves.concat(attrs), function (i, on) {
+                var model = 'z-' + on
+                var objs = $('[' + model + ']')
+                objs.length && objs.each(function () {
+                    var _this = $(this)
+                    var tar = _this.attr(model)
+                    var val = {
+                        ele: _this,
+                        eve: on,
+                        tar: tar
+                    }
+                    _this.removeAttr(model)
+                    if ($.inArray(on, eves)) {
+                        event_models.push(val)
+                        _this.on(on, opts[tar])
+                    } else if ($.inArray(on, attrs)) {
+                        attr_models.push(val)
+                        _this.on(on, function () {
+                            var target = opts[tar]
+                            if ('visible' == on) {
+                                if (target) {
+                                    _this.show().css('transform-origin', '')
+                                } else {
+                                    _this.hide()
+                                }
+                            } else {
+                                _this[on](target)
+                            }
+                        })
+                        if ($.type(opts[tar]) !== 'undefined') {
+                            _this.trigger(on)
+                        }
+                    }
+                })
+            })
+        }
+
+        function setModels(key, val, doPut) {
+            opts[key] = val
+            $.each(attr_models, function (i, item) {
+                if (item.tar == key) {
+                    item.ele.trigger(item.eve)
+                }
+            })
+            doPut && callbacks.Put()
+            return callbacks
+        }
+        callbacks.$events = event_models
+        callbacks.$attrs = attr_models
+        callbacks.Put = putModels
+        callbacks.Set = setModels
+        return callbacks
+    }
+
     // Define methods that will be available on all
     // Zepto collections
     $.fn = {

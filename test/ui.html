@@ -48,14 +48,14 @@
                 </a>
             </li>
         </ul>
-        <div class="z-loader"></div>
+        <div class="z-loader" z-visible="show"></div>
         <div class="z-message">
-            <div class="z-message-date">2018/8/5</div>
-            <div class="z-message-item z-message-me">
+            <div class="z-message-date" z-visible="show">2018/8/5</div>
+            <div class="z-message-item z-message-me" z-visible="show">
                 <div class="z-message-avatar" style="background-image:url(https://ss3.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/image/h%3D300/sign=6d0bf83bda00baa1a52c41bb7711b9b1/0b55b319ebc4b745b19f82c1c4fc1e178b8215d9.jpg)"></div>
                 <div class="z-message-box">aaaaaaaa</div>
             </div>
-            <div class="z-message-item z-message-me">
+            <div class="z-message-item z-message-me" z-tap="isShow">
                 <div class="z-message-avatar"></div>
                 <div class="z-message-box z-color-red">aaaaaaaa</div>
             </div>
@@ -208,6 +208,12 @@
             })
 
             $.pullUpRefresh(function(){})
+
+            var vm = $.viewModel({
+                isShow: function(){
+                    vm.Set('show', !vm.show)
+                }
+            })
 
         })
     </script>

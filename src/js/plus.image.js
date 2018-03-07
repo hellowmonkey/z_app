@@ -70,8 +70,7 @@
                     }, {
                         filename: '_doc/gallery/'
                     })
-                }
-                if (2 === e.index) {
+                } else if (2 === e.index) {
                     //相册选取
                     plus.gallery.pick(function (e) {
                         if (opts.multiple) {

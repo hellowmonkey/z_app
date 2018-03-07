@@ -15,22 +15,28 @@
         var done = function () {
             lock = true
             moreBtn.show().html(opts.loadingText)
-            cb(++page)
+            cb && cb(++page)
         }
         sElem.append(moreBtn)
-        $(window).on('scroll', function () {
-            clearTimeout(timer)
-            timer = setTimeout(function () {
-                if (isOver) return
-                var _this = $(this),
-                    scrollTop = _this.scrollTop(),
-                    scrollHeight = $(document).height(),
-                    windowHeight = _this.height()
-                if (scrollTop + windowHeight >= scrollHeight) {
-                    lock || done()
-                }
-            }, 60)
-        })
+        if ($.os.plus) {
+            document.addEventListener("plusscrollbottom", function () {
+                lock || done()
+            }, false);
+        } else {
+            $(window).on('scroll', function () {
+                clearTimeout(timer)
+                timer = setTimeout(function () {
+                    if (isOver) return
+                    var _this = $(window),
+                        scrollTop = _this.scrollTop(),
+                        scrollHeight = $(document).height(),
+                        windowHeight = _this.height()
+                    if (scrollTop + windowHeight >= scrollHeight) {
+                        lock || done()
+                    }
+                }, 60)
+            })
+        }
 
         return {
             reset: function () {

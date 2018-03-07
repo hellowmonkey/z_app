@@ -19,6 +19,7 @@
      * @returns {undefined}
      */
     $.fire = function (webview, eventType, data) {
+        if ($.type(webview) === 'string') webview = plus.webview.getWebviewById(webview)
         if (webview) {
             if (typeof data === 'undefined') {
                 data = '';
@@ -169,9 +170,9 @@
             }
         }
         webview.nShow = nShow
-		setTimeout(function() {
-			!webview.isVisible() && $.showView(webview)
-		}, nShow.delay)
+        setTimeout(function () {
+            !webview.isVisible() && $.showView(webview)
+        }, nShow.delay)
         return webview;
     };
 
@@ -497,11 +498,11 @@
         return webview;
     };
 
-    $.showView = function(view) {
+    $.showView = function (view) {
         view = view || $.currentWebview
         var opts = $.extend(true, defaultShow, view.nShow)
-		view.show.apply(view, [opts.aniShow, opts.duration])
-	}
+        view.show.apply(view, [opts.aniShow, opts.duration])
+    }
 
     //全局webviews
     $.webviews = {};
