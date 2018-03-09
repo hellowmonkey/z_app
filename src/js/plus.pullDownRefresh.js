@@ -1,7 +1,7 @@
 // 下拉刷新
 ;
 (function ($, document, window) {
-    if (!$.os.plus) return
+    // if (!$.os.plus) return
     $.pullDownRefresh = function (opts, cb) {
         var view = $.currentWebview
         if ($.type(opts) === 'function') {
@@ -10,7 +10,7 @@
         } else {
             opts = $.extend($.config.pullrefresh.down, opts || {})
         }
-        view.setPullToRefresh(opts, cb)
+        if ($.os.plus) view.setPullToRefresh(opts, cb)
         if (opts.auto) {
             setTimeout(function () {
                 begin()
@@ -25,8 +25,8 @@
             view.endPullToRefresh()
         }
         return {
-            begin: begin,
-            end: end
+            begin: $.os.plus ? begin : cb,
+            end: $.os.plus ? end : $.noop
         }
     }
 

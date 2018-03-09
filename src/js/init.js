@@ -60,6 +60,7 @@ $(function () {
             var href = _this.attr('href') || _this.data('link-target')
             var opts = _this.data('link-opts')
             var suf = '.html'
+            if (!href) return false
             var pathIndex = href.indexOf(suf)
             if (pathIndex === -1) return false
             var filename = href.substr(0, pathIndex)

@@ -1,8 +1,9 @@
 ;
 (function ($) {
-    if (!$.os.plus) return
+    // if (!$.os.plus) return
 
     $.compressImage = function (images, cb) {
+        if (!$.os.plus) return
         if ($.type(images) === 'string') {
             images = [{
                 src: images
@@ -40,6 +41,7 @@
     }
 
     $.useCamera = function (cb, opts) {
+        if (!$.os.plus) return
         opts = $.extend({
             multiple: true,
             filter: 'image'

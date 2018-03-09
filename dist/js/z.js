@@ -502,6 +502,7 @@ var Zepto = (function () {
 
     // 获取APP版本号
     $.appVersion = function (cb) {
+        if (!$.os.plus) return
         plus.runtime.getProperty(plus.runtime.appid, function (data) {
             cb(data.version)
         })
@@ -1380,7 +1381,7 @@ window.$ === undefined && (window.$ = Zepto)
             spring: true,
             preview: true
         },
-        host: 'http://127.0.0.1:8020'
+        host: location.origin
     };
 })(Zepto)
 //     Zepto.js
@@ -2857,7 +2858,7 @@ window.$ === undefined && (window.$ = Zepto)
  */
 ;
 (function ($, window) {
-    if (!$.os.plus) return
+    // if (!$.os.plus) return
     //首次按下back按键的时间
     var back__first = null;
 
@@ -2870,7 +2871,8 @@ window.$ === undefined && (window.$ = Zepto)
         for (var i = 0; i < backs.length; i++) {
             if (backs[i]() === false) return
         }
-        if (!window.plus) {
+        if (!$.os.plus) {
+            window.history.go(-1)
             return false;
         }
         var wobj = plus.webview.currentWebview();
@@ -2909,7 +2911,6 @@ window.$ === undefined && (window.$ = Zepto)
                 }
             });
         }
-        return true;
     };
 })(Zepto, window);
 /**
@@ -2918,12 +2919,13 @@ window.$ === undefined && (window.$ = Zepto)
  * @returns {undefined}
  */
 ;
-(function ($) {
-    if (!$.os.plus) return
+(function ($, window) {
+    // if (!$.os.plus) return
     //默认页面动画
     var defaultShow = $.config.show;
 
-    $.currentWebview = null;
+    var currentWebview = {};
+    $.currentWebview = currentWebview;
 
     /**
      * 5+ event(5+没提供之前我自己实现)
@@ -2933,6 +2935,7 @@ window.$ === undefined && (window.$ = Zepto)
      * @returns {undefined}
      */
     $.fire = function (webview, eventType, data) {
+        if (!$.os.plus) return
         if ($.type(webview) === 'string') webview = plus.webview.getWebviewById(webview)
         if (webview) {
             if (typeof data === 'undefined') {
@@ -2953,6 +2956,7 @@ window.$ === undefined && (window.$ = Zepto)
      * @returns {undefined}
      */
     $.receive = function (eventType, data) {
+        if (!$.os.plus) return
         if (eventType) {
             try {
                 if (data && typeof data === 'string') {
@@ -3010,7 +3014,13 @@ window.$ === undefined && (window.$ = Zepto)
                 id = id || url;
             }
         }
-        if (!window.plus) {
+        if (!$.os.plus) {
+            //TODO 先临时这么处理：手机上顶层跳，PC上parent跳
+            if ($.os.ios || $.os.android) {
+                window.top.location.href = url;
+            } else {
+                window.parent.location.href = url;
+            }
             return;
         }
 
@@ -3102,9 +3112,6 @@ window.$ === undefined && (window.$ = Zepto)
             } else {
                 window.parent.location.href = url;
             }
-            return;
-        }
-        if (!window.plus) {
             return;
         }
 
@@ -3248,7 +3255,7 @@ window.$ === undefined && (window.$ = Zepto)
      * @returns {webview}
      */
     $.createWindow = function (options, isCreate) {
-        if (!window.plus) {
+        if (!$.os.plus) {
             return;
         }
         var id = options.id || options.url;
@@ -3343,6 +3350,7 @@ window.$ === undefined && (window.$ = Zepto)
      *关闭当前webview打开的所有webview；
      */
     $.closeOpened = function (webview) {
+        if (!$.os.plus) return
         var opened = webview.opened();
         if (opened) {
             for (var i = 0, len = opened.length; i < len; i++) {
@@ -3363,6 +3371,7 @@ window.$ === undefined && (window.$ = Zepto)
         }
     };
     $.closeAll = function (webview, aniShow) {
+        if (!$.os.plus) return
         $.closeOpened(webview);
         if (aniShow) {
             webview.close(aniShow);
@@ -3388,9 +3397,7 @@ window.$ === undefined && (window.$ = Zepto)
      * @returns {webview}
      */
     $.appendWebview = function (options) {
-        if (!window.plus) {
-            return;
-        }
+        if (!$.os.plus) return
         var id = options.id || options.url;
         var webview;
         if (!$.webviews[id]) { //保证执行一遍
@@ -3404,7 +3411,7 @@ window.$ === undefined && (window.$ = Zepto)
             //修改方式：不再监控loaded事件，直接append
             //by chb@20150521
             // webview.addEventListener('loaded', function() {
-            plus.webview.currentWebview().append(webview);
+            currentWebview.append(webview);
             // });
             $.webviews[id] = options;
 
@@ -3413,7 +3420,8 @@ window.$ === undefined && (window.$ = Zepto)
     };
 
     $.showView = function (view) {
-        view = view || $.currentWebview
+        if (!$.os.plus) return
+        view = view || currentWebview
         var opts = $.extend(true, defaultShow, view.nShow)
         view.show.apply(view, [opts.aniShow, opts.duration])
     }
@@ -3424,7 +3432,8 @@ window.$ === undefined && (window.$ = Zepto)
     $.data.preloads = [];
     //$.currentWebview
     $.plusReady(function () {
-        $.currentWebview = plus.webview.currentWebview();
+        currentWebview = plus.webview.currentWebview();
+        $.currentWebview = currentWebview
     });
     window.addEventListener('preload', function () {
         //处理预加载部分
@@ -3441,11 +3450,11 @@ window.$ === undefined && (window.$ = Zepto)
     $.supportStatusbarOffset = function () {
         return $.os.plus && $.os.ios && parseFloat($.os.version) >= 7;
     };
-})(Zepto);
+})(Zepto, window);
 // 下拉刷新
 ;
 (function ($, document, window) {
-    if (!$.os.plus) return
+    // if (!$.os.plus) return
     $.pullDownRefresh = function (opts, cb) {
         var view = $.currentWebview
         if ($.type(opts) === 'function') {
@@ -3454,7 +3463,7 @@ window.$ === undefined && (window.$ = Zepto)
         } else {
             opts = $.extend($.config.pullrefresh.down, opts || {})
         }
-        view.setPullToRefresh(opts, cb)
+        if ($.os.plus) view.setPullToRefresh(opts, cb)
         if (opts.auto) {
             setTimeout(function () {
                 begin()
@@ -3469,8 +3478,8 @@ window.$ === undefined && (window.$ = Zepto)
             view.endPullToRefresh()
         }
         return {
-            begin: begin,
-            end: end
+            begin: $.os.plus ? begin : cb,
+            end: $.os.plus ? end : $.noop
         }
     }
 
@@ -3478,7 +3487,14 @@ window.$ === undefined && (window.$ = Zepto)
 // 原生弹框
 ;
 (function ($, window) {
-    if (!$.os.plus) return
+    if (!$.os.plus) {
+        $.alert = window.alert;
+        $.confirm = window.confirm;
+        $.prompt = window.prompt;
+        $.actionSheet = $.noop;
+        $.toast = console.log;
+        return
+    }
     /**
      * 警告消息框
      */
@@ -3514,7 +3530,7 @@ window.$ === undefined && (window.$ = Zepto)
         if (!opts.buttons || !opts.buttons.length) return
         $.each(opts.buttons, function (k, item) {
             if ($.type(item) === 'string') {
-                item = {
+                opts.buttons[k] = {
                     title: item
                 }
             }
@@ -3537,12 +3553,21 @@ window.$ === undefined && (window.$ = Zepto)
 })(Zepto, window)
 ;
 (function ($) {
-    if (!$.os.plus) return
+    // if (!$.os.plus) return
     var fileDoc = '_doc/',
         fileExt = '.txt',
         fileErr = ['文件写入失败: ', '文件创建失败: ', '文件获取失败: ']
-        
+
     $.readFile = function (filename, success, error) {
+        if (!$.os.plus) {
+            var suf = '_www'
+            if (filename.indexOf(suf) === -1) return
+            filename = filename.replace(suf, $.config.host)
+            $.get(filename, 'html', function (data) {
+                success(data)
+            }, error)
+            return
+        }
         plus.io.resolveLocalFileSystemURL(filename, function (entry) {
             entry.file(function (file) {
                 var fileReader = new plus.io.FileReader();
@@ -3563,6 +3588,7 @@ window.$ === undefined && (window.$ = Zepto)
     }
 
     $.writeFile = function (path, data, cover, cb) {
+        if (!$.os.plus) return
         if ('function' === $.type(cover)) {
             cb = cover
             cover = true
@@ -3604,6 +3630,7 @@ window.$ === undefined && (window.$ = Zepto)
     }
 
     $.uploadFile = function (files, url, cb, filename) {
+        if (!$.os.plus) return
         filename = filename || 'pic'
         var task = plus.uploader.createUpload(url, {
                 method: "POST"
@@ -3628,9 +3655,10 @@ window.$ === undefined && (window.$ = Zepto)
 })(Zepto)
 ;
 (function ($) {
-    if (!$.os.plus) return
+    // if (!$.os.plus) return
 
     $.compressImage = function (images, cb) {
+        if (!$.os.plus) return
         if ($.type(images) === 'string') {
             images = [{
                 src: images
@@ -3668,6 +3696,7 @@ window.$ === undefined && (window.$ = Zepto)
     }
 
     $.useCamera = function (cb, opts) {
+        if (!$.os.plus) return
         opts = $.extend({
             multiple: true,
             filter: 'image'
@@ -4699,6 +4728,7 @@ $(function () {
             var href = _this.attr('href') || _this.data('link-target')
             var opts = _this.data('link-opts')
             var suf = '.html'
+            if (!href) return false
             var pathIndex = href.indexOf(suf)
             if (pathIndex === -1) return false
             var filename = href.substr(0, pathIndex)

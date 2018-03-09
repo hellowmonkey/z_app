@@ -1,11 +1,20 @@
 ;
 (function ($) {
-    if (!$.os.plus) return
+    // if (!$.os.plus) return
     var fileDoc = '_doc/',
         fileExt = '.txt',
         fileErr = ['文件写入失败: ', '文件创建失败: ', '文件获取失败: ']
-        
+
     $.readFile = function (filename, success, error) {
+        if (!$.os.plus) {
+            var suf = '_www'
+            if (filename.indexOf(suf) === -1) return
+            filename = filename.replace(suf, $.config.host)
+            $.get(filename, 'html', function (data) {
+                success(data)
+            }, error)
+            return
+        }
         plus.io.resolveLocalFileSystemURL(filename, function (entry) {
             entry.file(function (file) {
                 var fileReader = new plus.io.FileReader();
@@ -26,6 +35,7 @@
     }
 
     $.writeFile = function (path, data, cover, cb) {
+        if (!$.os.plus) return
         if ('function' === $.type(cover)) {
             cb = cover
             cover = true
@@ -67,6 +77,7 @@
     }
 
     $.uploadFile = function (files, url, cb, filename) {
+        if (!$.os.plus) return
         filename = filename || 'pic'
         var task = plus.uploader.createUpload(url, {
                 method: "POST"

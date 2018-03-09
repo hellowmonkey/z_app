@@ -1057,78 +1057,78 @@ input[type="button"]:disabled {
   color: #fff;
 }
 .z-btn.z-color-blue {
-  border-color: #2b679b;
+  border-color: #3072ab;
   background-color: #337ab7;
 }
 .z-btn.z-color-blue:active,
 .z-btn.z-color-blue.z-active {
-  border-color: #22527b;
-  background-color: #285f8f;
+  border-color: #275d8b;
+  background-color: #2a6597;
 }
 .z-btn.z-color-blue.z-btn-outlined,
 .z-btn.z-color-blue.z-btn-link {
   color: #337ab7;
 }
 .z-btn.z-color-green {
-  border-color: #49a749;
+  border-color: #51b351;
   background-color: #5cb85c;
 }
 .z-btn.z-color-green:active,
 .z-btn.z-color-green.z-active {
-  border-color: #3d8b3d;
-  background-color: #449d44;
+  border-color: #439943;
+  background-color: #47a447;
 }
 .z-btn.z-color-green.z-btn-outlined,
 .z-btn.z-color-green.z-btn-link {
   color: #5cb85c;
 }
 .z-btn.z-color-red {
-  border-color: #d33632;
+  border-color: #d64742;
   background-color: #d9534f;
 }
 .z-btn.z-color-red:active,
 .z-btn.z-color-red.z-active {
-  border-color: #b52b27;
-  background-color: #c9302c;
+  border-color: #c52f2b;
+  background-color: #d2322d;
 }
 .z-btn.z-color-red.z-btn-outlined,
 .z-btn.z-color-red.z-btn-link {
   color: #d9534f;
 }
 .z-btn.z-color-yellow {
-  border-color: #ed9e2d;
+  border-color: #efa640;
   background-color: #f0ad4e;
 }
 .z-btn.z-color-yellow:active,
 .z-btn.z-color-yellow.z-active {
-  border-color: #df8a13;
-  background-color: #ec971f;
+  border-color: #ec951a;
+  background-color: #ed9c28;
 }
 .z-btn.z-color-yellow.z-btn-outlined,
 .z-btn.z-color-yellow.z-btn-link {
   color: #f0ad4e;
 }
 .z-btn.z-color-purple {
-  border-color: #714ee4;
+  border-color: #7f60e7;
   background-color: #8a6de9;
 }
 .z-btn.z-color-purple:active,
 .z-btn.z-color-purple.z-active {
-  border-color: #552bdf;
-  background-color: #6641e2;
+  border-color: #633ce2;
+  background-color: #6e4ae4;
 }
 .z-btn.z-color-purple.z-btn-outlined,
 .z-btn.z-color-purple.z-btn-link {
   color: #8a6de9;
 }
 .z-btn.z-color-cyan {
-  border-color: #3db5d8;
+  border-color: #4ebbdb;
   background-color: #5bc0de;
 }
 .z-btn.z-color-cyan:active,
 .z-btn.z-color-cyan.z-active {
-  border-color: #28a1c5;
-  background-color: #31b0d5;
+  border-color: #2caed5;
+  background-color: #39b3d7;
 }
 .z-btn.z-color-cyan.z-btn-outlined,
 .z-btn.z-color-cyan.z-btn-link {
@@ -1136,25 +1136,25 @@ input[type="button"]:disabled {
 }
 .z-btn.z-color-gray {
   border-color: #999;
-  background-color: #b3b3b3;
+  background-color: #b5b5b5;
 }
 .z-btn.z-color-gray:active,
 .z-btn.z-color-gray.z-active {
-  border-color: #737373;
-  background-color: #808080;
+  border-color: #7d7d7d;
+  background-color: #858585;
 }
 .z-btn.z-color-gray.z-btn-outlined,
 .z-btn.z-color-gray.z-btn-link {
   color: #999;
 }
 .z-btn.z-color-dark {
-  border-color: #292c35;
+  border-color: #323640;
   background-color: #393D49;
 }
 .z-btn.z-color-dark:active,
 .z-btn.z-color-dark.z-active {
-  border-color: #17191e;
-  background-color: #23252c;
+  border-color: #202329;
+  background-color: #272a32;
 }
 .z-btn.z-color-dark.z-btn-outlined,
 .z-btn.z-color-dark.z-btn-link {
@@ -1798,11 +1798,14 @@ input[type="radio"]:checked + .z-radio.z-color-dark:after {
   transform: scaleY(0.5);
 }
 .z-list .z-list-item.z-list-arrow {
-  padding-right: 65px;
+  padding-right: 35px;
   background-image: url("data:image/svg+xml;charset=utf-8,<svg%20viewBox%3D'0%200%2060%20120'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'><path%20d%3D'm60%2061.5-38.25%2038.25-9.75-9.75%2029.25-28.5-29.25-28.5%209.75-9.75z'%20fill%3D'%23c7c7cc'%2F><%2Fsvg>");
   background-size: 10px 20px;
   background-repeat: no-repeat;
   background-position: 96% center;
+}
+.z-list .z-list-item .z-pull-right.z-font-xs {
+  margin-top: 3px;
 }
 .z-message {
   padding: 10px;
@@ -2070,16 +2073,21 @@ input[type="radio"]:checked + .z-radio.z-color-dark:after {
 .z-switch.z-color-dark.z-active.z-switch-simple > .z-switch-handle {
   background-color: #393D49;
 }
-.z-list-item .z-switch,
 .z-input-item .z-switch {
   position: absolute;
   right: 10px;
   top: 50%;
   margin-top: -15px;
 }
-.z-list-item .z-switch.z-switch-simple,
 .z-input-item .z-switch.z-switch-simple {
   margin-top: -7px;
+}
+.z-list-item .z-switch {
+  float: right;
+  margin-left: 5px;
+}
+.z-list-item .z-switch:not(.z-switch-simple) {
+  margin-top: -6px;
 }
 .z-modal {
   display: none;
@@ -2219,6 +2227,7 @@ input[type="radio"]:checked + .z-radio.z-color-dark:after {
   white-space: nowrap;
 }
 .z-slider .z-slider-group .z-slider-item {
+  font-size: 1rem;
   position: relative;
   display: inline-block;
   width: 100%;

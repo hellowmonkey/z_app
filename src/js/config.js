@@ -143,6 +143,6 @@
             spring: true,
             preview: true
         },
-        host: 'http://127.0.0.1:8020'
+        host: location.origin
     };
 })(Zepto)

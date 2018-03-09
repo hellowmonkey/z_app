@@ -207,12 +207,16 @@
                 // $(this).button()
             })
 
-            $.pullUpRefresh(function(){})
+            $.pullUpRefresh(function () {})
 
             var vm = $.viewModel({
-                isShow: function(){
+                isShow: function () {
                     vm.Set('show', !vm.show)
                 }
+            })
+
+            $('body').on('longTap', '.z-message-item', function () {
+                console.log(this)
             })
 
         })

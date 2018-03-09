@@ -1,7 +1,14 @@
 // 原生弹框
 ;
 (function ($, window) {
-    if (!$.os.plus) return
+    if (!$.os.plus) {
+        $.alert = window.alert;
+        $.confirm = window.confirm;
+        $.prompt = window.prompt;
+        $.actionSheet = $.noop;
+        $.toast = console.log;
+        return
+    }
     /**
      * 警告消息框
      */
@@ -37,7 +44,7 @@
         if (!opts.buttons || !opts.buttons.length) return
         $.each(opts.buttons, function (k, item) {
             if ($.type(item) === 'string') {
-                item = {
+                opts.buttons[k] = {
                     title: item
                 }
             }

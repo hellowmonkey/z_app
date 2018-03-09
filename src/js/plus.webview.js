@@ -4,12 +4,13 @@
  * @returns {undefined}
  */
 ;
-(function ($) {
-    if (!$.os.plus) return
+(function ($, window) {
+    // if (!$.os.plus) return
     //默认页面动画
     var defaultShow = $.config.show;
 
-    $.currentWebview = null;
+    var currentWebview = {};
+    $.currentWebview = currentWebview;
 
     /**
      * 5+ event(5+没提供之前我自己实现)
@@ -19,6 +20,7 @@
      * @returns {undefined}
      */
     $.fire = function (webview, eventType, data) {
+        if (!$.os.plus) return
         if ($.type(webview) === 'string') webview = plus.webview.getWebviewById(webview)
         if (webview) {
             if (typeof data === 'undefined') {
@@ -39,6 +41,7 @@
      * @returns {undefined}
      */
     $.receive = function (eventType, data) {
+        if (!$.os.plus) return
         if (eventType) {
             try {
                 if (data && typeof data === 'string') {
@@ -96,7 +99,13 @@
                 id = id || url;
             }
         }
-        if (!window.plus) {
+        if (!$.os.plus) {
+            //TODO 先临时这么处理：手机上顶层跳，PC上parent跳
+            if ($.os.ios || $.os.android) {
+                window.top.location.href = url;
+            } else {
+                window.parent.location.href = url;
+            }
             return;
         }
 
@@ -188,9 +197,6 @@
             } else {
                 window.parent.location.href = url;
             }
-            return;
-        }
-        if (!window.plus) {
             return;
         }
 
@@ -334,7 +340,7 @@
      * @returns {webview}
      */
     $.createWindow = function (options, isCreate) {
-        if (!window.plus) {
+        if (!$.os.plus) {
             return;
         }
         var id = options.id || options.url;
@@ -429,6 +435,7 @@
      *关闭当前webview打开的所有webview；
      */
     $.closeOpened = function (webview) {
+        if (!$.os.plus) return
         var opened = webview.opened();
         if (opened) {
             for (var i = 0, len = opened.length; i < len; i++) {
@@ -449,6 +456,7 @@
         }
     };
     $.closeAll = function (webview, aniShow) {
+        if (!$.os.plus) return
         $.closeOpened(webview);
         if (aniShow) {
             webview.close(aniShow);
@@ -474,9 +482,7 @@
      * @returns {webview}
      */
     $.appendWebview = function (options) {
-        if (!window.plus) {
-            return;
-        }
+        if (!$.os.plus) return
         var id = options.id || options.url;
         var webview;
         if (!$.webviews[id]) { //保证执行一遍
@@ -490,7 +496,7 @@
             //修改方式：不再监控loaded事件，直接append
             //by chb@20150521
             // webview.addEventListener('loaded', function() {
-            plus.webview.currentWebview().append(webview);
+            currentWebview.append(webview);
             // });
             $.webviews[id] = options;
 
@@ -499,7 +505,8 @@
     };
 
     $.showView = function (view) {
-        view = view || $.currentWebview
+        if (!$.os.plus) return
+        view = view || currentWebview
         var opts = $.extend(true, defaultShow, view.nShow)
         view.show.apply(view, [opts.aniShow, opts.duration])
     }
@@ -510,7 +517,8 @@
     $.data.preloads = [];
     //$.currentWebview
     $.plusReady(function () {
-        $.currentWebview = plus.webview.currentWebview();
+        currentWebview = plus.webview.currentWebview();
+        $.currentWebview = currentWebview
     });
     window.addEventListener('preload', function () {
         //处理预加载部分
@@ -527,4 +535,4 @@
     $.supportStatusbarOffset = function () {
         return $.os.plus && $.os.ios && parseFloat($.os.version) >= 7;
     };
-})(Zepto);
+})(Zepto, window);

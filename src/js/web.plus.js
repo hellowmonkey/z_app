@@ -19,12 +19,9 @@
     // plus.file
     $.readFile = function (filename, success, error) {
         var suf = '_www'
-        if (filename.indexOf(suf) === -1) {
-            new Error('只能读取本地文件')
-            return
-        }
-        filename = filename.replace(suf, '')
-        $.get($.config.host + filename, 'html', function (data) {
+        if (filename.indexOf(suf) === -1) return
+        filename = filename.replace(suf, $.config.host)
+        $.get(filename, 'html', function (data) {
             success(data)
         }, error)
     }
@@ -58,5 +55,8 @@
     $.openWindowWithTitle = function (options) {
         location.href = options.url
     }
+    $.currentWebview = {}
+
+    window.plus = null
 
 })(Zepto, window)

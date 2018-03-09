@@ -117,13 +117,20 @@
             }
         }
     }
-    .z-list-item &,.z-input-item & {
+    .z-input-item & {
         position: absolute;
         right: 10px;
         top: 50%;
         margin-top: -15px;
         &.z-switch-simple {
             margin-top: -7px;
+        }
+    }
+    .z-list-item & {
+        float: right;
+        margin-left: 5px;
+        &:not(.z-switch-simple) {
+            margin-top: -6px;
         }
     }
 }

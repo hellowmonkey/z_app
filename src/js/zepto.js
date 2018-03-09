@@ -502,6 +502,7 @@ var Zepto = (function () {
 
     // 获取APP版本号
     $.appVersion = function (cb) {
+        if (!$.os.plus) return
         plus.runtime.getProperty(plus.runtime.appid, function (data) {
             cb(data.version)
         })

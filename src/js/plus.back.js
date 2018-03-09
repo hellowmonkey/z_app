@@ -6,7 +6,7 @@
  */
 ;
 (function ($, window) {
-    if (!$.os.plus) return
+    // if (!$.os.plus) return
     //首次按下back按键的时间
     var back__first = null;
 
@@ -19,7 +19,8 @@
         for (var i = 0; i < backs.length; i++) {
             if (backs[i]() === false) return
         }
-        if (!window.plus) {
+        if (!$.os.plus) {
+            window.history.go(-1)
             return false;
         }
         var wobj = plus.webview.currentWebview();
@@ -58,6 +59,5 @@
                 }
             });
         }
-        return true;
     };
 })(Zepto, window);
