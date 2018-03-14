@@ -2611,7 +2611,7 @@ window.$ === undefined && (window.$ = Zepto)
 
         if (deferred) deferred.promise(xhr)
 
-        if (!settings.crossDomain) setHeader('X-Requested-With', 'XMLHttpRequest')
+        /* if (!settings.crossDomain) */ setHeader('X-Requested-With', 'XMLHttpRequest')
         setHeader('Accept', mime || '*/*')
         if (mime = settings.mimeType || mime) {
             if (mime.indexOf(',') > -1) mime = mime.split(',', 2)[0]
@@ -3544,6 +3544,7 @@ window.$ === undefined && (window.$ = Zepto)
         }
 
         function startHandler(event) {
+            event.stopPropagation()
             if (lock) return
             var pos = getPosition(event)
             startTime = new Date().getTime()
@@ -3554,6 +3555,7 @@ window.$ === undefined && (window.$ = Zepto)
         }
 
         function moveHandler(event) {
+            event.stopPropagation()
             if (lock || startTime <= 0) return
             var pos = getPosition(event)
             var moveX = pos.x - startX
@@ -3566,6 +3568,7 @@ window.$ === undefined && (window.$ = Zepto)
         }
 
         function endHandler(event) {
+            event.stopPropagation()
             if (lock) return
             activeDist = moveDist
             var offset = itemWidth * opts.offset

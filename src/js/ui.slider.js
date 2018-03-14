@@ -129,6 +129,7 @@
         }
 
         function startHandler(event) {
+            event.stopPropagation()
             if (lock) return
             var pos = getPosition(event)
             startTime = new Date().getTime()
@@ -139,6 +140,7 @@
         }
 
         function moveHandler(event) {
+            event.stopPropagation()
             if (lock || startTime <= 0) return
             var pos = getPosition(event)
             var moveX = pos.x - startX
@@ -151,6 +153,7 @@
         }
 
         function endHandler(event) {
+            event.stopPropagation()
             if (lock) return
             activeDist = moveDist
             var offset = itemWidth * opts.offset

@@ -1010,6 +1010,24 @@ input[type="button"]:disabled {
 .z-bar.z-color-dark {
   background-color: #393D49;
 }
+.z-bar .z-bar-circleback {
+  height: 30px;
+  font-size: 1rem;
+  line-height: 30px;
+  display: block;
+  width: 30px;
+  text-align: center;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  margin-top: 7px;
+  float: left;
+  padding-right: 2px;
+}
+.z-bar .z-bar-circleback.z-color-light {
+  background-color: rgba(255, 255, 255, 0.6);
+  color: #333;
+}
 .z-btn {
   display: inline-block;
   padding: 6px 15px;
@@ -1060,105 +1078,113 @@ input[type="button"]:disabled {
   border-color: #3072ab;
   background-color: #337ab7;
 }
+.z-btn.z-color-blue.z-btn-outlined,
+.z-btn.z-color-blue.z-btn-link {
+  color: #337ab7;
+}
 .z-btn.z-color-blue:active,
 .z-btn.z-color-blue.z-active {
   border-color: #275d8b;
   background-color: #2a6597;
-}
-.z-btn.z-color-blue.z-btn-outlined,
-.z-btn.z-color-blue.z-btn-link {
-  color: #337ab7;
+  color: #fff;
 }
 .z-btn.z-color-green {
   border-color: #51b351;
   background-color: #5cb85c;
 }
+.z-btn.z-color-green.z-btn-outlined,
+.z-btn.z-color-green.z-btn-link {
+  color: #5cb85c;
+}
 .z-btn.z-color-green:active,
 .z-btn.z-color-green.z-active {
   border-color: #439943;
   background-color: #47a447;
-}
-.z-btn.z-color-green.z-btn-outlined,
-.z-btn.z-color-green.z-btn-link {
-  color: #5cb85c;
+  color: #fff;
 }
 .z-btn.z-color-red {
   border-color: #d64742;
   background-color: #d9534f;
 }
+.z-btn.z-color-red.z-btn-outlined,
+.z-btn.z-color-red.z-btn-link {
+  color: #d9534f;
+}
 .z-btn.z-color-red:active,
 .z-btn.z-color-red.z-active {
   border-color: #c52f2b;
   background-color: #d2322d;
-}
-.z-btn.z-color-red.z-btn-outlined,
-.z-btn.z-color-red.z-btn-link {
-  color: #d9534f;
+  color: #fff;
 }
 .z-btn.z-color-yellow {
   border-color: #efa640;
   background-color: #f0ad4e;
 }
+.z-btn.z-color-yellow.z-btn-outlined,
+.z-btn.z-color-yellow.z-btn-link {
+  color: #f0ad4e;
+}
 .z-btn.z-color-yellow:active,
 .z-btn.z-color-yellow.z-active {
   border-color: #ec951a;
   background-color: #ed9c28;
-}
-.z-btn.z-color-yellow.z-btn-outlined,
-.z-btn.z-color-yellow.z-btn-link {
-  color: #f0ad4e;
+  color: #fff;
 }
 .z-btn.z-color-purple {
   border-color: #7f60e7;
   background-color: #8a6de9;
 }
+.z-btn.z-color-purple.z-btn-outlined,
+.z-btn.z-color-purple.z-btn-link {
+  color: #8a6de9;
+}
 .z-btn.z-color-purple:active,
 .z-btn.z-color-purple.z-active {
   border-color: #633ce2;
   background-color: #6e4ae4;
-}
-.z-btn.z-color-purple.z-btn-outlined,
-.z-btn.z-color-purple.z-btn-link {
-  color: #8a6de9;
+  color: #fff;
 }
 .z-btn.z-color-cyan {
   border-color: #4ebbdb;
   background-color: #5bc0de;
 }
+.z-btn.z-color-cyan.z-btn-outlined,
+.z-btn.z-color-cyan.z-btn-link {
+  color: #5bc0de;
+}
 .z-btn.z-color-cyan:active,
 .z-btn.z-color-cyan.z-active {
   border-color: #2caed5;
   background-color: #39b3d7;
-}
-.z-btn.z-color-cyan.z-btn-outlined,
-.z-btn.z-color-cyan.z-btn-link {
-  color: #5bc0de;
+  color: #fff;
 }
 .z-btn.z-color-gray {
   border-color: #999;
   background-color: #b5b5b5;
 }
+.z-btn.z-color-gray.z-btn-outlined,
+.z-btn.z-color-gray.z-btn-link {
+  color: #999;
+}
 .z-btn.z-color-gray:active,
 .z-btn.z-color-gray.z-active {
   border-color: #7d7d7d;
   background-color: #858585;
-}
-.z-btn.z-color-gray.z-btn-outlined,
-.z-btn.z-color-gray.z-btn-link {
-  color: #999;
+  color: #fff;
 }
 .z-btn.z-color-dark {
   border-color: #323640;
   background-color: #393D49;
 }
+.z-btn.z-color-dark.z-btn-outlined,
+.z-btn.z-color-dark.z-btn-link {
+  color: #393D49;
+}
 .z-btn.z-color-dark:active,
 .z-btn.z-color-dark.z-active {
   border-color: #202329;
   background-color: #272a32;
-}
-.z-btn.z-color-dark.z-btn-outlined,
-.z-btn.z-color-dark.z-btn-link {
-  color: #393D49;
+  color: #fff;
 }
 .z-btn.z-btn-outlined {
   background-color: transparent;
@@ -1255,7 +1281,7 @@ textarea {
 }
 select {
   background-color: #fff;
-  border: 0!important;
+  border: 0 !important;
 }
 select:focus {
   -webkit-user-modify: read-only;
@@ -1263,6 +1289,26 @@ select:focus {
 .z-input-item {
   position: relative;
   background-color: #fff;
+}
+[class*="z-color-"] .z-input-item {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+[class*="z-color-"] .z-input-item .z-input {
+  color: #fff;
+}
+[class*="z-color-"] .z-input-item .z-input::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+[class*="z-color-"] .z-input-item:after {
+  content: none;
+}
+.z-bar[class*="z-color-"] .z-input-item {
+  border-radius: 3px;
+  margin: 5px 10px;
+}
+.z-bar[class*="z-color-"] .z-input-item .z-input {
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 .z-input-item:after {
   content: '';
@@ -1282,16 +1328,21 @@ select:focus {
 }
 .z-input-item .z-input {
   border: 0;
-  padding: 15px 10px;
+  padding: 14px 10px;
   width: 100%;
   background-color: transparent;
   display: block;
 }
-.z-input-item .z-input[type="search"] {
-  background-image: url("data:image/svg+xml;charset=utf-8,<svg%20fill%3D'%23999999'%20height%3D'24'%20viewBox%3D'0%200%2024%2024'%20width%3D'24'%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'><path%20d%3D'M15.5%2014h-.79l-.28-.27C15.41%2012.59%2016%2011.11%2016%209.5%2016%205.91%2013.09%203%209.5%203S3%205.91%203%209.5%205.91%2016%209.5%2016c1.61%200%203.09-.59%204.23-1.57l.27.28v.79l5%204.99L20.49%2019l-4.99-5zm-6%200C7.01%2014%205%2011.99%205%209.5S7.01%205%209.5%205%2014%207.01%2014%209.5%2011.99%2014%209.5%2014z'%2F><path%20d%3D'M0%200h24v24H0z'%20fill%3D'none'%2F><%2Fsvg>");
-  background-position: 5px center;
-  background-repeat: no-repeat;
-  padding-left: 30px;
+.z-input-item.z-input-search {
+  padding-left: 24px;
+}
+.z-input-item.z-input-search:before {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  margin-top: -10px;
+  font-family: 'z-iconfont';
+  content: '\e621';
 }
 .z-input-item .z-input-tag {
   position: absolute;
@@ -1646,6 +1697,14 @@ input[type="radio"]:checked + .z-radio.z-color-dark:after {
   position: relative;
   min-height: 1px;
   float: left;
+}
+.z-row.z-row-2 {
+  margin-left: -2px;
+  margin-right: -2px;
+  margin-top: -2px;
+}
+.z-row.z-row-2 > [class*="z-col-"] {
+  padding: 2px;
 }
 .z-row.z-row-5 {
   margin-left: -5px;

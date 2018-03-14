@@ -32,13 +32,13 @@ gulp.task('z', function () {
     gulp.src(z_src)
         .pipe(concat('z.js'))
         .pipe(gulp.dest('dist/js/'))
-        .pipe(gulp.dest('../../git/av/js/'))
+        .pipe(gulp.dest('../../git/movie_app/js/'))
         .pipe(uglify())
         .pipe(rename({
             suffix: '.min'
         }))
         .pipe(gulp.dest('dist/js/'))
-        .pipe(gulp.dest('../../git/av/js/'))
+        .pipe(gulp.dest('../../git/movie_app/js/'))
 })
 
 gulp.task('web', function () {
@@ -56,13 +56,13 @@ gulp.task('buildCss', function () {
     gulp.src('src/less/z.less')
         .pipe(less())
         .pipe(gulp.dest('dist/css/'))
-        .pipe(gulp.dest('../../git/av/css/'))
+        .pipe(gulp.dest('../../git/movie_app/css/'))
         .pipe(cleancss())
         .pipe(rename({
             suffix: '.min'
         }))
         .pipe(gulp.dest('dist/css/'))
-        .pipe(gulp.dest('../../git/av/css/'))
+        .pipe(gulp.dest('../../git/movie_app/css/'))
 })
 
 gulp.task('default', ['buildJs', 'buildCss'])

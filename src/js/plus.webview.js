@@ -509,6 +509,7 @@
         view = view || currentWebview
         var opts = $.extend(true, defaultShow, view.nShow)
         view.show.apply(view, [opts.aniShow, opts.duration])
+        return view
     }
 
     //全局webviews
