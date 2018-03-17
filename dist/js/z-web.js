@@ -3296,6 +3296,7 @@ window.$ === undefined && (window.$ = Zepto)
         sElem.append(moreBtn)
         if ($.os.plus) {
             document.addEventListener("plusscrollbottom", function () {
+                if (isOver) return
                 lock || done()
             }, false);
         } else {
@@ -3443,7 +3444,6 @@ window.$ === undefined && (window.$ = Zepto)
         _this.on(eventMap.down, startHandler)
         _this.on(eventMap.move, moveHandler)
         _this.on(eventMap.up, endHandler)
-        _this.on(eventMap.cancel, endHandler)
         _this.on(eventMap.cancel, endHandler)
 
         _this.on('slideMove', function (event) {
@@ -3894,6 +3894,7 @@ $(function () {
     $(document).on('tap', ripples, function (event) {
         event.stopPropagation()
         var _this = $(this)
+        if (_this.data('ripple-disabled')) return
         var size = Math.max(this.offsetWidth, this.offsetHeight)
         var color = (_this.is('[class*="z-color-"]') || _this.hasClass('z-ripple-light')) ? 'rgba(255,255,255,0)' : 'rgba(0,0,0,0)'
         var offset = _this.offset()
@@ -3941,7 +3942,7 @@ $(function () {
     })
 
     // 轮播
-    $('.z-action-slider').each(function(){
+    $('.z-action-slider').each(function () {
         $(this).slider()
     })
 

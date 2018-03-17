@@ -20,6 +20,7 @@
         sElem.append(moreBtn)
         if ($.os.plus) {
             document.addEventListener("plusscrollbottom", function () {
+                if (isOver) return
                 lock || done()
             }, false);
         } else {

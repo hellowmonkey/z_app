@@ -29,7 +29,6 @@
         _this.on(eventMap.move, moveHandler)
         _this.on(eventMap.up, endHandler)
         _this.on(eventMap.cancel, endHandler)
-        _this.on(eventMap.cancel, endHandler)
 
         _this.on('slideMove', function (event) {
             anim()
