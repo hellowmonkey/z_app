@@ -2611,7 +2611,8 @@ window.$ === undefined && (window.$ = Zepto)
 
         if (deferred) deferred.promise(xhr)
 
-        /* if (!settings.crossDomain) */ setHeader('X-Requested-With', 'XMLHttpRequest')
+        /* if (!settings.crossDomain) */
+        setHeader('X-Requested-With', 'XMLHttpRequest')
         setHeader('Accept', mime || '*/*')
         if (mime = settings.mimeType || mime) {
             if (mime.indexOf(',') > -1) mime = mime.split(',', 2)[0]
@@ -2714,6 +2715,7 @@ window.$ === undefined && (window.$ = Zepto)
     $.post = function ( /* url, data, success, dataType */ ) {
         var options = parseArguments.apply(null, arguments)
         options.type = 'POST'
+        options.dataType = options.dataType || 'json'
         return $.ajax(options)
     }
 
@@ -2891,16 +2893,25 @@ window.$ === undefined && (window.$ = Zepto)
     }
 
     $.loadTemplate = function (filename, cb) {
-        if(tempFiles[filename]) return
+        if (tempFiles[filename]) return
+        var script = $('script#' + filename + '[type="text/html"]')
+        if (script.length) {
+            callback(script.html())
+            return
+        }
         tempLoadings[filename] = true
         $.readFile($.config.template.path + filename + '.html', function (html) {
-            delete tempLoadings[filename]
-            tempFiles[filename] = html
-            cb && cb(html)
+            callback(html)
         }, function (e) {
             delete tempLoadings[filename]
             $.toast('模板文件获取失败：' + e.message)
         })
+
+        function callback(html) {
+            delete tempLoadings[filename]
+            tempFiles[filename] = html
+            cb && cb(html)
+        }
     }
 
 })(Zepto, window)
@@ -3665,17 +3676,19 @@ window.$ === undefined && (window.$ = Zepto)
 })(Zepto, window, document)
 ;
 (function ($, window) {
-    var localStorage = function () {
-        return $.os.plus ? plus.storage : window.localStorage
-    };
+    var localStorage = window.localStorage
+
+    $.plusReady(function () {
+        localStorage = plus.storage
+    })
+
     $.getStorage = function (keyName) {
-        var value = localStorage().getItem(keyName)
+        var value = localStorage.getItem(keyName)
         if (value) {
             if ($.likeObject(value)) {
                 return $.parseJSON(value)
-            } else {
-                return eval(value)
             }
+            return value
         } else {
             return null
         }
@@ -3684,14 +3697,14 @@ window.$ === undefined && (window.$ = Zepto)
         keyName = keyName.toString()
         if (typeof val === 'object') val = JSON.stringify(val)
         else val = val.toString()
-        localStorage().setItem(keyName, val)
+        localStorage.setItem(keyName, val)
         return $.getStorage(keyName)
     }
     $.removeStorage = function (keyName) {
-        localStorage().removeItem(keyName)
+        localStorage.removeItem(keyName)
     }
     $.clearStorage = function (keyName) {
-        localStorage().clear()
+        localStorage.clear()
     }
 })(Zepto, window)
 ;
@@ -3825,34 +3838,34 @@ $(function () {
                 indicator: 'number'
             })
         })
-
-        // 打开新页面
-        $('body').on('click', 'a,.z-action-link', function (event) {
-            event.preventDefault()
-            var _this = $(this)
-            var href = _this.attr('href') || _this.data('link-target')
-            var opts = _this.data('link-opts')
-            var suf = '.html'
-            if (!href) return false
-            var pathIndex = href.indexOf(suf)
-            if (pathIndex === -1) return false
-            var filename = href.substr(0, pathIndex)
-            var ids = filename.split('/')
-            var id = ids[ids.length - 1]
-            var url = filename + suf
-            var options = {
-                url: url,
-                id: id,
-                extras: $.parseUrlQuery(href)
-            }
-            if (opts) {
-                opts = JSON.parse(opts)
-                options = $.extend(options, opts)
-            }
-            $.openWindow(options)
-            return false
-        })
     }
+
+    // 打开新页面
+    $('body').on('click', 'a,.z-action-link', function (event) {
+        event.preventDefault()
+        var _this = $(this)
+        var href = _this.attr('href') || _this.data('link-target')
+        var opts = _this.data('link-opts')
+        var suf = '.html'
+        if (!href) return false
+        var pathIndex = href.indexOf(suf)
+        if (pathIndex === -1) return false
+        var filename = href.substr(0, pathIndex)
+        var ids = filename.split('/')
+        var id = ids[ids.length - 1]
+        var url = filename + suf
+        var options = {
+            url: url,
+            id: id,
+            extras: $.parseUrlQuery(href)
+        }
+        if (opts) {
+            opts = JSON.parse(opts)
+            options = $.extend(options, opts)
+        }
+        $.openWindow(options)
+        return false
+    })
 
     // 返回
     $('body').on('tap', '.z-action-back', function () {
@@ -3900,15 +3913,17 @@ $(function () {
         var offset = _this.offset()
         var top = event.detail.touch.y1 - offset.top
         var left = event.detail.touch.x1 - offset.left
-        _this.addClass('z-ripple').append('<div class="z-ripple-bg" style="top:' + top +
+        var bg = $('<div class="z-ripple-bg" style="top:' + top +
             'px;left:' + left + 'px"></div>')
+        _this.addClass('z-ripple').append(bg)
         setTimeout(function () {
-            _this.find('.z-ripple-bg').css({
+            bg.css({
                 boxShadow: '0 0 0 ' + size + 'px ' + color,
             })
         }, 10)
         setTimeout(function () {
-            _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
+            _this.removeClass('z-ripple')
+            bg.remove()
         }, 400)
     })
 

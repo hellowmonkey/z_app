@@ -1,16 +1,18 @@
 ;
 (function ($, window) {
-    var localStorage = function () {
-        return $.os.plus ? plus.storage : window.localStorage
-    };
+    var localStorage = window.localStorage
+
+    $.plusReady(function () {
+        localStorage = plus.storage
+    })
+
     $.getStorage = function (keyName) {
-        var value = localStorage().getItem(keyName)
+        var value = localStorage.getItem(keyName)
         if (value) {
             if ($.likeObject(value)) {
                 return $.parseJSON(value)
-            } else {
-                return eval(value)
             }
+            return value
         } else {
             return null
         }
@@ -19,13 +21,13 @@
         keyName = keyName.toString()
         if (typeof val === 'object') val = JSON.stringify(val)
         else val = val.toString()
-        localStorage().setItem(keyName, val)
+        localStorage.setItem(keyName, val)
         return $.getStorage(keyName)
     }
     $.removeStorage = function (keyName) {
-        localStorage().removeItem(keyName)
+        localStorage.removeItem(keyName)
     }
     $.clearStorage = function (keyName) {
-        localStorage().clear()
+        localStorage.clear()
     }
 })(Zepto, window)

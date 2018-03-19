@@ -52,34 +52,34 @@ $(function () {
                 indicator: 'number'
             })
         })
-
-        // 打开新页面
-        $('body').on('click', 'a,.z-action-link', function (event) {
-            event.preventDefault()
-            var _this = $(this)
-            var href = _this.attr('href') || _this.data('link-target')
-            var opts = _this.data('link-opts')
-            var suf = '.html'
-            if (!href) return false
-            var pathIndex = href.indexOf(suf)
-            if (pathIndex === -1) return false
-            var filename = href.substr(0, pathIndex)
-            var ids = filename.split('/')
-            var id = ids[ids.length - 1]
-            var url = filename + suf
-            var options = {
-                url: url,
-                id: id,
-                extras: $.parseUrlQuery(href)
-            }
-            if (opts) {
-                opts = JSON.parse(opts)
-                options = $.extend(options, opts)
-            }
-            $.openWindow(options)
-            return false
-        })
     }
+
+    // 打开新页面
+    $('body').on('click', 'a,.z-action-link', function (event) {
+        event.preventDefault()
+        var _this = $(this)
+        var href = _this.attr('href') || _this.data('link-target')
+        var opts = _this.data('link-opts')
+        var suf = '.html'
+        if (!href) return false
+        var pathIndex = href.indexOf(suf)
+        if (pathIndex === -1) return false
+        var filename = href.substr(0, pathIndex)
+        var ids = filename.split('/')
+        var id = ids[ids.length - 1]
+        var url = filename + suf
+        var options = {
+            url: url,
+            id: id,
+            extras: $.parseUrlQuery(href)
+        }
+        if (opts) {
+            opts = JSON.parse(opts)
+            options = $.extend(options, opts)
+        }
+        $.openWindow(options)
+        return false
+    })
 
     // 返回
     $('body').on('tap', '.z-action-back', function () {
@@ -127,15 +127,17 @@ $(function () {
         var offset = _this.offset()
         var top = event.detail.touch.y1 - offset.top
         var left = event.detail.touch.x1 - offset.left
-        _this.addClass('z-ripple').append('<div class="z-ripple-bg" style="top:' + top +
+        var bg = $('<div class="z-ripple-bg" style="top:' + top +
             'px;left:' + left + 'px"></div>')
+        _this.addClass('z-ripple').append(bg)
         setTimeout(function () {
-            _this.find('.z-ripple-bg').css({
+            bg.css({
                 boxShadow: '0 0 0 ' + size + 'px ' + color,
             })
         }, 10)
         setTimeout(function () {
-            _this.removeClass('z-ripple').find('.z-ripple-bg').remove()
+            _this.removeClass('z-ripple')
+            bg.remove()
         }, 400)
     })
 

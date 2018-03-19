@@ -87,6 +87,8 @@
      * @param {object} options 可选:参数,等待,窗口,显示配置{params:{},waiting:{},styles:{},show:{}}
      */
     $.openWindow = function (url, id, options) {
+        var suf = '.html',
+            ids;
         if (typeof url === 'object') {
             options = url;
             url = options.url;
@@ -99,6 +101,7 @@
                 id = id || url;
             }
         }
+        if (url.indexOf(suf) === -1) url = url + suf
         if (!$.os.plus) {
             //TODO 先临时这么处理：手机上顶层跳，PC上parent跳
             if ($.os.ios || $.os.android) {
@@ -108,6 +111,10 @@
             }
             return;
         }
+
+        id = id.replace(suf, '')
+        ids = id.split('/')
+        id = ids[ids.length - 1]
 
         options = options || {};
         var params = options.params || {};

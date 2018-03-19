@@ -37,16 +37,25 @@
     }
 
     $.loadTemplate = function (filename, cb) {
-        if(tempFiles[filename]) return
+        if (tempFiles[filename]) return
+        var script = $('script#' + filename + '[type="text/html"]')
+        if (script.length) {
+            callback(script.html())
+            return
+        }
         tempLoadings[filename] = true
         $.readFile($.config.template.path + filename + '.html', function (html) {
-            delete tempLoadings[filename]
-            tempFiles[filename] = html
-            cb && cb(html)
+            callback(html)
         }, function (e) {
             delete tempLoadings[filename]
             $.toast('模板文件获取失败：' + e.message)
         })
+
+        function callback(html) {
+            delete tempLoadings[filename]
+            tempFiles[filename] = html
+            cb && cb(html)
+        }
     }
 
 })(Zepto, window)
