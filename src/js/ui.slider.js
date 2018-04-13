@@ -128,7 +128,6 @@
         }
 
         function startHandler(event) {
-            event.stopPropagation()
             if (lock) return
             var pos = getPosition(event)
             startTime = new Date().getTime()
@@ -139,20 +138,18 @@
         }
 
         function moveHandler(event) {
-            event.stopPropagation()
             if (lock || startTime <= 0) return
             var pos = getPosition(event)
             var moveX = pos.x - startX
             var moveY = pos.y - startY
             setLoop(true)
-            if (opts.checkY && (Math.abs(moveY) * 5) > Math.abs(moveX)) return
+            if (opts.checkY && (Math.abs(moveY) * 4) > Math.abs(moveX)) return
             moveDist = activeDist + moveX
             trigger('slideMove')
             trigger('slide')
         }
 
         function endHandler(event) {
-            event.stopPropagation()
             if (lock) return
             activeDist = moveDist
             var offset = itemWidth * opts.offset

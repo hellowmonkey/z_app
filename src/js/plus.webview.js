@@ -128,7 +128,7 @@
             if (plus.webview.getWebviewById(id)) {
                 webview = webviewCache.webview;
             }
-        } else if (options.createNew !== true) {
+        } else if (!options.createNew) {
             webview = plus.webview.getWebviewById(id);
         }
 

@@ -11,6 +11,8 @@
         if (value) {
             if ($.likeObject(value)) {
                 return $.parseJSON(value)
+            } else if (value === '{}') {
+                return {}
             }
             return value
         } else {

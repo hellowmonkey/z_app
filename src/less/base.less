@@ -374,8 +374,9 @@ input[type="button"]:disabled {
 .z-content,
 .z-content-padding {
     position: relative;
+    overflow: hidden;
     .z-bar:not(.z-bar-transparent)+& {
-        padding-top: @bar-height;
+        margin-top: @bar-height;
     }
 }
 

@@ -136,7 +136,7 @@
             resetHeight: false,
             handler: '.z-slider-group',
             items: '.z-slider-item',
-            offset: 0.2,
+            offset: 0.4,
             duration: 200,
             indicator: 'dots',
             activeDot: 0,

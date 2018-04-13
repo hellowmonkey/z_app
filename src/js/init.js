@@ -77,6 +77,10 @@ $(function () {
             opts = JSON.parse(opts)
             options = $.extend(options, opts)
         }
+        if (_this.data('link-only')) {
+            var view = plus.webview.getWebviewById(options.id)
+            if (view) view.close('none', 0)
+        }
         $.openWindow(options)
         return false
     })
@@ -122,6 +126,7 @@ $(function () {
         event.stopPropagation()
         var _this = $(this)
         if (_this.data('ripple-disabled')) return
+        if (!event.detail || !event.detail.touch) return
         var size = Math.max(this.offsetWidth, this.offsetHeight)
         var color = (_this.is('[class*="z-color-"]') || _this.hasClass('z-ripple-light')) ? 'rgba(255,255,255,0)' : 'rgba(0,0,0,0)'
         var offset = _this.offset()

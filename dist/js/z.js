@@ -1374,7 +1374,7 @@ window.$ === undefined && (window.$ = Zepto)
             resetHeight: false,
             handler: '.z-slider-group',
             items: '.z-slider-item',
-            offset: 0.2,
+            offset: 0.4,
             duration: 200,
             indicator: 'dots',
             activeDot: 0,
@@ -3045,7 +3045,7 @@ window.$ === undefined && (window.$ = Zepto)
             if (plus.webview.getWebviewById(id)) {
                 webview = webviewCache.webview;
             }
-        } else if (options.createNew !== true) {
+        } else if (!options.createNew) {
             webview = plus.webview.getWebviewById(id);
         }
 
@@ -4461,7 +4461,6 @@ window.$ === undefined && (window.$ = Zepto)
         }
 
         function startHandler(event) {
-            event.stopPropagation()
             if (lock) return
             var pos = getPosition(event)
             startTime = new Date().getTime()
@@ -4472,20 +4471,18 @@ window.$ === undefined && (window.$ = Zepto)
         }
 
         function moveHandler(event) {
-            event.stopPropagation()
             if (lock || startTime <= 0) return
             var pos = getPosition(event)
             var moveX = pos.x - startX
             var moveY = pos.y - startY
             setLoop(true)
-            if (opts.checkY && (Math.abs(moveY) * 5) > Math.abs(moveX)) return
+            if (opts.checkY && (Math.abs(moveY) * 4) > Math.abs(moveX)) return
             moveDist = activeDist + moveX
             trigger('slideMove')
             trigger('slide')
         }
 
         function endHandler(event) {
-            event.stopPropagation()
             if (lock) return
             activeDist = moveDist
             var offset = itemWidth * opts.offset
@@ -4593,6 +4590,8 @@ window.$ === undefined && (window.$ = Zepto)
         if (value) {
             if ($.likeObject(value)) {
                 return $.parseJSON(value)
+            } else if (value === '{}') {
+                return {}
             }
             return value
         } else {
@@ -4769,6 +4768,10 @@ $(function () {
             opts = JSON.parse(opts)
             options = $.extend(options, opts)
         }
+        if (_this.data('link-only')) {
+            var view = plus.webview.getWebviewById(options.id)
+            if (view) view.close('none', 0)
+        }
         $.openWindow(options)
         return false
     })
@@ -4814,6 +4817,7 @@ $(function () {
         event.stopPropagation()
         var _this = $(this)
         if (_this.data('ripple-disabled')) return
+        if (!event.detail || !event.detail.touch) return
         var size = Math.max(this.offsetWidth, this.offsetHeight)
         var color = (_this.is('[class*="z-color-"]') || _this.hasClass('z-ripple-light')) ? 'rgba(255,255,255,0)' : 'rgba(0,0,0,0)'
         var offset = _this.offset()
